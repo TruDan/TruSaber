@@ -1,0 +1,84 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruSaber", "TruSaber\TruSaber.csproj", "{0512EA88-E54C-4DF0-A5D0-A0C5DE284B62}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpVR", "SharpVR\SharpVR.csproj", "{DD062E3A-AE46-4CA4-8202-41D585567004}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimationAux", "AnimationAux\AnimationAux.csproj", "{F2F7FA8C-1FC7-42CC-93D8-E5DFF48AC09B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimationPipeline", "AnimationPipeline\AnimationPipeline.csproj", "{FF2FBE94-50B5-4E78-9592-B95F32A8881E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TruSaber.DebugTool", "TruSaber.DebugTool\TruSaber.DebugTool.csproj", "{C73BE40B-2FFA-4601-8CCE-EF87CD37C510}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeatMapLib", "BeatMapLib\BeatMapLib.csproj", "{BEBB2BF3-AE87-48FC-BC75-D8F8B95E9CCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BEPUphysicsDrawer", "BEPUphysicsDrawer\BEPUphysicsDrawer.csproj", "{20CC0765-E7F5-44CB-9B86-EC8CDD1852CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConversionHelper", "ConversionHelper\ConversionHelper.csproj", "{AA264458-F33C-4B6B-90C1-B3209470893B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		DirectX|Any CPU = DirectX|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0512EA88-E54C-4DF0-A5D0-A0C5DE284B62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0512EA88-E54C-4DF0-A5D0-A0C5DE284B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0512EA88-E54C-4DF0-A5D0-A0C5DE284B62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0512EA88-E54C-4DF0-A5D0-A0C5DE284B62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0512EA88-E54C-4DF0-A5D0-A0C5DE284B62}.DirectX|Any CPU.ActiveCfg = DirectX|Any CPU
+		{0512EA88-E54C-4DF0-A5D0-A0C5DE284B62}.DirectX|Any CPU.Build.0 = DirectX|Any CPU
+		{DD062E3A-AE46-4CA4-8202-41D585567004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD062E3A-AE46-4CA4-8202-41D585567004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD062E3A-AE46-4CA4-8202-41D585567004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD062E3A-AE46-4CA4-8202-41D585567004}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD062E3A-AE46-4CA4-8202-41D585567004}.DirectX|Any CPU.ActiveCfg = DirectX|Any CPU
+		{DD062E3A-AE46-4CA4-8202-41D585567004}.DirectX|Any CPU.Build.0 = DirectX|Any CPU
+		{F2F7FA8C-1FC7-42CC-93D8-E5DFF48AC09B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2F7FA8C-1FC7-42CC-93D8-E5DFF48AC09B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2F7FA8C-1FC7-42CC-93D8-E5DFF48AC09B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2F7FA8C-1FC7-42CC-93D8-E5DFF48AC09B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2F7FA8C-1FC7-42CC-93D8-E5DFF48AC09B}.DirectX|Any CPU.ActiveCfg = DirectX|Any CPU
+		{F2F7FA8C-1FC7-42CC-93D8-E5DFF48AC09B}.DirectX|Any CPU.Build.0 = DirectX|Any CPU
+		{FF2FBE94-50B5-4E78-9592-B95F32A8881E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF2FBE94-50B5-4E78-9592-B95F32A8881E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF2FBE94-50B5-4E78-9592-B95F32A8881E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF2FBE94-50B5-4E78-9592-B95F32A8881E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF2FBE94-50B5-4E78-9592-B95F32A8881E}.DirectX|Any CPU.ActiveCfg = DirectX|Any CPU
+		{FF2FBE94-50B5-4E78-9592-B95F32A8881E}.DirectX|Any CPU.Build.0 = DirectX|Any CPU
+		{C73BE40B-2FFA-4601-8CCE-EF87CD37C510}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{C73BE40B-2FFA-4601-8CCE-EF87CD37C510}.Debug|Any CPU.Build.0 = Debug|x86
+		{C73BE40B-2FFA-4601-8CCE-EF87CD37C510}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C73BE40B-2FFA-4601-8CCE-EF87CD37C510}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C73BE40B-2FFA-4601-8CCE-EF87CD37C510}.DirectX|Any CPU.ActiveCfg = DirectX|Any CPU
+		{C73BE40B-2FFA-4601-8CCE-EF87CD37C510}.DirectX|Any CPU.Build.0 = DirectX|Any CPU
+		{BEBB2BF3-AE87-48FC-BC75-D8F8B95E9CCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEBB2BF3-AE87-48FC-BC75-D8F8B95E9CCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEBB2BF3-AE87-48FC-BC75-D8F8B95E9CCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEBB2BF3-AE87-48FC-BC75-D8F8B95E9CCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEBB2BF3-AE87-48FC-BC75-D8F8B95E9CCD}.DirectX|Any CPU.ActiveCfg = DirectX|Any CPU
+		{BEBB2BF3-AE87-48FC-BC75-D8F8B95E9CCD}.DirectX|Any CPU.Build.0 = DirectX|Any CPU
+		{20CC0765-E7F5-44CB-9B86-EC8CDD1852CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20CC0765-E7F5-44CB-9B86-EC8CDD1852CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20CC0765-E7F5-44CB-9B86-EC8CDD1852CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20CC0765-E7F5-44CB-9B86-EC8CDD1852CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20CC0765-E7F5-44CB-9B86-EC8CDD1852CE}.DirectX|Any CPU.ActiveCfg = DirectX|Any CPU
+		{20CC0765-E7F5-44CB-9B86-EC8CDD1852CE}.DirectX|Any CPU.Build.0 = DirectX|Any CPU
+		{AA264458-F33C-4B6B-90C1-B3209470893B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA264458-F33C-4B6B-90C1-B3209470893B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA264458-F33C-4B6B-90C1-B3209470893B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA264458-F33C-4B6B-90C1-B3209470893B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA264458-F33C-4B6B-90C1-B3209470893B}.DirectX|Any CPU.ActiveCfg = DirectX|Any CPU
+		{AA264458-F33C-4B6B-90C1-B3209470893B}.DirectX|Any CPU.Build.0 = DirectX|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {162DA582-5E7D-415B-A152-9A15C55D42F5}
+	EndGlobalSection
+EndGlobal
