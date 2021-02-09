@@ -205,7 +205,9 @@ namespace TruSaber.Scenes
                     if(note.DueTime > playPosition)
                         break;
 
-                    _noteEntities.TryDequeue(out note);
+                    if (!_noteEntities.TryDequeue(out note))
+                        break;
+                    
                     if (!note.HasSpawnedAtLeastOnce)
                     {
                         SpawnNote(note);

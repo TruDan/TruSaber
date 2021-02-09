@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using TruSaber.Abstractions;
+using TruSaber.Configuration;
 using TruSaber.Debugging;
 
 namespace TruSaber
@@ -31,6 +32,7 @@ namespace TruSaber
                 })
                 .ConfigureAppConfiguration(builder =>
                 {
+                    builder.AddCommandLine(args);
                     builder.AddEnvironmentVariables("TruSaber_");
                     builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
                 })
@@ -41,11 +43,16 @@ namespace TruSaber
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
+                    var opts = new GameOptions();
+                    hostContext.Configuration.Bind(opts);
+                    
+                    services.AddOptions<GameOptions>().Bind(hostContext.Configuration);
+                    services.AddSingleton<GameOptions>(opts);
                     services.AddSingleton<IGame, TruSaberGame>();
                     services.AddHostedService<Worker>();
                     services.AddGameConfiguration();
 
-                    var pluginDirs = hostContext.Configuration.GetValue<List<string>>("PluginPaths");
+                    var pluginDirs = opts.PluginDirectories;
                     if (pluginDirs == null)
                         pluginDirs = new List<string>(); 
                     
@@ -54,7 +61,8 @@ namespace TruSaber
                     
                     services.AddPlugins(pluginDirs.ToArray());
                     services.TryAddSingleton<IDebugService, NoopDebugService>();
-                });
+                })
+                .UseConsoleLifetime();
         
         private static void ConfigureNLog(string baseDir)
         {

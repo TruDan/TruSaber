@@ -6,6 +6,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using MonoGame.Extended.Gui;
+using RocketUI;
+using RocketUI.Input;
 using SharpVR;
 using TruSaber.Graphics;
 using TruSaber.Scenes;
@@ -22,6 +25,9 @@ namespace TruSaber.Abstractions
             services.AddSingleton<IVRService, VRService>();
             services.AddSingleton<SceneManager>();
             services.AddSingleton<PerspectiveCamera>();
+            services.AddSingleton<InputManager>();
+//            services.AddSingleton<IGuiRenderer>();
+            services.AddSingleton<GuiManager>();
         }
 
         public static void AddPlugins(this IServiceCollection services, params string[] pluginPaths)

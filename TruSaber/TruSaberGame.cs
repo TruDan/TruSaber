@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RocketUI.Graphics;
 using SharpDX;
 using TruSaber.Abstractions;
 using TruSaber.Graphics;
@@ -36,6 +38,15 @@ namespace TruSaber
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+
+            var hostApplicationLifetime = services.GetRequiredService<IHostApplicationLifetime>();
+            hostApplicationLifetime.ApplicationStopping.Register(OnHostApplicationStopping);
+
+        }
+
+        private void OnHostApplicationStopping()
+        {
+            GpuResourceManager.Dispose();
         }
 
         protected override void Initialize()
@@ -59,6 +70,7 @@ namespace TruSaber
 
         protected override void LoadContent()
         {
+            GpuResourceManager.Init(GraphicsDevice);
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             base.LoadContent();

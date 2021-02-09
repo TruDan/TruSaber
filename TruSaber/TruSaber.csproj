@@ -62,6 +62,7 @@
         <ProjectReference Include="..\AnimationPipeline\AnimationPipeline.csproj" />
         <ProjectReference Include="..\BeatMapLib\BeatMapLib.csproj" />
         <ProjectReference Include="..\BEPUphysicsDrawer\BEPUphysicsDrawer.csproj" />
+        <ProjectReference Include="..\RocketUI\RocketUI.csproj" />
         <ProjectReference Include="..\SharpVR\SharpVR.csproj" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)' == 'DirectX'">
