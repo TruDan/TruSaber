@@ -10,6 +10,7 @@ using BEPUphysics.Materials;
 using BEPUphysics.NarrowPhaseSystems.Pairs;
 using BEPUphysics.PositionUpdating;
 using BEPUutilities;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SharpVR;
@@ -29,7 +30,7 @@ namespace TruSaber
         public  Hand                            Hand   { get; }
 
         public  Quaternion ControllerOffset { get; set; }
-        private VrContext  VrContext        { get; }
+        private IVrContext  VrContext        { get; }
 
         public Microsoft.Xna.Framework.Vector3 AngularVelocity
         {
@@ -50,10 +51,12 @@ namespace TruSaber
         {
             Player = player;
             Hand = hand;
-            VrContext = VrContext.Get();
+            VrContext = game.ServiceProvider.GetRequiredService<IVrContext>();
             ControllerOffset = Quaternion.CreateFromYawPitchRoll(0f, -90f.ToRadians(), 0f);
             // PhysicsEntity = new TransformableEntity(Position.ToBEPU(),
             //     new BoxShape(0.04f, 0.75f, 0.04f), Matrix3x3.CreateFromMatrix(World.ToBEPU()));
+            Position = hand == Hand.Left ? Microsoft.Xna.Framework.Vector3.Left : Microsoft.Xna.Framework.Vector3.Right;
+            Rotation = Quaternion.Identity;
             InitPhysics();
         }
 
@@ -91,6 +94,7 @@ namespace TruSaber
         {
             base.LoadContent();
             Model = Game.Content.Load<Model>("Models/Saber");
+            
         }
 
         private void InitPhysics()

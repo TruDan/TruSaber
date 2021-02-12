@@ -9,7 +9,7 @@ namespace SharpVR
 {
     // Don't trust the wiki, it's horribly outdated. The header files contain the best docs
     // https://github.com/ValveSoftware/openvr/blob/master/headers/openvr.h#L1208)
-    public class VrContext : IDisposable
+    public class VrContext : IVrContext
     {
         private static readonly uint EventSize = (uint) Marshal.SizeOf<VREvent_t>();
 
@@ -24,8 +24,8 @@ namespace SharpVR
 
         // hmd is always device with index 0
         public HeadMountedDisplay Hmd => (HeadMountedDisplay) _devices[0];
-        public Controller LeftController => (Controller) _devices[1];
-        public Controller RightController => (Controller) _devices[2];
+        public IVRController LeftController => (IVRController) _devices[1];
+        public IVRController RightController => (IVRController) _devices[2];
         
         private VrContext()
         {
@@ -42,6 +42,7 @@ namespace SharpVR
         /// Indicates if OpenVR is initialized.
         /// </summary>
         public bool Initialized { get; private set; }
+        public bool Emulated { get; private set; }
 
         /// <summary>
         /// Attempt to initialize OpenVR.
@@ -51,7 +52,7 @@ namespace SharpVR
         {
             if (Initialized)
                 return;
-
+            
             var error = EVRInitError.None;
             System = OpenVR.Init(ref error);
             Compositor = OpenVR.Compositor;
@@ -71,6 +72,24 @@ namespace SharpVR
 
             Initialized = true;
         }
+
+
+        private int   _emulatedWidth, _emulatedHeight;
+        private float _emulatedFieldOfView;
+        public void InitializeEmulation(int viewportWidth, int viewportHeight, float viewportFieldOfView)
+        {
+            Emulated = true;
+
+            _emulatedWidth = viewportWidth;
+            _emulatedHeight = viewportHeight;
+            _emulatedFieldOfView = viewportFieldOfView;
+            
+            _devices[0] = new HeadMountedDisplay(this, 0);
+            _devices[1] = new EmulatedController(this, 1, Hand.Left);
+            _devices[2] = new EmulatedController(this, 2, Hand.Right);
+            WaitGetPoses();
+        }
+
         public string GetTrackedDeviceString(uint deviceIndex, ETrackedDeviceProperty prop)
         {
             var error      = ETrackedPropertyError.TrackedProp_Success;
@@ -93,7 +112,7 @@ namespace SharpVR
             {
                 Console.WriteLine($"[VR][Device {index}]: Registered ({device.GetType().Name})");
 
-                if (device is Controller controller)
+                if (device is IVRController controller)
                 {
                     var role = System.GetControllerRoleForTrackedDeviceIndex((uint) index);
                     switch (role)
@@ -118,7 +137,11 @@ namespace SharpVR
 
         public void Shutdown()
         {
-            OpenVR.Shutdown();
+            if (!Emulated)
+            {
+                OpenVR.Shutdown();
+            }
+
             Initialized = false;
         }
 
@@ -165,6 +188,13 @@ namespace SharpVR
         /// </summary>
         public void GetRenderTargetSize(out int width, out int height)
         {
+            if (Emulated)
+            {
+                width = _emulatedWidth;
+                height = _emulatedHeight;
+                return;
+            }
+            
             var w = 0u;
             var h = 0u;
             System.GetRecommendedRenderTargetSize(ref w, ref h);
@@ -172,17 +202,6 @@ namespace SharpVR
             height = (int) h;
         }
 
-        /// <summary>
-        /// Returns the projection matrix of the given eye.
-        /// </summary>
-        /// <param name="eye">Eye to get the projection matrix for.</param>
-        /// <param name="zNear">Near plane distance.</param>
-        /// <param name="zFar">Far plane distance.</param>
-        /// <param name="matrix">Projection matrix; note that this is column major.</param>
-        public void GetProjectionMatrix(Eye eye, float zNear, float zFar, out HmdMatrix44_t matrix)
-        {
-            matrix = System.GetProjectionMatrix((EVREye) eye, zNear, zFar);
-        }
         
         /// <summary>
         /// Returns the projection matrix of the given eye.
@@ -193,28 +212,18 @@ namespace SharpVR
         /// <param name="matrix">Projection matrix; note that this is column major.</param>
         public Matrix GetProjectionMatrix(Eye eye, float zNear, float zFar)
         {
-            return System.GetProjectionMatrix((EVREye) eye, zNear, zFar).ToMg();
+            if (Emulated)
+            {
+                return Matrix.CreatePerspectiveFieldOfView(_emulatedFieldOfView, _emulatedWidth / (float) _emulatedHeight, zNear, zFar);
+            }
+            
+            return System.GetProjectionMatrix((EVREye) eye, zNear, zFar);
         }
 
         // NOT EXPOSED: public void GetProjectionRaw
 
         // NOT EXPOSED: public bool ComputeDistortion
 
-        /// <summary>
-        /// Returns the view matrix transform between the view space and eye space. Eye space is the
-        /// per-eye flavor of view space that provides stereo disparity. Instead of
-        /// Model * View * Projection the model is Model * View * Eye * Projection. Normally
-        /// View and Eye will be multiplied together and treated as View in your application.
-        /// </summary>
-        /// <param name="eye">Eye to get the matrix for.</param>
-        /// <param name="matrix">Eye transform matrix.</param>
-        /// <remarks>
-        /// Matrix incorporates the user's interpupillary distance (IPD).
-        /// </remarks>
-        public void GetEyeMatrix(Eye eye, out HmdMatrix34_t matrix)
-        {
-            matrix = System.GetEyeToHeadTransform((EVREye) eye);
-        }
         
         /// <summary>
         /// Returns the view matrix transform between the view space and eye space. Eye space is the
@@ -229,7 +238,12 @@ namespace SharpVR
         /// </remarks>
         public Matrix GetEyeMatrix(Eye eye)
         {
-            return System.GetEyeToHeadTransform((EVREye) eye).ToMg();
+            if (Emulated)
+            {
+                return Matrix.Identity;
+            }
+            
+            return System.GetEyeToHeadTransform((EVREye) eye);
         }
 
         // NOT EXPOSED: bool GetTimeSinceLastVsync
@@ -257,6 +271,9 @@ namespace SharpVR
 
         public void ProcessEvents()
         {
+            if(Emulated) 
+                return;
+            
             var ev = new VREvent_t();
             while (System.PollNextEvent(ref ev, EventSize))
                 ProcessEvent(ev);
@@ -310,10 +327,47 @@ namespace SharpVR
 
         public void WaitGetPoses()
         {
-            var error = OpenVR.Compositor.WaitGetPoses(_lastDevicePoses, _lastNextDevicePoses);
-            if (error != EVRCompositorError.None)
-                throw CreateException(error);
-
+            if (Emulated)
+            {
+                _lastDevicePoses[0] = _lastNextDevicePoses[0] = new TrackedDevicePose_t()
+                {
+                    vVelocity = Vector3.Zero,
+                    eTrackingResult = ETrackingResult.Running_OK,
+                    vAngularVelocity = Vector3.Zero,
+                    bDeviceIsConnected = true,
+                    bPoseIsValid = true,
+                    mDeviceToAbsoluteTracking = Matrix.CreateTranslation(Vector3.Zero)
+                };
+                
+                _lastDevicePoses[1] = _lastNextDevicePoses[1] = new TrackedDevicePose_t()
+                {
+                    vVelocity = Vector3.Zero,
+                    eTrackingResult = ETrackingResult.Running_OK,
+                    vAngularVelocity = Vector3.Zero,
+                    bDeviceIsConnected = true,
+                    bPoseIsValid = true,
+                    mDeviceToAbsoluteTracking = Matrix.CreateTranslation(Vector3.Zero + (Vector3.Forward + Vector3.Left) * 0.5f)
+                };
+                
+                _lastDevicePoses[2] = _lastNextDevicePoses[2] = new TrackedDevicePose_t()
+                {
+                    vVelocity = Vector3.Zero,
+                    eTrackingResult = ETrackingResult.Running_OK,
+                    vAngularVelocity = Vector3.Zero,
+                    bDeviceIsConnected = true,
+                    bPoseIsValid = true,
+                    mDeviceToAbsoluteTracking = Matrix.CreateTranslation(Vector3.Zero + (Vector3.Forward + Vector3.Right) * 0.5f)
+                };
+                
+            }
+            else
+            {
+                var error = OpenVR.Compositor.WaitGetPoses(_lastDevicePoses, _lastNextDevicePoses);
+                if (error != EVRCompositorError.None)
+                    throw CreateException(error);
+            }
+            
+            
             for (var i = 0; i < _lastDevicePoses.Length; i++)
             {
                 var p = _lastDevicePoses[i];
@@ -385,7 +439,7 @@ namespace SharpVR
             if (Instance == null)
             {
                 Instance = new VrContext();
-                Instance.Initialize();
+                //Instance.Initialize();
             }
 
             return Instance;
@@ -420,6 +474,17 @@ namespace SharpVR
         {
             this.Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public void Submit(Eye eye, ref Texture_t vrTexture, ref VRTextureBounds_t vrTextureBounds,
+            EVRSubmitFlags     submitDefault)
+        {
+            if (!Emulated)
+            {
+                var err = OpenVR.Compositor.Submit((EVREye) eye, ref vrTexture, ref vrTextureBounds, submitDefault);
+                if (err != EVRCompositorError.None)
+                    Console.WriteLine($"[VR][EyeCamera {eye.ToString()}] {err.ToString()}");
+            }
         }
 
         private void Dispose(bool disposing)

@@ -4,22 +4,37 @@ using Valve.VR;
 
 namespace SharpVR
 {
-    
+
     public class VRButtonMask
     {
-        public const ulong System = (1ul << (int)EVRButtonId.System); // reserved
-        public const ulong ApplicationMenu = (1ul << (int)EVRButtonId.ApplicationMenu);
-        public const ulong Grip = (1ul << (int)EVRButtonId.Grip);
-        public const ulong Axis0 = (1ul << (int)EVRButtonId.Axis0);
-        public const ulong Axis1 = (1ul << (int)EVRButtonId.Axis1);
-        public const ulong Axis2 = (1ul << (int)EVRButtonId.Axis2);
-        public const ulong Axis3 = (1ul << (int)EVRButtonId.Axis3);
-        public const ulong Axis4 = (1ul << (int)EVRButtonId.Axis4);
-        public const ulong Touchpad = (1ul << (int)EVRButtonId.SteamVRTouchpad);
-        public const ulong Trigger = (1ul << (int)EVRButtonId.SteamVRTrigger);
+        public const ulong System          = (1ul << (int) EVRButtonId.System); // reserved
+        public const ulong ApplicationMenu = (1ul << (int) EVRButtonId.ApplicationMenu);
+        public const ulong Grip            = (1ul << (int) EVRButtonId.Grip);
+        public const ulong Axis0           = (1ul << (int) EVRButtonId.Axis0);
+        public const ulong Axis1           = (1ul << (int) EVRButtonId.Axis1);
+        public const ulong Axis2           = (1ul << (int) EVRButtonId.Axis2);
+        public const ulong Axis3           = (1ul << (int) EVRButtonId.Axis3);
+        public const ulong Axis4           = (1ul << (int) EVRButtonId.Axis4);
+        public const ulong Touchpad        = (1ul << (int) EVRButtonId.SteamVRTouchpad);
+        public const ulong Trigger         = (1ul << (int) EVRButtonId.SteamVRTrigger);
+    }
+
+    public interface IVRController : ITrackedDevice
+    {
+        Hand Hand { get; }
+    }
+
+    public class EmulatedController : TrackedDevice, IVRController
+    {
+        public Hand Hand { get; }
+        
+        public EmulatedController(VrContext context, int index, Hand hand) : base(context, index)
+        {
+            Hand = hand;
+        }
     }
     
-    public class Controller : TrackedDevice
+    public class VRController : TrackedDevice, IVRController
     {
         public Hand Hand { get; }
 
@@ -97,7 +112,7 @@ namespace SharpVR
         public bool GetTouchUp(EVRButtonId buttonId) => GetTouchUp(1ul << (int)buttonId);
 
 
-        internal Controller(VrContext context, int index) : base(context, index)
+        internal VRController(VrContext context, int index) : base(context, index)
         {
             var role = context.System.GetControllerRoleForTrackedDeviceIndex((uint) index);
             switch (role)

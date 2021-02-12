@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using NLog;
 using SharpVR;
 using TruSaber.Abstractions;
+using TruSaber.Configuration;
 using TruSaber.Debugging;
 using TruSaber.Graphics;
 using Valve.VR;
@@ -15,27 +16,22 @@ namespace TruSaber.Services
 {
     public class VRService : GameComponent, IVRService, IDisposable
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceProvider   _serviceProvider;
         private readonly ILogger<VRService> _logger;
-        private VrContext _context;
+        private readonly GameOptions        _gameOptions;
+        private          IVrContext         _context;
 
         private VREyeCamera[] Cameras;
         
         private Matrix _hmdPose;
-
-        public VRService(IServiceProvider serviceProvider, IGame game, ILogger<VRService> logger) : base(game.Game)
+        
+        public VRService(IServiceProvider serviceProvider, IGame game, ILogger<VRService> logger, GameOptions gameOptions) : base(game.Game)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
-            UpdateOrder = -100;
-
-            Cameras = new VREyeCamera[2];
-            Cameras[0] = new VREyeCamera(((IGame) Game), Eye.Left);
-            Cameras[1] = new VREyeCamera(((IGame) Game), Eye.Right);
-            Game.Components.Add(Cameras[0]);
-            Game.Components.Add(Cameras[1]);
-            ((IGame)Game).Cameras.Add(Cameras[0]);
-            ((IGame)Game).Cameras.Add(Cameras[1]);
+            _gameOptions = gameOptions;
+            UpdateOrder = -1000;
+            _context = CreateVrContext();
         }
 
         public override void Initialize()
@@ -44,12 +40,20 @@ namespace TruSaber.Services
             ((IGame)Game).GraphicsDeviceManager.SynchronizeWithVerticalRetrace = false;
             ((IGame)Game).GraphicsDeviceManager.GraphicsDevice.PresentationParameters.PresentationInterval = PresentInterval.Immediate;
             ((IGame)Game).GraphicsDeviceManager.ApplyChanges();
-            _context = CreateVrContext();
+            
+
+            Cameras = new VREyeCamera[2];
+            Cameras[0] = new VREyeCamera(((IGame) Game), Eye.Left);
+            Cameras[1] = new VREyeCamera(((IGame) Game), Eye.Right);
+            Game.Components.Add(Cameras[0]);
+            Game.Components.Add(Cameras[1]);
+            ((IGame)Game).Cameras.Add(Cameras[0]);
+            ((IGame)Game).Cameras.Add(Cameras[1]);
             
             base.Initialize();
         }
 
-        private VrContext CreateVrContext()
+        private IVrContext CreateVrContext()
         {
             if (!VrContext.CanCallNativeDll(out var error))
             {
@@ -79,7 +83,10 @@ namespace TruSaber.Services
             _logger.Info("Initializing VR Runtime");
             try
             {
-                vrContext.Initialize();
+                if(_gameOptions.EmulateVr)
+                    vrContext.InitializeEmulation(Game.Window.ClientBounds.Width, Game.Window.ClientBounds.Height, 60.0f.ToRadians());
+                else
+                    vrContext.Initialize();
             }
             catch (SharpVRException ex)
             {
@@ -119,7 +126,7 @@ namespace TruSaber.Services
             base.Dispose(disposing);
         }
 
-        public VrContext Context
+        public IVrContext Context
         {
             get => _context;
         }

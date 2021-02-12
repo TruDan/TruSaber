@@ -5,8 +5,8 @@
         <PublishReadyToRun>false</PublishReadyToRun>
         <TieredCompilation>false</TieredCompilation>
         <LangVersion>latest</LangVersion>
-        <Configurations>Debug;Release;DirectX</Configurations>
-        <Platforms>AnyCPU</Platforms>
+        <Configurations>Release;DirectX;Debug</Configurations>
+        <Platforms>AnyCPU;x64</Platforms>
     </PropertyGroup>
     <PropertyGroup>
         <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -23,6 +23,12 @@
         </None>
         <None Update="NLog.config">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="appsettings.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="hostsettings.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
     <ItemGroup>

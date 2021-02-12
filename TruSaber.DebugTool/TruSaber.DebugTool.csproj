@@ -5,7 +5,7 @@
         <UseWindowsForms>true</UseWindowsForms>
         <OutputType>WinExe</OutputType>
         <Configurations>Debug;Release;DirectX</Configurations>
-        <Platforms>AnyCPU;x86</Platforms>
+        <Platforms>AnyCPU;x86;x64</Platforms>
     </PropertyGroup>
 
     <ItemGroup>

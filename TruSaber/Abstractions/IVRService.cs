@@ -11,7 +11,7 @@ namespace TruSaber.Abstractions
     public interface IVRService : IGameComponent
     {
         
-        VrContext Context { get; }
+        IVrContext Context { get; }
         
     }
 }

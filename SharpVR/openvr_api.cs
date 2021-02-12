@@ -7,6 +7,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.Xna.Framework;
 using Valve.VR;
 
 namespace Valve.VR
@@ -5184,47 +5185,147 @@ namespace Valve.VR
     [StructLayout(LayoutKind.Sequential)]
     public struct HmdMatrix34_t
     {
-        public float m0; //float[3][4]
-        public float m1;
-        public float m2;
-        public float m3;
-        public float m4;
-        public float m5;
-        public float m6;
-        public float m7;
-        public float m8;
-        public float m9;
-        public float m10;
-        public float m11;
+        public float M11; //float[4][4]
+        public float M12;
+        public float M13;
+        public float M14;
+        public float M21;
+        public float M22;
+        public float M23;
+        public float M24;
+        public float M31;
+        public float M32;
+        public float M33;
+        public float M34;
+        
+        
+        public HmdMatrix34_t(float m11, float m12, float m13, float m14,
+            float                  m21, float m22, float m23, float m24,
+            float                  m31, float m32, float m33, float m34)
+        {
+            M11 = m11;
+            M12 = m12;
+            M13 = m13;
+            M14 = m14;
+            M21 = m21;
+            M22 = m22;
+            M23 = m23;
+            M24 = m24;
+            M31 = m31;
+            M32 = m32;
+            M33 = m33;
+            M34 = m34;
+        }
+
+        public static implicit operator Matrix(HmdMatrix34_t mat)
+        {
+            var m = new Matrix(
+                mat.M11, mat.M21, mat.M31, 0.0f,
+                mat.M12, mat.M22, mat.M32, 0.0f,
+                mat.M13, mat.M23, mat.M33, 0.0f,
+                mat.M14, mat.M24, mat.M34, 1.0f);
+            
+           return Matrix.Invert(m);
+           //return m;
+        }
+
+        public static implicit operator HmdMatrix34_t(Matrix m)
+        {
+           var mat = Matrix.Invert(m);
+             
+            return new HmdMatrix34_t(mat.M11, mat.M21, mat.M31, mat.M41,
+                mat.M12, mat.M22, mat.M32, mat.M42,
+                mat.M13, mat.M23, mat.M33, mat.M43);
+            // return new HmdMatrix34_t(mat.M11, mat.M12, mat.M13, mat.M14, 
+            //     mat.M21, mat.M22, mat.M23, mat.M24,
+            //     mat.M31, mat.M32, mat.M33, mat.M34);
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct HmdMatrix44_t
     {
-        public float m0; //float[4][4]
-        public float m1;
-        public float m2;
-        public float m3;
-        public float m4;
-        public float m5;
-        public float m6;
-        public float m7;
-        public float m8;
-        public float m9;
-        public float m10;
-        public float m11;
-        public float m12;
-        public float m13;
-        public float m14;
-        public float m15;
+        public float M11; //float[4][4]
+        public float M12;
+        public float M13;
+        public float M14;
+        public float M21;
+        public float M22;
+        public float M23;
+        public float M24;
+        public float M31;
+        public float M32;
+        public float M33;
+        public float M34;
+        public float M41;
+        public float M42;
+        public float M43;
+        public float M44;
+
+        public HmdMatrix44_t(float m11, float m12, float m13, float m14,
+            float                  m21, float m22, float m23, float m24,
+            float                  m31, float m32, float m33, float m34,
+            float                  m41, float m42, float m43, float m44)
+        {
+            M11 = m11;
+            M12 = m12;
+            M13 = m13;
+            M14 = m14;
+            M21 = m21;
+            M22 = m22;
+            M23 = m23;
+            M24 = m24;
+            M31 = m31;
+            M32 = m32;
+            M33 = m33;
+            M34 = m34;
+            M41 = m41;
+            M42 = m42;
+            M43 = m43;
+            M44 = m44;
+        }
+
+        public static implicit operator Matrix(HmdMatrix44_t mat)
+        {
+            return new Matrix(
+                mat.M11, mat.M21, mat.M31, mat.M41,
+                mat.M12, mat.M22, mat.M32, mat.M42,
+                mat.M13, mat.M23, mat.M33, mat.M43,
+                mat.M14, mat.M24, mat.M34, mat.M44);
+        }
+
+        public static implicit operator HmdMatrix44_t(Matrix mat)
+        {
+            return new HmdMatrix44_t(mat.M11, mat.M21, mat.M31, mat.M41,
+                mat.M12, mat.M22, mat.M32, mat.M42,
+                mat.M13, mat.M23, mat.M33, mat.M43,
+                mat.M14, mat.M24, mat.M34, mat.M44);
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]
     public struct HmdVector3_t
     {
-        public float v0; //float[3]
-        public float v1;
-        public float v2;
+        public float X; //float[3]
+        public float Y;
+        public float Z;
+
+        public HmdVector3_t(float x, float y, float z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
+
+        public static implicit operator Vector3(HmdVector3_t vec)
+        {
+            return new Vector3(vec.X, vec.Y, vec.Z);
+        }
+        
+        public static implicit operator HmdVector3_t(Vector3 vec)
+        {
+            return new HmdVector3_t(vec.X, vec.Y, vec.Z);
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]

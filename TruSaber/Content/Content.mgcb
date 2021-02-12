@@ -10,8 +10,8 @@
 
 #-------------------------------- References --------------------------------#
 
-/reference:..\..\AnimationPipeline\bin\netcoreapp3.1\AnimationPipeline.dll
-/reference:..\..\AnimationPipeline\bin\netcoreapp3.1\XnaAux.dll
+/reference:..\..\AnimationPipeline\bin\x86\Debug\net5.0\AnimationPipeline.dll
+/reference:..\..\AnimationPipeline\bin\x86\Debug\net5.0\XnaAux.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -138,13 +138,13 @@
 
 #begin Models/Characters/Player.fbx
 /importer:FbxImporter
-/processor:AnimationModelProcessor
+/processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
 /processorParam:ColorKeyEnabled=True
-/processorParam:DefaultEffect=SkinnedEffect
+/processorParam:DefaultEffect=BasicEffect
 /processorParam:GenerateMipmaps=True
 /processorParam:GenerateTangentFrames=False
-/processorParam:PremultiplyTextureAlpha=False
+/processorParam:PremultiplyTextureAlpha=True
 /processorParam:PremultiplyVertexColors=True
 /processorParam:ResizeTexturesToPowerOfTwo=False
 /processorParam:RotationX=0
@@ -152,7 +152,7 @@
 /processorParam:RotationZ=0
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
-/processorParam:TextureFormat=Color
+/processorParam:TextureFormat=Compressed
 /build:Models/Characters/Player.fbx
 
 #begin Models/Platform.fbx
@@ -174,7 +174,7 @@
 /processorParam:TextureFormat=Compressed
 /build:Models/Platform.fbx
 
-#begin Models/Saber.fbx
+#begin Models/Saber.dae
 /importer:FbxImporter
 /processor:ModelProcessor
 /processorParam:ColorKeyColor=0,0,0,0
@@ -191,5 +191,5 @@
 /processorParam:Scale=1
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed
-/build:Models/Saber.fbx
+/build:Models/Saber.dae
 

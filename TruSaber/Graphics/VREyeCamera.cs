@@ -65,7 +65,7 @@ namespace TruSaber.Graphics
         private Quaternion _rotation = Quaternion.Identity;
         
         private GraphicsDevice _graphicsDevice;
-        private VrContext _vrContext;
+        private IVrContext _vrContext;
         
         private Texture_t _vrTexture;
         private VRTextureBounds_t _vrTextureBounds;
@@ -157,9 +157,7 @@ namespace TruSaber.Graphics
             _graphicsDevice.Clear(Color.Black);
             doDraw();
 
-            var err = OpenVR.Compositor.Submit((EVREye) Eye, ref _vrTexture, ref _vrTextureBounds, EVRSubmitFlags.Submit_Default);
-            if(err != EVRCompositorError.None)
-                Console.WriteLine($"[VR][EyeCamera {Eye.ToString()}] {err.ToString()}");
+            _vrContext.Submit(Eye, ref _vrTexture, ref _vrTextureBounds, EVRSubmitFlags.Submit_Default);
         }
     }
 }

@@ -21,8 +21,10 @@ namespace TruSaber.Abstractions
         public static void AddGameConfiguration(this IServiceCollection services)
         {
             // your base DI def here
-            services.AddSingleton<VrContext>(sp => VrContext.Get());
+//            services.AddSingleton<VrContext>(sp => VrContext.Get());
             services.AddSingleton<IVRService, VRService>();
+            services.AddSingleton<IVrContext>(provider => provider.GetRequiredService<IVRService>().Context);
+            services.AddSingleton<VrContext>(provider => provider.GetRequiredService<IVRService>().Context as VrContext);
             services.AddSingleton<SceneManager>();
             services.AddSingleton<PerspectiveCamera>();
             services.AddSingleton<InputManager>();

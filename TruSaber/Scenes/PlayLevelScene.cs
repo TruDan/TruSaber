@@ -54,14 +54,16 @@ namespace TruSaber.Scenes
 
             _activeNoteEntities = new List<NoteEntity>();
             
-            _parallelLooper = new ParallelLooper();
-            for(int i = 0; i < Math.Min(Environment.ProcessorCount, 8); i++)
-            {
-                _parallelLooper.AddThread();
-            }
-            _space = new Space(_parallelLooper);
+            // _parallelLooper = new ParallelLooper();
+            // for(int i = 0; i < Math.Min(Environment.ProcessorCount, 8); i++)
+            // {
+            //     _parallelLooper.AddThread();
+            // }
+            // _space = new Space(_parallelLooper);
+            _space = new Space();
             _space.Solver.AllowMultithreading = false;
             _space.ForceUpdater.Enabled = true;
+            
             _space.PositionUpdater.Enabled = true;
             _space.BoundingBoxUpdater.Enabled = true;
             _space.DeactivationManager.Enabled = false;
@@ -217,8 +219,12 @@ namespace TruSaber.Scenes
             var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             
 //            _space.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-            _space.TimeStepSettings.TimeStepDuration = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            _space.Update(dt);
+            _space.TimeStepSettings.TimeStepDuration = (float) gameTime.ElapsedGameTime.TotalSeconds;
+            try
+            {
+                _space.Update(dt);
+            }
+            catch {}
 
             _modelDrawer.Update();
                         
