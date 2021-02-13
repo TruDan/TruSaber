@@ -25,14 +25,11 @@ namespace RocketUI
         }
     }
 
-    public class GuiManager
+    public class GuiManager : DrawableGameComponent
     {
         // public GuiDebugHelper DebugHelper { get; }
 
         public event EventHandler<GuiDrawScreenEventArgs> DrawScreen;
-
-        private Game Game { get; }
-        private GraphicsDevice GraphicsDevice { get; set; }
 
         public GuiScaledResolution ScaledResolution { get; }
         public GuiFocusHelper FocusManager { get; }
@@ -41,7 +38,6 @@ namespace RocketUI
 
         internal InputManager InputManager { get; }
         internal SpriteBatch SpriteBatch { get; private set; }
-        internal GuiRenderArgs GuiRenderArgs { get; private set; }
 
         public GuiSpriteBatch GuiSpriteBatch { get; private set; }
 
@@ -55,9 +51,8 @@ namespace RocketUI
             IServiceProvider serviceProvider,
             InputManager inputManager,
             IGuiRenderer guiRenderer
-        )
+        ) : base(game)
         {
-            Game = game;
             ServiceProvider = serviceProvider;
             InputManager = inputManager;
             ScaledResolution = new GuiScaledResolution(game)
@@ -73,8 +68,6 @@ namespace RocketUI
             SpriteBatch = new SpriteBatch(Game.GraphicsDevice);
 
             GuiSpriteBatch = new GuiSpriteBatch(guiRenderer, Game.GraphicsDevice, SpriteBatch);
-            GuiRenderArgs = new GuiRenderArgs(Game.GraphicsDevice, SpriteBatch, ScaledResolution, GuiRenderer,
-                new GameTime());
             //  DebugHelper = new GuiDebugHelper(this);
 
         }
@@ -93,16 +86,19 @@ namespace RocketUI
             }
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            Init(GraphicsDevice, ServiceProvider);
+        }
+
         public void Init(GraphicsDevice graphicsDevice, IServiceProvider serviceProvider)
         {
-            GraphicsDevice = graphicsDevice;
             SpriteBatch = new SpriteBatch(graphicsDevice);
             GuiRenderer.Init(graphicsDevice, serviceProvider);
 
             GuiSpriteBatch?.Dispose();
             GuiSpriteBatch = new GuiSpriteBatch(GuiRenderer, graphicsDevice, SpriteBatch);
-            GuiRenderArgs =
-                new GuiRenderArgs(GraphicsDevice, SpriteBatch, ScaledResolution, GuiRenderer, new GameTime());
         }
 
         private bool _doInit = true;
@@ -172,8 +168,11 @@ namespace RocketUI
             return Screens.Contains(screen);
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
+            if(!Enabled)
+                return;
+            
             ScaledResolution.Update();
             
             var screens = Screens.ToArray();
@@ -203,8 +202,11 @@ namespace RocketUI
 
         private BasicEffect _basicEffect;
 
-        public void Draw(GameTime gameTime)
+        public override void Draw(GameTime gameTime)
         {
+            if (!Visible)
+                return;
+            
             IDisposable maybeADisposable = null;
 
             try
@@ -230,7 +232,9 @@ namespace RocketUI
         {
             foreach (var screen in Screens.ToArray())
             {
-                if (screen == null) continue;
+                if (screen == null || screen is IGuiManaged)
+                    continue;
+                
                 action.Invoke(screen);
             }
         }

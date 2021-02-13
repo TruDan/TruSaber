@@ -13,6 +13,7 @@ using SharpVR;
 using TruSaber.Graphics;
 using TruSaber.Scenes;
 using TruSaber.Services;
+using IGuiRenderer = RocketUI.Graphics.IGuiRenderer;
 
 namespace TruSaber.Abstractions
 {
@@ -28,7 +29,7 @@ namespace TruSaber.Abstractions
             services.AddSingleton<SceneManager>();
             services.AddSingleton<PerspectiveCamera>();
             services.AddSingleton<InputManager>();
-//            services.AddSingleton<IGuiRenderer>();
+            services.AddSingleton<IGuiRenderer, GuiRenderer>();
             services.AddSingleton<GuiManager>();
         }
 

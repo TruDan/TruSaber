@@ -72,7 +72,7 @@ namespace RocketUI.Input
 
         public void Update(GameTime gameTime)
         {
-            if (!Game.IsActive) //Do not process input when Alex isn't focused.
+            if (!Game.IsActive)
                 return;
             
             foreach (var playerInputManager in PlayerInputManagers.Values.ToArray())

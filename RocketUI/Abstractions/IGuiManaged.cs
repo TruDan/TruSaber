@@ -1,6 +1,6 @@
 ﻿namespace RocketUI.Abstractions
 {
-    public class IGuiManaged
+    public interface IGuiManaged
     {
         
     }

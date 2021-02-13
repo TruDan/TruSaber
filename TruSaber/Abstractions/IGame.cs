@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using RocketUI;
 using TruSaber.Scenes;
 
 namespace TruSaber.Abstractions
@@ -19,6 +20,7 @@ namespace TruSaber.Abstractions
         Player Player { get; }
         
         IServiceProvider ServiceProvider { get; }
+        GuiManager           GuiManager      { get; }
 
         event EventHandler<EventArgs> Exiting;
 

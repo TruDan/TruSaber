@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RocketUI;
 using RocketUI.Graphics;
 using SharpDX;
 using TruSaber.Abstractions;
@@ -30,6 +31,10 @@ namespace TruSaber
         public SceneManager SceneManager { get; private set; }
         
         public Player Player { get; private set; }
+        
+        
+        
+        public GuiManager GuiManager { get; private set; }
 
         public TruSaberGame(IServiceProvider services)
         {
@@ -55,6 +60,7 @@ namespace TruSaber
             GraphicsDeviceManager.SynchronizeWithVerticalRetrace = false;
 //            GraphicsDeviceManager.PreferMultiSampling = true;
             IsFixedTimeStep = false;
+            Window.AllowUserResizing = true;
             
             GraphicsDeviceManager.ApplyChanges();
             
@@ -63,6 +69,10 @@ namespace TruSaber
             Components.Add(vr);
             
             Player = new Player(this);
+
+            GuiManager = ServiceProvider.GetRequiredService<GuiManager>();
+            Components.Add(GuiManager);
+
             Components.Add(Player);
             base.Initialize();
         }

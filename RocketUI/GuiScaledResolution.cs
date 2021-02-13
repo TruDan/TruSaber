@@ -92,16 +92,18 @@ namespace RocketUI
 		{
 			Graphics = game.GraphicsDevice;
 
+			ViewportSize = new Size(game.Window.ClientBounds.Width, game.Window.ClientBounds.Height);
+			
 			Graphics.DeviceReset          += (sender, args) => Update();
-//			game.Window.ClientSizeChanged += (sender, args) => ViewportSize = new Size(Graphics.Viewport.Width,  Graphics.Viewport.Height);
-//			game.Activated                += (sender, args) => Update();
+			game.Window.ClientSizeChanged += (sender, args) => ViewportSize = new Size(Graphics.Viewport.Width,  Graphics.Viewport.Height);
+			game.Activated                += (sender, args) => Update();
 
-			//TargetWidth = 480;
-			//TargetHeight = 320;
+			TargetWidth = 480;
+			TargetHeight = 320;
 
 			//_targetWidth = Viewport.TitleSafeArea.Width;
 			//_targetHeight = Viewport.TitleSafeArea.Height;
-			//Update();
+			Update();
 		}
 
 		public void Update()

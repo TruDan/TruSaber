@@ -64,8 +64,8 @@ namespace TruSaber
             {
                 if (VrContext.LeftController != null)
                 {
-                    Position = Player.Position + VrContext.LeftController.LocalPosition;
-                    Rotation = Quaternion.Multiply(VrContext.LeftController.LocalRotation, ControllerOffset);
+                    Transform.Position = Player.Position + VrContext.LeftController.LocalPosition;
+                    Transform.Rotation = Quaternion.Multiply(VrContext.LeftController.LocalRotation, ControllerOffset);
                     //PhysicsEntity.AngularVelocity = VrContext.LeftController.GetAngularVelocity().ToBEPU();
                 }
             }
@@ -73,8 +73,8 @@ namespace TruSaber
             {
                 if (VrContext.RightController != null)
                 {
-                    Position = Player.Position + VrContext.RightController.LocalPosition;
-                    Rotation = Quaternion.Multiply(VrContext.RightController.LocalRotation, ControllerOffset);
+                    Transform.Position = Player.Position + VrContext.RightController.LocalPosition;
+                    Transform.Rotation = Quaternion.Multiply(VrContext.RightController.LocalRotation, ControllerOffset);
                 }
             }
 
