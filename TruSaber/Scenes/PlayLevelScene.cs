@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended.Collisions;
 using SharpVR;
+using TruSaber.Configuration;
 using TruSaber.Models;
 using TruSaber.Utilities.Extensions;
 using Matrix = Microsoft.Xna.Framework.Matrix;
@@ -32,7 +33,7 @@ namespace TruSaber.Scenes
         private ParallelLooper _parallelLooper;
         private Space          _space;
 
-        public PlayLevelScene() : this("/home/kenny/Desktop/TruSaber/Test Levels/2f1d (High Hopes - MinorSetback)")
+        public PlayLevelScene() : this(TruSaberGame.Instance.ServiceProvider.GetRequiredService<GameOptions>().DebugLevel)
         {
         }
 

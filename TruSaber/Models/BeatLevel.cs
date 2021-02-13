@@ -25,7 +25,7 @@ namespace TruSaber.Models
         private bool _infoLoaded;
         public BeatLevel(string directory)
         {
-            Directory = directory;
+            Directory = Path.GetFullPath(directory);
         }
 
         public async Task LoadLevelInfoAsync()
