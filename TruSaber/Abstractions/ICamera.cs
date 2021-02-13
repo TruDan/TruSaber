@@ -7,8 +7,6 @@ namespace TruSaber.Abstractions
     {
         public Vector3 Position { get; set; }
         public Quaternion Rotation { get; set; }
-        public Vector3 Forward { get; }
-        public Vector3 Up { get; }
         
         public Matrix View { get; }
         public Matrix Projection { get; }

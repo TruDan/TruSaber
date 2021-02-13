@@ -2,7 +2,6 @@
 {
     public interface IGuiScreen : IGuiElement, IGuiFocusContext
     {
-
         void UpdateLayout();
 
     }

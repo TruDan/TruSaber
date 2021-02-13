@@ -7,8 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Xna.Framework;
 using NLog;
 using NLog.Extensions.Logging;
+using RocketUI.Abstractions;
 using TruSaber.Abstractions;
 using TruSaber.Configuration;
 using TruSaber.Debugging;
@@ -49,6 +51,7 @@ namespace TruSaber
                     services.AddOptions<GameOptions>().Bind(hostContext.Configuration);
                     services.AddSingleton<GameOptions>(opts);
                     services.AddSingleton<IGame, TruSaberGame>();
+                    services.AddSingleton<Game>(sp => sp.GetRequiredService<IGame>().Game);
                     services.AddHostedService<Worker>();
                     services.AddGameConfiguration();
 

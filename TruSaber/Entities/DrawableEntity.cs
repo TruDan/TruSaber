@@ -88,7 +88,7 @@ namespace TruSaber
             if (Model != null)
             {
                 var camera = ((IGame)Game).Camera;
-                Model.Draw(World, camera.View, camera.Projection);
+                Model.Draw(Transform.World, camera.View, camera.Projection);
             }
         }
 

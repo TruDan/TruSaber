@@ -6,45 +6,54 @@ using TruSaber.Abstractions;
 
 namespace TruSaber.Graphics
 {
-    public class PerspectiveCamera : ICamera
+    public class PerspectiveCamera : GameComponent, ICamera, ITransformable
     {
-        private readonly IGame _game;
-        private Vector3 _position = Vector3.Zero;
-        public event EventHandler<EventArgs> EnabledChanged;
-        public event EventHandler<EventArgs> UpdateOrderChanged;
+        private readonly IGame       _game;
+        public           Transform3D Transform { get; } = new Transform3D();
 
-        public bool Enabled { get; }
-        public int UpdateOrder { get; }
+        public Vector3 Scale
+        {
+            get => Transform.Scale;
+            set => Transform.Scale = value;
+        }
 
         public Vector3 Position
         {
-            get => _position;
-            set
-            {
-                _position = value; 
-                UpdateView();
-            }
+            get => Transform.Position;
+            set => Transform.Position = value;
         }
 
-        public Quaternion Rotation { get; set; }
-        public Vector3 Forward { get; private set; } = Vector3.Backward;
-        public Vector3 Up { get; private set; } = Vector3.Up;
-        public Matrix View { get; private set; }
+        public Quaternion Rotation
+        {
+            get => Transform.Rotation;
+            set => Transform.Rotation = value;
+        }
+
+        public Matrix World
+        {
+            get => Transform.World;
+        }
+
+        public Matrix View       { get; private set; }
         public Matrix Projection { get; private set; }
 
-        public PerspectiveCamera(IGame game)
+        public PerspectiveCamera(IGame game) : base(game.Game)
         {
             _game = game;
             UpdateView();
             UpdateProjection();
 
             _game.GraphicsDeviceManager.DeviceCreated += (sender, args) => UpdateProjection();
-            _game.GraphicsDeviceManager.DeviceReset += (sender, args) => UpdateProjection();
+            _game.GraphicsDeviceManager.DeviceReset += (sender,   args) => UpdateProjection();
+            _game.Window.ClientSizeChanged += (sender,            args) => UpdateProjection();
+            Transform.PositionChanged += (sender,                 args) => UpdateView();
         }
         
         private void UpdateView()
         {
-            View = Matrix.CreateLookAt(Position, Position - Forward, Up);
+            var forward = Vector3.Transform(Vector3.Backward, Rotation);
+            var up      = Vector3.Transform(Vector3.Up, Rotation);
+            View = Matrix.CreateLookAt(Position, Position - forward, up);
         }
 
         private void UpdateProjection()
@@ -55,7 +64,7 @@ namespace TruSaber.Graphics
             var aspect = (float) w / (float) h;
             Projection = Matrix.CreatePerspectiveFieldOfView(60.0f.ToRadians(), aspect, 0.1f, 100f);
         }
-        
+
         public void Update(GameTime gameTime)
         {
             var keyboard = KeyboardExtended.GetState();
@@ -63,13 +72,14 @@ namespace TruSaber.Graphics
             {
             }
         }
-        
+
         public void Draw(Action doDraw)
         {
             var g = _game.Game.GraphicsDevice;
-            
+
             g.SetRenderTarget(null);
             g.Clear(Color.Black);
+
             doDraw();
         }
     }
