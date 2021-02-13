@@ -87,8 +87,25 @@ namespace TruSaber
             
             if (Model != null)
             {
-                var camera = ((IGame)Game).Camera;
-                Model.Draw(World, camera.View, camera.Projection);
+                var rasterBefore = GraphicsDevice.RasterizerState;
+                var pencilBefore = GraphicsDevice.DepthStencilState;
+                var blend        = GraphicsDevice.BlendState;
+                
+                GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                GraphicsDevice.BlendState = BlendState.AlphaBlend;
+
+                try
+                {
+                    var camera = ((IGame) Game).Camera;
+                    Model.Draw(World, camera.View, camera.Projection);
+                }
+                finally
+                {
+                    GraphicsDevice.RasterizerState = rasterBefore;
+                    GraphicsDevice.DepthStencilState = pencilBefore;
+                    GraphicsDevice.BlendState = blend;
+                }
             }
         }
 

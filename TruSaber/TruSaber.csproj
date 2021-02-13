@@ -43,8 +43,6 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="BEPUik" Version="1.5.1" />
-        <PackageReference Include="BepuPhysics" Version="1.5.1" />
-        <PackageReference Include="BEPUutilities" Version="1.5.1" />
         <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
@@ -67,7 +65,6 @@
         <ProjectReference Include="..\AnimationAux\AnimationAux.csproj" />
         <ProjectReference Include="..\AnimationPipeline\AnimationPipeline.csproj" />
         <ProjectReference Include="..\BeatMapLib\BeatMapLib.csproj" />
-        <ProjectReference Include="..\BEPUphysicsDrawer\BEPUphysicsDrawer.csproj" />
         <ProjectReference Include="..\RocketUI\RocketUI.csproj" />
         <ProjectReference Include="..\SharpVR\SharpVR.csproj" />
     </ItemGroup>

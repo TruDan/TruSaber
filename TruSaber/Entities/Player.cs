@@ -32,12 +32,14 @@ namespace TruSaber
 
         public override void Initialize()
         {
-            base.Initialize();
-            LeftHand.Initialize();
-            RightHand.Initialize();
-            //ResizeToHeight();
             Position = Vector3.Zero;
             Rotation = Quaternion.Identity;
+            
+            LeftHand.Initialize();
+            RightHand.Initialize();
+            
+            base.Initialize();
+            //ResizeToHeight();
         }
 
         public override void Update(GameTime gameTime)

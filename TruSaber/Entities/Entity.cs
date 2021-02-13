@@ -12,7 +12,8 @@ namespace TruSaber
         private Quaternion _rotation = Quaternion.Identity;
         private Vector3    _velocity = Vector3.Zero;
 
-        public virtual Matrix World { get; protected set; }
+        public virtual Matrix      World       { get; protected set; }
+        public         BoundingBox BoundingBox { get; private set; }
         
         public virtual Vector3 Scale
         {
@@ -33,6 +34,7 @@ namespace TruSaber
                 if(_position == value) 
                     return;
                 _position = value;
+
                 OnPositionChanged();
             }
         }
@@ -95,11 +97,6 @@ namespace TruSaber
             }
 
             base.Update(gameTime);
-            
-            if (Velocity != Vector3.Zero)
-            {
-                Position += (Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            }
         }
     }
 }

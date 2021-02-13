@@ -2,17 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using BeatMapInfo;
-using BEPUphysics;
-using BEPUphysics.BroadPhaseEntries;
-using BEPUphysics.BroadPhaseEntries.MobileCollidables;
-using BEPUphysics.CollisionRuleManagement;
-using BEPUphysics.CollisionShapes.ConvexShapes;
-using BEPUphysics.CollisionTests;
-using BEPUphysics.Entities.Prefabs;
-using BEPUphysics.NarrowPhaseSystems.Pairs;
-using BEPUphysicsDrawer.Lines;
-using BEPUphysicsDrawer.Models;
-using BEPUutilities;
 using BEPUutilities.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
@@ -43,7 +32,7 @@ namespace TruSaber.Scenes
         private ParallelLooper _parallelLooper;
         private Space          _space;
 
-        public PlayLevelScene() : this("C:\\Users\\truda\\Desktop\\2f1d (High Hopes - MinorSetback)")
+        public PlayLevelScene() : this("/home/kenny/Desktop/TruSaber/Test Levels/2f1d (High Hopes - MinorSetback)")
         {
         }
 
@@ -60,23 +49,10 @@ namespace TruSaber.Scenes
             //     _parallelLooper.AddThread();
             // }
             // _space = new Space(_parallelLooper);
-            _space = new Space();
-            _space.Solver.AllowMultithreading = false;
-            _space.ForceUpdater.Enabled = true;
-            
-            _space.PositionUpdater.Enabled = true;
-            _space.BoundingBoxUpdater.Enabled = true;
-            _space.DeactivationManager.Enabled = false;
+            _space = new Space(Level);
             //_space.Solver.IterationLimit = 1;
-            
-            _space.TimeStepSettings.MaximumTimeStepsPerFrame = 10;
-            _space.TimeStepSettings.TimeStepDuration = 1f / 80f;
-        }
 
-        private InstancedModelDrawer _modelDrawer   = new (TruSaberGame.Instance.Game);
-        private BoundingBoxDrawer    _bbDrawer      = new (TruSaberGame.Instance.Game);
-        private ContactDrawer        _contactDrawer = new (TruSaberGame.Instance.Game);
-        
+        }
         
         protected override void OnInitialize()
 
@@ -98,61 +74,34 @@ namespace TruSaber.Scenes
             foreach (var note in map.Notes)
             {
                 var noteEntity = new NoteEntity(TruSaberGame.Instance, note, (float) bpm, _speed,
-                    (float) Level.MapInfo.SongTimeOffset);
-                _noteEntities.Enqueue(noteEntity);
+                    0f);
+                
+                SpawnNote(noteEntity);
+                //_noteEntities.Enqueue(noteEntity);
             }
+
+            _space.Start(TimeSpan.FromMilliseconds(Level.MapInfo.SongTimeOffset));
 
             InitPhysics();
         }
 
         private void InitPhysics()
         {
-            var leftNoteGroup  = new CollisionGroup();
-            var rightNoteGroup = new CollisionGroup();
-            
-            var leftHandGroup  = new CollisionGroup();
-            var rightHandGroup = new CollisionGroup();
-
             //CollisionRules.CollisionGroupRules.Add(new CollisionGroupPair(leftNoteGroup, leftNoteGroup), CollisionRule.NoSolver);
             //CollisionRules.CollisionGroupRules.Add(new CollisionGroupPair(rightNoteGroup, rightNoteGroup), CollisionRule.NoSolver);
-            CollisionRules.CollisionGroupRules.Add(new CollisionGroupPair(leftNoteGroup, rightNoteGroup), CollisionRule.NoSolver);
-            CollisionRules.CollisionGroupRules.Add(new CollisionGroupPair(leftHandGroup, rightNoteGroup), CollisionRule.NoSolver);
-            CollisionRules.CollisionGroupRules.Add(new CollisionGroupPair(leftHandGroup, rightHandGroup), CollisionRule.NoSolver);
-            CollisionRules.CollisionGroupRules.Add(new CollisionGroupPair(leftNoteGroup, rightHandGroup), CollisionRule.NoSolver);
 
-
-            foreach (var noteEntity in _noteEntities)
-            {
-                if (noteEntity.Type == NoteType.LeftNote)
-                {
-                    noteEntity.PhysicsEntity.CollisionInformation.CollisionRules.Group = leftNoteGroup;
-                }
-                else if (noteEntity.Type == NoteType.RightNote)
-                {
-                    noteEntity.PhysicsEntity.CollisionInformation.CollisionRules.Group = rightNoteGroup;
-                }
-
-                noteEntity.PhysicsEntity.CollisionInformation.Events.InitialCollisionDetected += EventsOnContactCreated;
-            }
-
-            _player.LeftHand.PhysicsEntity.CollisionInformation.CollisionRules.Group = leftHandGroup;
-            _player.RightHand.PhysicsEntity.CollisionInformation.CollisionRules.Group = rightHandGroup;
-            
-            _player.LeftHand.PhysicsEntity.CollisionInformation.Events.InitialCollisionDetected += EventsOnContactCreated;
-            _player.RightHand.PhysicsEntity.CollisionInformation.Events.InitialCollisionDetected += EventsOnContactCreated;
-            
             _player.LeftHand.AddToSpace(_space);
             _player.RightHand.AddToSpace(_space);
-            _space.ForceUpdater.Gravity = new BEPUutilities.Vector3();
 
-            
             _bbEffect = new BasicEffect(TruSaberGame.Instance.Game.GraphicsDevice);
             _bbEffect.LightingEnabled = false;
             _bbEffect.VertexColorEnabled = true;
             _bbEffect.World = Matrix.Identity;
+            //  _player.Enabled = false;
+            // _bbEffect.
         }
 
-        private void EventsOnContactCreated(EntityCollidable sender, Collidable other, CollidablePairHandler pair)
+        /*private void EventsOnContactCreated(EntityCollidable sender, Collidable other, CollidablePairHandler pair)
         {
             HandEntity hand;
             NoteEntity note;
@@ -182,7 +131,7 @@ namespace TruSaber.Scenes
             {
                 DespawnNote(note);
             }
-        }
+        }*/
 
         private bool        _started;
         private int         noteIndex;
@@ -199,35 +148,17 @@ namespace TruSaber.Scenes
 
             var playPosition       = MediaPlayer.PlayPosition + _speedOffset;
 
-            var spawn = true;
-            while (spawn)
-            {
-                if (_noteEntities.TryPeek(out var note))
-                {
-                    if(note.DueTime > playPosition)
-                        break;
-
-                    if (!_noteEntities.TryDequeue(out note))
-                        break;
-                    
-                    if (!note.HasSpawnedAtLeastOnce)
-                    {
-                        SpawnNote(note);
-                    }
-                }
-            }
             var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
             
-//            _space.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-            _space.TimeStepSettings.TimeStepDuration = (float) gameTime.ElapsedGameTime.TotalSeconds;
-            try
-            {
-                _space.Update(dt);
-            }
-            catch {}
+          //  _space.TimeStepSettings.TimeStepDuration = (float) gameTime.ElapsedGameTime.TotalSeconds;
+         //   try
+          //  {
+         //       _space.Update(dt);
+         //   }
+         //   catch {}
 
-            _modelDrawer.Update();
-                        
+         
+            _space.Update(gameTime);
             base.OnUpdate(gameTime);
 
             //
@@ -264,8 +195,8 @@ namespace TruSaber.Scenes
             _bbEffect.Projection = proj;
             
            // _modelDrawer.Draw(view.ToBEPU(), proj.ToBEPU());
-            _contactDrawer.Draw(_bbEffect, _space);
-            _bbDrawer.Draw(_bbEffect, _space);
+           // _contactDrawer.Draw(_bbEffect, _space);
+           // _bbDrawer.Draw(_bbEffect, _space);
         }
 
         protected override void OnDraw(GameTime gameTime)
@@ -281,14 +212,14 @@ namespace TruSaber.Scenes
             Components.Add(note);
             note.AddToSpace(_space);
             _activeNoteEntities.Add(note);
-            _modelDrawer.Add(note.PhysicsEntity);
+        //    _modelDrawer.Add(note.PhysicsEntity);
         }
 
         private void DespawnNote(NoteEntity note)
         {
             if(!note.Spawned) return;
             
-            _modelDrawer.Remove(note.PhysicsEntity);
+         //   _modelDrawer.Remove(note.PhysicsEntity);
             _activeNoteEntities.Remove(note);
             note.RemoveFromSpace(_space);
             Components.Remove(note);

@@ -63,10 +63,8 @@ namespace TruSaber
             Components.Add(vr);
             
             Player = new Player(this);
-
-            base.Initialize();
-            
             Components.Add(Player);
+            base.Initialize();
         }
 
         protected override void LoadContent()
