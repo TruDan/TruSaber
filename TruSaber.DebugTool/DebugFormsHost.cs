@@ -32,7 +32,7 @@ namespace TruSaber.DebugTool
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            //Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.Run(_mainForm);
         }
 

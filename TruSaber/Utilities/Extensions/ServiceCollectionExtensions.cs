@@ -27,7 +27,7 @@ namespace TruSaber.Abstractions
             services.AddSingleton<IVrContext>(provider => provider.GetRequiredService<IVRService>().Context);
             services.AddSingleton<VrContext>(provider => provider.GetRequiredService<IVRService>().Context as VrContext);
             services.AddSingleton<SceneManager>();
-            services.AddSingleton<PerspectiveCamera>();
+            services.AddSingleton<Camera>();
             services.AddSingleton<InputManager>();
             services.AddSingleton<IGuiRenderer, GuiRenderer>();
             services.AddSingleton<GuiManager>();
@@ -38,6 +38,9 @@ namespace TruSaber.Abstractions
             foreach (var pluginPath in pluginPaths)
             {
                 var path = GetPath(pluginPath);
+                
+                Console.WriteLine($"Attempting to load plugins from {path}");
+                
                 if (!Directory.Exists(path))
                     continue;
                 //var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -83,7 +86,7 @@ namespace TruSaber.Abstractions
             if (Path.EndsInDirectorySeparator(path))
                 path = Path.TrimEndingDirectorySeparator(path);
 
-            return Path.GetFileName(path);
+            return Path.GetFullPath(path);
         }
         
         private static ImportDefinition BuildImportDefinition()

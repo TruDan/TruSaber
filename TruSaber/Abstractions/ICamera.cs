@@ -10,6 +10,9 @@ namespace TruSaber.Abstractions
         
         public Matrix View { get; }
         public Matrix Projection { get; }
+        
+        public float NearDistance { get; }
+        public float FarDistance { get; }
 
         public void Draw(Action doDraw);
 

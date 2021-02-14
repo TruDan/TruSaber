@@ -40,11 +40,14 @@ namespace TruSaber
                 })
                 .ConfigureLogging((context, builder) =>
                 {
-                    builder.AddNLog()
+                    builder
+                        .AddConfiguration(context.Configuration)
                         .AddConsole();
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
+                    services.AddLogging();
+                    
                     var opts = new GameOptions();
                     hostContext.Configuration.Bind(opts);
                     
@@ -55,7 +58,7 @@ namespace TruSaber
                     services.AddHostedService<Worker>();
                     services.AddGameConfiguration();
 
-                    var pluginDirs = opts.PluginDirectories;
+                    var pluginDirs = opts.PluginPaths;
                     if (pluginDirs == null)
                         pluginDirs = new List<string>(); 
                     

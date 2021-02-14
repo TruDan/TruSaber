@@ -4,6 +4,7 @@ using System.Linq;
 using BeatMapInfo;
 using BEPUutilities.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
@@ -19,8 +20,10 @@ namespace TruSaber.Scenes
 {
     public class PlayLevelScene : Scene
     {
-        private double    _beat;
-        public  BeatLevel Level { get; set; }
+
+        private ILogger<PlayLevelScene> _logger;
+        private double                  _beat;
+        public  BeatLevel               Level { get; set; }
 
         private Queue<NoteEntity> _noteEntities;
         private List<NoteEntity> _activeNoteEntities;
@@ -39,6 +42,7 @@ namespace TruSaber.Scenes
 
         public PlayLevelScene(string level)
         {
+            _logger = TruSaberGame.Instance.ServiceProvider.GetRequiredService<ILogger<PlayLevelScene>>();
             Level = new BeatLevel(level);
             _player = TruSaberGame.Instance.Player;
 
@@ -74,14 +78,13 @@ namespace TruSaber.Scenes
             _noteEntities = new Queue<NoteEntity>();
             foreach (var note in map.Notes)
             {
-                var noteEntity = new NoteEntity(TruSaberGame.Instance, note, (float) bpm, _speed,
-                    0f);
+                var noteEntity = new NoteEntity(TruSaberGame.Instance, note, (float) bpm, _speed, 0f);
                 
                 SpawnNote(noteEntity);
                 //_noteEntities.Enqueue(noteEntity);
             }
 
-            _space.Start(TimeSpan.FromMilliseconds(Level.MapInfo.SongTimeOffset));
+            _space.Start(TimeSpan.FromSeconds(Level.MapInfo.SongTimeOffset));
 
             InitPhysics();
         }
@@ -158,8 +161,17 @@ namespace TruSaber.Scenes
          //   }
          //   catch {}
 
-         
             _space.Update(gameTime);
+
+            foreach (var note in _activeNoteEntities.ToArray())
+            {
+                if (note.Position.Z > -10)
+                {
+                    CheckHandCollision(_player.LeftHand, note);
+                    CheckHandCollision(_player.RightHand, note);
+                }
+            }
+            
             base.OnUpdate(gameTime);
 
             //
@@ -183,6 +195,38 @@ namespace TruSaber.Scenes
             // }
             //
             //
+        }
+
+        private void CheckHandCollision(HandEntity hand, NoteEntity note)
+        {
+            var intersection = hand.Ray.Intersects(note.BoundingBox);
+            if (intersection.HasValue)
+            {
+                if (intersection < 2f) // saber length of 80cm.
+                {
+                    var intersectionPoint = (hand.Ray.Position + (intersection.Value * hand.Ray.Direction));
+                    if (note.Type == NoteType.LeftNote && hand.Hand == Hand.Left)
+                    {
+                        // woohoo!!
+                        Console.WriteLine($"Left Hand hit a Left Block!!! +50 points to griffindor!");
+                        DespawnNote(note);
+                    }
+                    else if (note.Type == NoteType.RightNote && hand.Hand == Hand.Right)
+                    {
+                        // woohoo!
+                        Console.WriteLine($"Right Hand hit a Right Block!!! +50 points to griffindor!");
+                        DespawnNote(note);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Block was hit, but using the wrong hand!");
+                    }
+                }
+                else
+                {
+                   Console.WriteLine($"Block interscected but its currently too far away to do anything with it");
+                }
+            }
         }
 
         private void DrawPhysicsDebug()
@@ -233,7 +277,7 @@ namespace TruSaber.Scenes
             _started = true;
             noteIndex = 0;
             noteTotal = _noteEntities.Count;
-            _activeNoteEntities.Clear();
+            //_activeNoteEntities.Clear();
             _speedOffset = TimeSpan.FromSeconds((1f / (float) _speed)* (60f / Level.MapInfo.BeatsPerMinute));
         }
 

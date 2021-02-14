@@ -1,6 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
+using Microsoft.Xna.Framework.Graphics;
 using TruSaber.Abstractions;
+using TruSaber.Graphics;
 
 namespace TruSaber.DebugTool
 {
@@ -26,11 +30,16 @@ namespace TruSaber.DebugTool
             get => _viewType;
             set
             {
-                _viewType = value;
-                if (_headerText == null)
-                    _headerText = _viewType.ToString();
+                if (_viewType != value)
+                {
+                    _viewType = value;
+                    if (_headerText == null)
+                        _headerText = _viewType.ToString();
+                    UpdateView();
+                }
             }
         }
+
 
         private string _headerText;
         private CameraViewType _viewType;
@@ -48,6 +57,9 @@ namespace TruSaber.DebugTool
                     label1.Text = _headerText;
             }
         }
+        
+        [Browsable(true)]
+        public Camera Camera { get; set; }
 
         public CameraView()
         {
@@ -55,6 +67,50 @@ namespace TruSaber.DebugTool
             label1.Text = _headerText;
         }
 
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            UpdateRenderTarget();
+        }
 
+        private void UpdateRenderTarget()
+        {
+            if(DesignMode) return;
+
+            var b = Bounds;
+            new 
+            Camera.RenderTarget = new RenderTarget2D(TruSaberGame.Instance.Game.GraphicsDevice, b.Width, b.Height);
+        }
+        
+        private void UpdateView()
+        {
+            if(DesignMode) return;
+            
+            if (Camera == null)
+            {
+                Camera = new Camera(TruSaberGame.Instance);
+                UpdateRenderTarget();
+                TruSaberGame.Instance.Cameras.Add(Camera);
+            }
+            
+            switch (ViewType)
+            {
+                case CameraViewType.Top:
+                case CameraViewType.Right:
+                case CameraViewType.Front:
+                    Camera.ProjectionType = ProjectionType.Orthographic;
+                    break;
+                case CameraViewType.FirstPerson:
+                    Camera.ProjectionType = ProjectionType.Perspective;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+        }
     }
 }

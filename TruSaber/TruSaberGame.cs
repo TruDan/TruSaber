@@ -83,7 +83,7 @@ namespace TruSaber
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             base.LoadContent();
-            var cam = new PerspectiveCamera(Instance);
+            var cam = new Camera(Instance);
             cam.Position = new Vector3(0f, 1.8f, 0f);
             Cameras.Add(cam);
             

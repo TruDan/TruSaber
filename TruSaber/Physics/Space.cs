@@ -38,19 +38,16 @@ namespace TruSaber
 
 			//var targetTime = (float)1f / ((float)_level.MapInfo.BeatsPerMinute / 60f);
 			
-			while (_frameAccumulator >= TargetTime)
-			{
 				foreach (var entity in entities)
 				{
 					var velocity = entity.Velocity;
 					if (MathF.Abs(velocity.LengthSquared()) > 0f)
 					{
-						entity.Position += (velocity * TargetTime);
+						entity.Position += (velocity * frameTime);
 					}
 				}
 				
 				_frameAccumulator -= TargetTime;
-			}
 		}
 
 		public void Add(Entity entity)

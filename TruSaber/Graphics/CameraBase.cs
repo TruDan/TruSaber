@@ -1,14 +1,24 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Input;
 using TruSaber.Abstractions;
 
 namespace TruSaber.Graphics
 {
-    public class PerspectiveCamera : GameComponent, ICamera, ITransformable
+    public enum ProjectionType
+    {
+        Perspective,
+        Orthographic
+    }
+    
+    public class Camera : GameComponent, ICamera, ITransformable
     {
         private readonly IGame       _game;
+        private          Rectangle   _bounds       = Rectangle.Empty;
+        private          float       _nearDistance = 0.1f;
+        private          float       _farDistance         = 1000.0f;
         public           Transform3D Transform { get; } = new Transform3D();
 
         public Vector3 Scale
@@ -16,19 +26,16 @@ namespace TruSaber.Graphics
             get => Transform.Scale;
             set => Transform.Scale = value;
         }
-
         public Vector3 Position
         {
             get => Transform.Position;
             set => Transform.Position = value;
         }
-
         public Quaternion Rotation
         {
             get => Transform.Rotation;
             set => Transform.Rotation = value;
         }
-
         public Matrix World
         {
             get => Transform.World;
@@ -37,7 +44,41 @@ namespace TruSaber.Graphics
         public Matrix View       { get; private set; }
         public Matrix Projection { get; private set; }
 
-        public PerspectiveCamera(IGame game) : base(game.Game)
+        public float NearDistance
+        {
+            get => _nearDistance;
+            set
+            {
+                _nearDistance = value;
+                UpdateProjection();
+            }
+        }
+
+        public float FarDistance
+        {
+            get => _farDistance;
+            set
+            {
+                _farDistance = value;
+                UpdateProjection();
+            }
+        }
+
+        public Rectangle Bounds
+        {
+            get => _bounds;
+            set
+            {
+                _bounds = value;
+                UpdateProjection();
+            }
+        }
+
+        public ProjectionType ProjectionType { get; set; } = ProjectionType.Perspective;
+        
+        public RenderTarget2D RenderTarget { get; set; }
+
+        public Camera(IGame game) : base(game.Game)
         {
             _game = game;
             UpdateView();
@@ -58,11 +99,22 @@ namespace TruSaber.Graphics
 
         private void UpdateProjection()
         {
-            var w = _game.Window.ClientBounds.Width;
-            var h = _game.Window.ClientBounds.Height;
+            if (Bounds == Rectangle.Empty)
+            {
+                Bounds = _game.Window.ClientBounds;
+            }
+            var w = Bounds.Width;
+            var h = Bounds.Height;
 
-            var aspect = (float) w / (float) h;
-            Projection = Matrix.CreatePerspectiveFieldOfView(60.0f.ToRadians(), aspect, 0.1f, 100f);
+            if (ProjectionType == ProjectionType.Perspective)
+            {
+                var aspect = (float) w / (float) h;
+                Projection = Matrix.CreatePerspectiveFieldOfView(60.0f.ToRadians(), aspect, NearDistance, FarDistance);
+            }
+            else
+            {
+                Projection = Matrix.CreateOrthographic(w, h, NearDistance, FarDistance);
+            }
         }
 
         public void Update(GameTime gameTime)
@@ -77,7 +129,7 @@ namespace TruSaber.Graphics
         {
             var g = _game.Game.GraphicsDevice;
 
-            g.SetRenderTarget(null);
+            g.SetRenderTarget(RenderTarget);
             g.Clear(Color.Black);
 
             doDraw();

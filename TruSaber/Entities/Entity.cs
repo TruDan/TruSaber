@@ -5,10 +5,9 @@ namespace TruSaber
 {
     public class Entity : GameComponent, ITransformable
     {
-        private Vector3    _velocity = Vector3.Zero;
-
-        public         BoundingBox BoundingBox { get; private set; }
+        public BoundingBox BoundingBox { get; protected set; }
         
+        private Vector3    _velocity = Vector3.Zero;
         public virtual Vector3 Velocity
         {
             get => _velocity;
@@ -20,7 +19,6 @@ namespace TruSaber
                 OnPositionChanged();
             }
         }
-
         public Transform3D Transform { get; } = new Transform3D();
         public Vector3 Scale
         {
@@ -51,6 +49,7 @@ namespace TruSaber
             Position = Vector3.Zero;
             // Scale = Vector3.One / 2f;
             _dirty = true;
+            Transform.PositionChanged += (sender, args) => OnPositionChanged();
         }
 
         protected virtual void OnPositionChanged()

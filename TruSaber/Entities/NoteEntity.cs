@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Graphics;
 using TruSaber.Abstractions;
+using TruSaber.Graphics;
 using TruSaber.Utilities.Extensions;
 using BoundingBox = Microsoft.Xna.Framework.BoundingBox;
 using Quaternion = Microsoft.Xna.Framework.Quaternion;
@@ -56,7 +57,6 @@ namespace TruSaber
 
             base.Position = _initialPosition;
             base.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, CutDirection.ToAngle());
-            
             InitPhysics();
         }
 
@@ -109,6 +109,9 @@ namespace TruSaber
             base.OnPositionChanged();
                 
             Visible = MathF.Abs(Position.Z) < 30f;
+            
+            var half3 = (Vector3.One * 1.0f) * 0.5f;
+            BoundingBox = new BoundingBox(Position - half3, Position + half3);
            // if (Position)
         }
 
@@ -185,7 +188,14 @@ namespace TruSaber
                     }
                 }
             }
+            
         }
 
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+            
+            BoundingBox.Draw(GraphicsDevice, Color);
+        }
     }
 }

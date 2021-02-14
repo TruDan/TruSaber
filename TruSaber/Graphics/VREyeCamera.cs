@@ -54,8 +54,8 @@ namespace TruSaber.Graphics
         public         Matrix  View       { get; private set; }
         public         Matrix  Projection { get; private set; }
 
-        public float NearPlane { get; set; } = 0.1f;
-        public float FarPlane { get; set; } = 100.0f;
+        public float NearDistance { get; set; } = 0.1f;
+        public float FarDistance { get; set; } = 100.0f;
 
         
         private Vector3    _scale    = Vector3.One;
@@ -142,7 +142,7 @@ namespace TruSaber.Graphics
 
         private void UpdateProjectionMatrix()
         {
-            Projection = _vrContext.GetProjectionMatrix(Eye, NearPlane, FarPlane);
+            Projection = _vrContext.GetProjectionMatrix(Eye, NearDistance, FarDistance);
         }
 
         public override void Update(GameTime gameTime)
