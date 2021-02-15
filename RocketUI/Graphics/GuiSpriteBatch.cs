@@ -128,7 +128,45 @@ namespace RocketUI.Graphics
 
             return context;
         }
+        public IDisposable BeginWorld(Matrix world)
+        {
+            var previousWorld = Effect.World;
 
+            Effect.World = world;
+            
+            return new ContextDisposable(() =>
+            {
+                Effect.World = previousWorld;
+            });
+        }
+
+        public IDisposable BeginProjection(Matrix projection)
+        {
+            var previousProjection = Effect.Projection;
+
+            Effect.Projection = projection;
+            
+            return new ContextDisposable(() =>
+            {
+                Effect.Projection = previousProjection;
+            });
+        }
+        
+        public IDisposable BeginViewProjection(Matrix view, Matrix projection)
+        {
+            var previousView       = Effect.View;
+            var previousProjection = Effect.Projection;
+
+            Effect.View = view;
+            Effect.Projection = projection;
+            
+            return new ContextDisposable(() =>
+            {
+                Effect.View = previousView;
+                Effect.Projection = previousProjection;
+            });
+        }
+        
         public IDisposable BeginTransform(Matrix transformMatrix, bool mergeTransform = true)
         {
             var previousRenderMatrix = RenderMatrix;

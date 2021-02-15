@@ -9,7 +9,9 @@ using RocketUI;
 using RocketUI.Graphics;
 using SharpDX;
 using TruSaber.Abstractions;
+using TruSaber.Debugging;
 using TruSaber.Graphics;
+using TruSaber.Graphics.Gui;
 using TruSaber.Scenes;
 using Vector3 = Microsoft.Xna.Framework.Vector3;
 
@@ -54,6 +56,7 @@ namespace TruSaber
             GpuResourceManager.Dispose();
         }
 
+        private DebugGui _debugGui;
         protected override void Initialize()
         {
             GraphicsDeviceManager.GraphicsProfile = GraphicsProfile.HiDef;
@@ -71,6 +74,7 @@ namespace TruSaber
             Player = new Player(this);
 
             GuiManager = ServiceProvider.GetRequiredService<GuiManager>();
+            GuiManager.AddScreen(_debugGui = new DebugGui());
             Components.Add(GuiManager);
 
             Components.Add(Player);
@@ -84,11 +88,14 @@ namespace TruSaber
 
             base.LoadContent();
             var cam = new Camera(Instance);
-            cam.Position = new Vector3(0f, 1.8f, 0f);
+            cam.Position = new Vector3(0f, 1.7f, 0f);
+           // cam.Rotation = Quaternion.CreateFromYawPitchRoll(270f, (float)Math.PI / 2f, 0f);
             Cameras.Add(cam);
             
 //            SceneManager.SetScene<MainMenuScene>();
             SceneManager.SetScene<PlayLevelScene>();
+
+            _graphics.GraphicsDevice.Viewport = new Viewport(Game.Window.ClientBounds);
         }
 
         protected override void Update(GameTime gameTime)
@@ -109,6 +116,8 @@ namespace TruSaber
             foreach (var camera in cameras)
             {
                 Camera = camera;
+                GuiManager.GuiSpriteBatch.Effect.View = camera.View;
+                GuiManager.GuiSpriteBatch.Effect.Projection = camera.Projection;
                 camera.Draw(() => base.Draw(gameTime));
             }
             //

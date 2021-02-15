@@ -13,7 +13,7 @@ namespace TruSaber.Graphics
         public GuiScaledResolution ScaledResolution { get; set; }
         public void Init(GraphicsDevice graphics, IServiceProvider serviceProvider)
         {
-            
+            Font = (WrappedSpriteFont) TruSaberGame.Instance.Game.Content.Load<SpriteFont>("Fonts/Default");
         }
 
         public IFont Font { get; set; }

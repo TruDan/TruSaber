@@ -7,6 +7,7 @@ namespace TruSaber.Scenes
 {
     public abstract class Scene : IScene
     {
+        
         public GameComponentCollection Components => _components;
         private readonly GameComponentCollection _components;
 
@@ -66,8 +67,8 @@ namespace TruSaber.Scenes
 
         public void Draw(GameTime gameTime)
         {
-            OnDraw(gameTime);
             this._drawables.ForEachFilteredItem<GameTime>(Scene.DrawAction, gameTime);
+            OnDraw(gameTime);
         }
 
         protected virtual void OnInitialize()

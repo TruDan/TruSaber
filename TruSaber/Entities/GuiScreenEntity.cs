@@ -18,6 +18,7 @@ namespace TruSaber
         private Viewport _viewport;
 
         private RenderTarget2D _renderTarget;
+
         public float DotsPerInch
         {
             get => _dotsPerMm / 25.4f;
@@ -38,7 +39,6 @@ namespace TruSaber
         {
             base.OnInit(renderer);
             _renderTarget = new RenderTarget2D(_game.GraphicsDevice, Width, Height);
-            
         }
 
         /// <summary>Draw this component.</summary>
@@ -46,20 +46,23 @@ namespace TruSaber
         protected override void OnDraw(GuiSpriteBatch graphics, GameTime gameTime)
         {
             //using (var context = graphics.BeginTransform(Transform.World))
-            using(var gfx = _game.GraphicsDevice.PushRenderTarget(_renderTarget))
-            using(var cxt = graphics.BranchContext(BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.PointWrap))
+           // using (var gfx = _game.GraphicsDevice.PushRenderTarget(_renderTarget))
+            using (var cxt = graphics.BranchContext(BlendState.AlphaBlend, DepthStencilState.DepthRead,
+                RasterizerState.CullNone, SamplerState.PointWrap))
+            using (graphics.BeginWorld(Transform.World))
             {
                 cxt.Viewport = _viewport;
                 graphics.BeginTransform(Transform.World);
                 graphics.Begin();
-                
+
                 base.OnDraw(graphics, gameTime);
 
                 graphics.End();
             }
-            
+
             graphics.Begin();
             graphics.DrawRectangle(new Rectangle(50, 50, 200, 200), Color.Aqua, 5);
+            graphics.FillRectangle(Bounds, Color.LimeGreen);
             graphics.End();
         }
     }

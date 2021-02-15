@@ -23,7 +23,7 @@ namespace TruSaber.Scenes
             _guiManager = TruSaberGame.Instance.ServiceProvider.GetRequiredService<GuiManager>();
 
             _guiScreen = new GuiScreenEntity(TruSaberGame.Instance.Game, 800, 600);
-            _guiScreen.Transform.Position = Vector3.Zero;
+            _guiScreen.Transform.Position = Vector3.Backward * 7.5f;
             _guiScreen.Transform.Scale = new Vector3(1f / 100f);
             _guiScreen.Transform.Rotation = Quaternion.CreateFromAxisAngle(Vector3.Up, 180f.ToRadians());
             
@@ -46,7 +46,17 @@ namespace TruSaber.Scenes
         protected override void OnDraw(GameTime gameTime)
         {
             base.OnDraw(gameTime);
-            _guiScreen.Draw(_guiManager.GuiSpriteBatch, gameTime);
+            
+            try
+            {
+                _guiManager.GuiSpriteBatch.Begin();
+
+                _guiScreen.Draw(_guiManager.GuiSpriteBatch, gameTime);
+            }
+            finally
+            {
+                _guiManager.GuiSpriteBatch.End();
+            }
         }
 
         protected override void OnShow()
