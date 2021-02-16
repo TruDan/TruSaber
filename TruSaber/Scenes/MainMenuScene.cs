@@ -13,6 +13,8 @@ namespace TruSaber.Scenes
         private GuiManager _guiManager;
         public MainMenuScene()
         {
+            _guiScreen = new GuiScreenEntity(TruSaberGame.Instance.Game, 800, 600);
+
             
         }
 
@@ -22,16 +24,18 @@ namespace TruSaber.Scenes
 
             _guiManager = TruSaberGame.Instance.ServiceProvider.GetRequiredService<GuiManager>();
 
-            _guiScreen = new GuiScreenEntity(TruSaberGame.Instance.Game, 800, 600);
-            _guiScreen.Transform.Position = Vector3.Backward * 7.5f;
-            _guiScreen.Transform.Scale = new Vector3(1f / 100f);
+            _guiScreen.Initialize();
+            _guiScreen.Transform.Position = (Vector3.Forward * 7.5f) + Vector3.Up;
+            _guiScreen.Transform.Scale = new Vector3(1.5f);
             _guiScreen.Transform.Rotation = Quaternion.CreateFromAxisAngle(Vector3.Up, 180f.ToRadians());
             
-            //Components.Add(_guiScreen);
+            Components.Add(_guiScreen);
             
             var el = new GuiElement();
             _guiScreen.AddChild(el);
-            el.Background = Color.PowderBlue;
+            _guiScreen.Background = Color.PowderBlue;
+            
+            el.Background = Color.MediumVioletRed;
             el.Width = 300;
             el.Height = 50;
             el.Anchor = Alignment.MiddleCenter;
@@ -40,28 +44,17 @@ namespace TruSaber.Scenes
         protected override void OnUpdate(GameTime gameTime)
         {
             base.OnUpdate(gameTime);
-            _guiScreen.Update(gameTime);
         }
 
         protected override void OnDraw(GameTime gameTime)
         {
             base.OnDraw(gameTime);
             
-            try
-            {
-                _guiManager.GuiSpriteBatch.Begin();
-
-                _guiScreen.Draw(_guiManager.GuiSpriteBatch, gameTime);
-            }
-            finally
-            {
-                _guiManager.GuiSpriteBatch.End();
-            }
         }
 
         protected override void OnShow()
         {
-            //_guiManager.AddScreen(_guiScreen);
+           // _guiManager.AddScreen(_guiScreen);
             base.OnShow();            
         }
 

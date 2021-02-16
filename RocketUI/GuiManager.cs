@@ -94,11 +94,12 @@ namespace RocketUI
 
         public void Init(GraphicsDevice graphicsDevice, IServiceProvider serviceProvider)
         {
-            SpriteBatch = new SpriteBatch(graphicsDevice);
+         //   SpriteBatch = new SpriteBatch(graphicsDevice);
             GuiRenderer.Init(graphicsDevice, serviceProvider);
+            ApplyFont(GuiRenderer.Font);
 
-            GuiSpriteBatch?.Dispose();
-            GuiSpriteBatch = new GuiSpriteBatch(GuiRenderer, graphicsDevice, SpriteBatch);
+      //      GuiSpriteBatch?.Dispose();
+      //      GuiSpriteBatch = new GuiSpriteBatch(GuiRenderer, graphicsDevice, SpriteBatch);
         }
 
         private bool _doInit = true;

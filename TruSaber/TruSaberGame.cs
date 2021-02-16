@@ -73,11 +73,6 @@ namespace TruSaber
             
             Player = new Player(this);
 
-            GuiManager = ServiceProvider.GetRequiredService<GuiManager>();
-            GuiManager.AddScreen(_debugGui = new DebugGui());
-            Components.Add(GuiManager);
-
-            Components.Add(Player);
             base.Initialize();
         }
 
@@ -92,8 +87,14 @@ namespace TruSaber
            // cam.Rotation = Quaternion.CreateFromYawPitchRoll(270f, (float)Math.PI / 2f, 0f);
             Cameras.Add(cam);
             
-//            SceneManager.SetScene<MainMenuScene>();
-            SceneManager.SetScene<PlayLevelScene>();
+            GuiManager = ServiceProvider.GetRequiredService<GuiManager>();
+            GuiManager.AddScreen(_debugGui = new DebugGui());
+            Components.Add(GuiManager);
+            GuiManager.DrawOrder = 100;
+            
+            Components.Add(Player);
+            SceneManager.SetScene<MainMenuScene>();
+//            SceneManager.SetScene<PlayLevelScene>();
 
             _graphics.GraphicsDevice.Viewport = new Viewport(Game.Window.ClientBounds);
         }
@@ -116,8 +117,8 @@ namespace TruSaber
             foreach (var camera in cameras)
             {
                 Camera = camera;
-                GuiManager.GuiSpriteBatch.Effect.View = camera.View;
-                GuiManager.GuiSpriteBatch.Effect.Projection = camera.Projection;
+                //GuiManager.GuiSpriteBatch.Effect.View = camera.View;
+                //GuiManager.GuiSpriteBatch.Effect.Projection = camera.Projection;
                 camera.Draw(() => base.Draw(gameTime));
             }
             //

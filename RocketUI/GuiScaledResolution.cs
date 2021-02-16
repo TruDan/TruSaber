@@ -98,8 +98,8 @@ namespace RocketUI
 			game.Window.ClientSizeChanged += (sender, args) => ViewportSize = new Size(game.Window.ClientBounds.Width,  game.Window.ClientBounds.Height);
 			game.Activated                += (sender, args) => Update();
 
-			TargetWidth = 480;
-			TargetHeight = 320;
+			TargetWidth = 720;
+			TargetHeight = 540;
 
 			//_targetWidth = Viewport.TitleSafeArea.Width;
 			//_targetHeight = Viewport.TitleSafeArea.Height;

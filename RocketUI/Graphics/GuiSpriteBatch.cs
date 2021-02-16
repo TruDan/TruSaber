@@ -22,7 +22,7 @@ namespace RocketUI.Graphics
         public IFont Font { get; set; }
 
         //public GraphicsContext Graphics { get; }
-        public SpriteBatch SpriteBatch { get; }
+        public SpriteBatch         SpriteBatch      { get; private set; }
         public GuiScaledResolution ScaledResolution { get; }
 
         public GraphicsContext Context { get; }
@@ -50,15 +50,20 @@ namespace RocketUI.Graphics
             var cameraPosition = new Vector3(0, 0, 13);
             cameraPosition = Vector3.Transform(cameraPosition, Matrix.CreateScale(1));
 
-            var view        = Matrix.CreateLookAt(cameraPosition, new Vector3(0, 0, 0), Vector3.Up);
-            var projection  = Matrix.CreatePerspectiveFieldOfView(1, _graphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
+            //var view        = Matrix.CreateLookAt(cameraPosition, new Vector3(0, 0, 0), Vector3.Up);
+            //var projection  = Matrix.CreatePerspectiveFieldOfView(1, _graphicsDevice.Viewport.AspectRatio, 1.0f, 1000.0f);
 
-            Effect.World       = Matrix.CreateWorld(Vector3.Zero, Vector3.Forward, Vector3.Up);
-            Effect.View        = view;
-            Effect.Projection = projection;
             
-//            Context = GraphicsContext.CreateContext(_graphicsDevice, BlendState.NonPremultiplied, DepthStencilState.None, RasterizerState, SamplerState.PointClamp);
-            Context = GraphicsContext.CreateContext(_graphicsDevice, BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.AnisotropicWrap);
+            //Effect.World       = Matrix.CreateWorld(Vector3.Zero, Vector3.Forward, Vector3.Up);
+            //Effect.View        = view;
+            //Effect.Projection = projection;
+            
+            Effect.World = Matrix.Identity;
+            Effect.View = Matrix.Identity;
+            Effect.Projection = Matrix.CreateOrthographic(graphicsDevice.PresentationParameters.BackBufferWidth,graphicsDevice.PresentationParameters.BackBufferHeight, 0.1f, 1000.0f);
+            
+            Context = GraphicsContext.CreateContext(_graphicsDevice, BlendState.NonPremultiplied, DepthStencilState.None, RasterizerState, SamplerState.PointClamp);
+//            Context = GraphicsContext.CreateContext(_graphicsDevice, BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.AnisotropicWrap);
 
             Font = _renderer.Font;
             ScaledResolution = _renderer.ScaledResolution;
@@ -97,11 +102,11 @@ namespace RocketUI.Graphics
             return new Rectangle(loc1, loc2 - loc1);
         }
 
-        public void Begin()
+        public void Begin(bool withScale = true)
         {
             if (_hasBegun) return;
 
-            SpriteBatch.Begin(SpriteSortMode.Deferred, Context.BlendState, Context.SamplerState, Context.DepthStencilState, Context.RasterizerState, Effect, ScaledResolution.TransformMatrix * RenderMatrix);
+            SpriteBatch.Begin(SpriteSortMode.Deferred, Context.BlendState, Context.SamplerState, Context.DepthStencilState, Context.RasterizerState, null, withScale ? ScaledResolution.TransformMatrix * RenderMatrix : null);
 
             _hasBegun = true;
         }
@@ -502,7 +507,10 @@ namespace RocketUI.Graphics
         public void Dispose()
         {
             _colorTexture?.Dispose();
+            _colorTexture = null;
+            
             SpriteBatch?.Dispose();
+            SpriteBatch = null;
         }
 
         #endregion

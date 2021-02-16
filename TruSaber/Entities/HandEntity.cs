@@ -70,8 +70,7 @@ namespace TruSaber
 
         public override void Update(GameTime gameTime)
         {
-            
-            if(!Enabled) return;
+            if(!(Initialized && Enabled)) return;
 
             if (Hand == Hand.Left)
             {
@@ -143,6 +142,8 @@ namespace TruSaber
 
         public override void Draw(GameTime gameTime)
         {
+            if(!(Initialized && Enabled)) return;
+            
             base.Draw(gameTime);
             var cam = (Game as IGame).Camera;
             
