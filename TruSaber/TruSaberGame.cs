@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using RocketUI;
 using RocketUI.Graphics;
 using SharpDX;
+using SharpVR;
 using TruSaber.Abstractions;
 using TruSaber.Debugging;
 using TruSaber.Graphics;
@@ -76,16 +77,17 @@ namespace TruSaber
             base.Initialize();
         }
 
+        private Camera _cam;
         protected override void LoadContent()
         {
             GpuResourceManager.Init(GraphicsDevice);
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             base.LoadContent();
-            var cam = new Camera(Instance);
-            cam.Position = new Vector3(0f, 1.7f, 0f);
+            _cam = new Camera(Instance);
+            _cam.Position = new Vector3(0f, 1.7f, 0f);
            // cam.Rotation = Quaternion.CreateFromYawPitchRoll(270f, (float)Math.PI / 2f, 0f);
-            Cameras.Add(cam);
+            Cameras.Add(_cam);
             
             GuiManager = ServiceProvider.GetRequiredService<GuiManager>();
             GuiManager.AddScreen(_debugGui = new DebugGui());
@@ -104,6 +106,10 @@ namespace TruSaber
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            var hmd = ServiceProvider.GetRequiredService<IVrContext>().Hmd;
+            _cam.Position = hmd.LocalPosition;
+            _cam.Rotation = hmd.LocalRotation;
             
             base.Update(gameTime);
         }

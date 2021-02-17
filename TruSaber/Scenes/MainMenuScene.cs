@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using RocketUI;
+using RocketUI.Controls;
 using RocketUI.Primitive;
 
 namespace TruSaber.Scenes
@@ -11,11 +12,10 @@ namespace TruSaber.Scenes
         private GuiScreenEntity _guiScreen;
 
         private GuiManager _guiManager;
+        private GuiButton  _playButton;
         public MainMenuScene()
         {
             _guiScreen = new GuiScreenEntity(TruSaberGame.Instance.Game, 800, 600);
-
-            
         }
 
         protected override void OnInitialize()
@@ -24,21 +24,16 @@ namespace TruSaber.Scenes
 
             _guiManager = TruSaberGame.Instance.ServiceProvider.GetRequiredService<GuiManager>();
 
-            _guiScreen.Initialize();
-            _guiScreen.Transform.Position = (Vector3.Forward * 7.5f) + Vector3.Up;
-            _guiScreen.Transform.Scale = new Vector3(1.5f);
+            _guiScreen.Transform.Position = (Vector3.Forward * 7.5f) + (Vector3.Up * 2f);
+            _guiScreen.Transform.Scale = new Vector3(3f);
             _guiScreen.Transform.Rotation = Quaternion.CreateFromAxisAngle(Vector3.Up, 180f.ToRadians());
             
             Components.Add(_guiScreen);
-            
-            var el = new GuiElement();
-            _guiScreen.AddChild(el);
-            _guiScreen.Background = Color.PowderBlue;
-            
-            el.Background = Color.MediumVioletRed;
-            el.Width = 300;
-            el.Height = 50;
-            el.Anchor = Alignment.MiddleCenter;
+
+            var _stack = new GuiStackMenu();
+            _stack.AddMenuItem("PLAY", () => TruSaberGame.Instance.SceneManager.SetScene<PlayLevelScene>());
+            _stack.AddMenuItem("CHOOSE LEVEL", () => TruSaberGame.Instance.SceneManager.SetScene<SelectLevelScene>());
+            _guiScreen.AddChild(_stack);
         }
 
         protected override void OnUpdate(GameTime gameTime)

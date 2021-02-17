@@ -42,10 +42,10 @@ namespace TruSaber
             _renderTarget = new RenderTarget2D(_game.GraphicsDevice, Width, Height);
             _verticies = new VertexPositionTexture[4];
             _indicies = new short[6];
-            _verticies[0] = new VertexPositionTexture(new Vector3(-1, 1, 0), new Vector2(0, 0));
-            _verticies[1] = new VertexPositionTexture(new Vector3(1, 1, 0), new Vector2(1, 0));
-            _verticies[2] = new VertexPositionTexture(new Vector3(1, -1, 0), new Vector2(1, 1));
-            _verticies[3] = new VertexPositionTexture(new Vector3(-1, -1, 0), new Vector2(0, 1));
+            _verticies[0] = new VertexPositionTexture(new Vector3(0.5f, 0.5f, 0), new Vector2(1, 0));
+            _verticies[1] = new VertexPositionTexture(new Vector3(-0.5f, 0.5f, 0), new Vector2(0, 0));
+            _verticies[2] = new VertexPositionTexture(new Vector3(0.5f, -0.5f, 0), new Vector2(1, 1));
+            _verticies[3] = new VertexPositionTexture(new Vector3(-0.5f, -0.5f, 0), new Vector2(0, 1));
             _indicies[0] = 0;
             _indicies[1] = 1;
             _indicies[2] = 2;
@@ -55,7 +55,7 @@ namespace TruSaber
             _effect = new BasicEffect(_game.GraphicsDevice);
             _effect.TextureEnabled = true;
             _effect.Texture = _renderTarget;
-            _effect.AmbientLightColor = (Color.White * 0.2f).ToVector3();
+            //_effect.AmbientLightColor = (Color.White * 0.2f).ToVector3();
         }
 
         private VertexPositionTexture[] _verticies;
@@ -64,16 +64,32 @@ namespace TruSaber
 
         public void Draw(GameTime gameTime)
         {
-            var game = (IGame) _game;
-            try
-            {
-                game.GuiManager.GuiSpriteBatch.Begin();
+            var game     = (IGame) _game;
+            var graphics = game.GuiManager.GuiSpriteBatch;
+            
+                using (_game.GraphicsDevice.PushRenderTarget(_renderTarget))
+                using (var cxt = graphics.BranchContext(BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.PointClamp))
+                    //using (var cxt = graphics.BranchContext())
+                {
+                    graphics.Begin(false);
 
-                Draw(game.GuiManager.GuiSpriteBatch, gameTime);
-            }
-            finally
+                    Draw(graphics, gameTime);
+                    graphics.End();
+                }
+            
+            using (var cxt = graphics.BranchContext(BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.AnisotropicWrap))
             {
-                game.GuiManager.GuiSpriteBatch.End();
+                var cam = game.Camera;
+                _effect.World = Transform.World;
+                _effect.View = cam.View;
+                _effect.Projection = cam.Projection;
+
+                foreach (var pass in _effect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    _game.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, _verticies, 0, 2,
+                        VertexPositionTexture.VertexDeclaration);
+                }
             }
         }
         
@@ -82,34 +98,14 @@ namespace TruSaber
         protected override void OnDraw(GuiSpriteBatch graphics, GameTime gameTime)
         {
             //using (var context = graphics.BeginTransform(Transform.World))
-            using (_game.GraphicsDevice.PushRenderTarget(_renderTarget))
-            using (var cxt = graphics.BranchContext(BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.PointClamp))
-            //using (var cxt = graphics.BranchContext())
-            {
                 //cxt.Viewport = _viewport;
-                //graphics.ScaledResolution.ViewportSize = _viewport.Bounds.Size;
-                graphics.Begin(false);
+               // graphics.ScaledResolution.ViewportSize = _viewport.Bounds.Size;
 
                 graphics.DrawRectangle(new Rectangle(50, 50, 200, 200), Color.Aqua, 5);
-                graphics.FillRectangle(Bounds, Color.LimeGreen);
+                graphics.FillRectangle(RenderBounds, Color.LimeGreen);
 
                 base.OnDraw(graphics, gameTime);
 
-
-                graphics.End();
-            }
-
-                var cam = ((IGame) _game).Camera;
-            _effect.World = Transform.World;
-            _effect.View = cam.View;
-            _effect.Projection = cam.Projection;
-
-            foreach (var pass in _effect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                _game.GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _verticies, 0, 4,
-                    _indicies, 0, 2, VertexPositionTexture.VertexDeclaration);
-            }
         }
 
         public void Initialize()
