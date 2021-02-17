@@ -10,5 +10,5 @@
         "./Plugins",
         "../../../../TruSaber.DebugTool/bin/x86/Debug/net5.0-windows"
     ],
-    "EmulateVr": true
+    "EmulateVr": false
 }

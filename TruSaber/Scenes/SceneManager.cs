@@ -10,6 +10,7 @@ namespace TruSaber.Scenes
 
         public SceneManager(IGame game) : base(game.Game)
         {
+            DrawOrder = -100;
         }
 
 

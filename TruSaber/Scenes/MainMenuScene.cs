@@ -24,16 +24,24 @@ namespace TruSaber.Scenes
 
             _guiManager = TruSaberGame.Instance.ServiceProvider.GetRequiredService<GuiManager>();
 
-            _guiScreen.Transform.Position = (Vector3.Forward * 7.5f) + (Vector3.Up * 2f);
-            _guiScreen.Transform.Scale = new Vector3(3f);
-            _guiScreen.Transform.Rotation = Quaternion.CreateFromAxisAngle(Vector3.Up, 180f.ToRadians());
+            var pos    = (Vector3.Forward * 7.5f) + (Vector3.Up * 2f);
+            var aspect = 800f / 600f;
+            _guiScreen.Transform.Position = new Vector3(-2f, 3f,-3f);
+            _guiScreen.Transform.Scale = new Vector3(4f / 800f, 3f / 600f, 1f);
+            _guiScreen.Transform.Rotation = Quaternion.CreateFromYawPitchRoll(0f, 180f.ToRadians(), 0f);
             
             Components.Add(_guiScreen);
 
-            var _stack = new GuiStackMenu();
+            var _stack = new GuiStackMenu()
+            {
+                Anchor = Alignment.FillLeft,
+                Background = Color.Red,
+                MinWidth = 200,
+                MinHeight = 300
+            };
+            _guiScreen.AddChild(_stack);
             _stack.AddMenuItem("PLAY", () => TruSaberGame.Instance.SceneManager.SetScene<PlayLevelScene>());
             _stack.AddMenuItem("CHOOSE LEVEL", () => TruSaberGame.Instance.SceneManager.SetScene<SelectLevelScene>());
-            _guiScreen.AddChild(_stack);
         }
 
         protected override void OnUpdate(GameTime gameTime)

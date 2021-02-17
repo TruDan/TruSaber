@@ -6,7 +6,7 @@ namespace RocketUI.Controls
 {
     public class GuiStackMenu : GuiScrollableStackContainer
     {
-	    private bool _modern = true;
+	    private bool _modern = false;
 
 	    public bool ModernStyle
 	    {

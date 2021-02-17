@@ -106,7 +106,7 @@ namespace RocketUI.Graphics
         {
             if (_hasBegun) return;
 
-            SpriteBatch.Begin(SpriteSortMode.Deferred, Context.BlendState, Context.SamplerState, Context.DepthStencilState, Context.RasterizerState, null, withScale ? ScaledResolution.TransformMatrix * RenderMatrix : null);
+            SpriteBatch.Begin(SpriteSortMode.Immediate, Context.BlendState, Context.SamplerState, Context.DepthStencilState, Context.RasterizerState, Effect, withScale ? ScaledResolution.TransformMatrix * RenderMatrix : null);
 
             _hasBegun = true;
         }

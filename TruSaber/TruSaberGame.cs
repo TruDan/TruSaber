@@ -73,6 +73,7 @@ namespace TruSaber
             Components.Add(vr);
             
             Player = new Player(this);
+            Components.Add(Player);
 
             base.Initialize();
         }
@@ -92,9 +93,9 @@ namespace TruSaber
             GuiManager = ServiceProvider.GetRequiredService<GuiManager>();
             GuiManager.AddScreen(_debugGui = new DebugGui());
             Components.Add(GuiManager);
-            GuiManager.DrawOrder = 100;
+            GuiManager.DrawOrder = 10;
+            GuiManager.Init(GraphicsDevice, ServiceProvider);
             
-            Components.Add(Player);
             SceneManager.SetScene<MainMenuScene>();
 //            SceneManager.SetScene<PlayLevelScene>();
 

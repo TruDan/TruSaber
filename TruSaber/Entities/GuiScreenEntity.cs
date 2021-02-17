@@ -31,15 +31,15 @@ namespace TruSaber
             _game = game;
             //AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClipToBounds = false;
-            Background = Color.GreenYellow;
-            _viewport = new Viewport(0, 0, Width, Height);
+            //Background = Color.GreenYellow;
             UpdateSize(width, height);
+            _viewport = new Viewport(0, 0, Width, Height);
         }
 
         protected override void OnInit(IGuiRenderer renderer)
         {
             base.OnInit(renderer);
-            _renderTarget = new RenderTarget2D(_game.GraphicsDevice, Width, Height);
+            _renderTarget = new RenderTarget2D(_game.GraphicsDevice, Width, Height, false, _game.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24, 0, RenderTargetUsage.PreserveContents);
             _verticies = new VertexPositionTexture[4];
             _indicies = new short[6];
             _verticies[0] = new VertexPositionTexture(new Vector3(0.5f, 0.5f, 0), new Vector2(1, 0));
@@ -65,32 +65,35 @@ namespace TruSaber
         public void Draw(GameTime gameTime)
         {
             var game     = (IGame) _game;
+            var cam      = game.Camera;
             var graphics = game.GuiManager.GuiSpriteBatch;
             
-                using (_game.GraphicsDevice.PushRenderTarget(_renderTarget))
-                using (var cxt = graphics.BranchContext(BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.PointClamp))
+                //using (_game.GraphicsDevice.PushRenderTarget(_renderTarget))
+                using (var cxt = graphics.BranchContext(BlendState.AlphaBlend, DepthStencilState.None, RasterizerState.CullNone, SamplerState.PointClamp))
                     //using (var cxt = graphics.BranchContext())
                 {
-                    graphics.Begin(false);
+                    graphics.Effect.World = Transform.World;
+                    graphics.Effect.View = cam.View;
+                    graphics.Effect.Projection = cam.Projection;
+                    graphics.Begin(true);
 
                     Draw(graphics, gameTime);
                     graphics.End();
                 }
             
-            using (var cxt = graphics.BranchContext(BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.AnisotropicWrap))
-            {
-                var cam = game.Camera;
-                _effect.World = Transform.World;
-                _effect.View = cam.View;
-                _effect.Projection = cam.Projection;
-
-                foreach (var pass in _effect.CurrentTechnique.Passes)
-                {
-                    pass.Apply();
-                    _game.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, _verticies, 0, 2,
-                        VertexPositionTexture.VertexDeclaration);
-                }
-            }
+            // using (var cxt = graphics.BranchContext(BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.AnisotropicWrap))
+            // {
+            //     _effect.World = Transform.World;
+            //     _effect.View = cam.View;
+            //     _effect.Projection = cam.Projection;
+            //
+            //     foreach (var pass in _effect.CurrentTechnique.Passes)
+            //     {
+            //         pass.Apply();
+            //         _game.GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleStrip, _verticies, 0, 2,
+            //             VertexPositionTexture.VertexDeclaration);
+            //     }
+            // }
         }
         
         /// <summary>Draw this component.</summary>
@@ -101,10 +104,10 @@ namespace TruSaber
                 //cxt.Viewport = _viewport;
                // graphics.ScaledResolution.ViewportSize = _viewport.Bounds.Size;
 
-                graphics.DrawRectangle(new Rectangle(50, 50, 200, 200), Color.Aqua, 5);
-                graphics.FillRectangle(RenderBounds, Color.LimeGreen);
-
                 base.OnDraw(graphics, gameTime);
+                graphics.DrawRectangle(new Rectangle(50, 50, 200, 200), Color.Aqua, 5);
+               // graphics.FillRectangle(RenderBounds, Color.LimeGreen);
+
 
         }
 
@@ -120,7 +123,7 @@ namespace TruSaber
         public event EventHandler<EventArgs> EnabledChanged;
         public event EventHandler<EventArgs> UpdateOrderChanged;
 
-        public int                           DrawOrder { get; } = 0;
+        public int                           DrawOrder { get; } = 10;
         public bool                          Visible   { get; } = true;
         public event EventHandler<EventArgs> DrawOrderChanged;
         public event EventHandler<EventArgs> VisibleChanged;
