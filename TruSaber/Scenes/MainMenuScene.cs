@@ -13,6 +13,7 @@ namespace TruSaber.Scenes
 
         private GuiManager _guiManager;
         private GuiButton  _playButton;
+        private Skybox     _skybox;
         public MainMenuScene()
         {
             _guiScreen = new GuiScreenEntity(TruSaberGame.Instance.Game, 800, 600);
@@ -42,8 +43,15 @@ namespace TruSaber.Scenes
             _guiScreen.AddChild(_stack);
             _stack.AddMenuItem("PLAY", () => TruSaberGame.Instance.SceneManager.SetScene<PlayLevelScene>());
             _stack.AddMenuItem("CHOOSE LEVEL", () => TruSaberGame.Instance.SceneManager.SetScene<SelectLevelScene>());
+
+            _skybox = new Skybox(TruSaberGame.Instance)
+            {
+                Scale = Vector3.One
+            };
+            Components.Add(_skybox);
         }
 
+        
         protected override void OnUpdate(GameTime gameTime)
         {
             base.OnUpdate(gameTime);
