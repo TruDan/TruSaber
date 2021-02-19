@@ -23,7 +23,7 @@ namespace TruSaber.Graphics
             _graphicsDevice = graphics;
             Font = (WrappedSpriteFont) TruSaberGame.Instance.Game.Content.Load<SpriteFont>("Fonts/Default");
             
-            LoadEmbeddedTextures();
+            LoadTexturesFromContent();
         }
 
         public IFont Font { get; set; }
@@ -44,10 +44,59 @@ namespace TruSaber.Graphics
 
         #region Texture Loading
 
-        private void LoadEmbeddedTextures()
+        private void LoadTexturesFromContent()
         {
+            var c        = TruSaberGame.Instance.Game.Content;
+            var basePath = "Textures/UI/";
 
+            var buttons = c.Load<Texture2D>(basePath + "Buttons");
+            LoadTextureFromSpriteSheet(GuiTextures.ButtonDefault, buttons, ButtonBackgroundDefault, new Thickness(50));
+            LoadTextureFromSpriteSheet(GuiTextures.ButtonHover, buttons, ButtonBackgroundHover, new Thickness(50));
+            LoadTextureFromSpriteSheet(GuiTextures.ButtonFocused, buttons, ButtonBackgroundFocus, new Thickness(50));
+            LoadTextureFromSpriteSheet(GuiTextures.ButtonDisabled, buttons, ButtonBackgroundDisabled, new Thickness(50));
+            
+            var scrollbar = c.Load<Texture2D>(basePath + "ScrollBar");
         }
+
+
+        #region Impl
+
+
+        #region Buttons
+
+        private static readonly Rectangle ButtonBackgroundDefault  = new Rectangle(0, 0, 432, 104);
+        private static readonly Rectangle ButtonBackgroundHover    = new Rectangle(0, 104, 432, 104);
+        private static readonly Rectangle ButtonBackgroundFocus    = new Rectangle(0, 208, 432, 104);
+        private static readonly Rectangle ButtonBackgroundDisabled = new Rectangle(0, 312, 432, 104);
+        
+        #endregion
+
+        #region ScrollBar
+
+        public static readonly Rectangle ScrollBarBackgroundDefault  = new Rectangle(0, 0, 10, 10);
+        public static readonly Rectangle ScrollBarBackgroundHover    = new Rectangle(0, 0, 10, 10);
+        public static readonly Rectangle ScrollBarBackgroundFocus    = new Rectangle(0, 0, 10, 10);
+        public static readonly Rectangle ScrollBarBackgroundDisabled = new Rectangle(0, 0, 10, 10);
+
+        public static readonly Rectangle ScrollBarTrackDefault  = new Rectangle(10, 10, 10, 10);
+        public static readonly Rectangle ScrollBarTrackHover    = new Rectangle(10, 10, 10, 10);
+        public static readonly Rectangle ScrollBarTrackFocus    = new Rectangle(10, 10, 10, 10);
+        public static readonly Rectangle ScrollBarTrackDisabled = new Rectangle(10, 10, 10, 10);
+
+        public static readonly Rectangle ScrollBarUpButtonDefault  = new Rectangle(20, 20, 10, 10);
+        public static readonly Rectangle ScrollBarUpButtonHover    = new Rectangle(20, 20, 10, 10);
+        public static readonly Rectangle ScrollBarUpButtonFocus    = new Rectangle(20, 20, 10, 10);
+        public static readonly Rectangle ScrollBarUpButtonDisabled = new Rectangle(20, 20, 10, 10);
+
+        public static readonly Rectangle ScrollBarDownButtonDefault  = new Rectangle(30, 30, 10, 10);
+        public static readonly Rectangle ScrollBarDownButtonHover    = new Rectangle(30, 30, 10, 10);
+        public static readonly Rectangle ScrollBarDownButtonFocus    = new Rectangle(30, 30, 10, 10);
+        public static readonly Rectangle ScrollBarDownButtonDisabled = new Rectangle(30, 30, 10, 10);
+        
+        #endregion
+
+        #endregion
+        
         
         private TextureSlice2D LoadTextureFromEmbeddedResource(GuiTextures guiTexture, byte[] resource)
         {
@@ -55,24 +104,14 @@ namespace TruSaber.Graphics
             return _textureCache[guiTexture];
         }
         
-        private void LoadTextureFromSpriteSheet(GuiTextures guiTexture, Texture2D spriteSheet, Rectangle sliceRectangle, Thickness ninePatchThickness, Size originalSize)
+        private void LoadTextureFromSpriteSheet(GuiTextures guiTexture, Texture2D spriteSheet, Rectangle sliceRectangle, Thickness ninePatchThickness)
         {
-            var widthScaler  = spriteSheet.Width / originalSize.Width;
-            var heightScaler = spriteSheet.Height / originalSize.Height;
-			
-            _textureCache[guiTexture] = new NinePatchTexture2D(spriteSheet.Slice(new Rectangle(sliceRectangle.X * widthScaler,
-                sliceRectangle.Y * heightScaler, sliceRectangle.Width * widthScaler,
-                sliceRectangle.Height * heightScaler)), ninePatchThickness);
+            _textureCache[guiTexture] = new NinePatchTexture2D(spriteSheet.Slice(sliceRectangle), ninePatchThickness);
         }
 
-        private void LoadTextureFromSpriteSheet(GuiTextures guiTexture, Texture2D spriteSheet, Rectangle sliceRectangle, Size originalSize)
+        private void LoadTextureFromSpriteSheet(GuiTextures guiTexture, Texture2D spriteSheet, Rectangle sliceRectangle)
         {
-            var widthScaler  = spriteSheet.Width / originalSize.Width;
-            var heightScaler = spriteSheet.Height / originalSize.Height;
-
-            _textureCache[guiTexture] = spriteSheet.Slice(new Rectangle(sliceRectangle.X * widthScaler,
-                sliceRectangle.Y * heightScaler, sliceRectangle.Width * widthScaler,
-                sliceRectangle.Height * heightScaler));
+            _textureCache[guiTexture] = spriteSheet.Slice(sliceRectangle);
         }
 
         #endregion

@@ -78,12 +78,16 @@ namespace TruSaber.Scenes
 
         public override void Update(GameTime gameTime)
         {
+            if(!Enabled) return;
+            
             base.Update(gameTime);
             globeSpinAngle += (0.01f * (float)(gameTime.ElapsedGameTime.TotalSeconds * 60f));
         }
 
         public override void Draw(GameTime gameTime)
         {
+            if(!Visible || beffect == null) return;
+            
             base.Draw(gameTime);
 
             var cam = (Game as IGame).Camera;

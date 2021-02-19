@@ -18,8 +18,7 @@ namespace RocketUI.Graphics.Textures
 		{
 		}
 
-		public NinePatchTexture2D(Texture2D texture, Rectangle bounds, int sizeSlice = 0) : this(texture, bounds,
-			new Thickness(sizeSlice))
+		public NinePatchTexture2D(Texture2D texture, Rectangle bounds, int sizeSlice = 0) : this(texture, bounds, new Thickness(sizeSlice))
 		{
 		}
 		public NinePatchTexture2D(Texture2D texture, Rectangle bounds, Rectangle innerSliceBounds) : this(texture, bounds,

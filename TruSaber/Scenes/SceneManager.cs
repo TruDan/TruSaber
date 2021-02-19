@@ -8,16 +8,25 @@ namespace TruSaber.Scenes
     {
         public IScene ActiveScene { get; private set; }
 
+        private bool _initialized = false;
         public SceneManager(IGame game) : base(game.Game)
         {
-            DrawOrder = -100;
+            DrawOrder = 0;
         }
 
+        public override void Initialize()
+        {
+            _initialized = true;
+            base.Initialize();
+            
+            ActiveScene?.Initialize();
+        }
 
         public void SetScene<TScene>() where TScene : IScene, new()
         {
             var scene = new TScene();
-            scene.Initialize();
+            if(_initialized)
+                scene.Initialize();
             SetScene(scene);
         }
 

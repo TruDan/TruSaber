@@ -153,6 +153,21 @@ namespace RocketUI.Primitive
 				rect.Height - b.Vertical
 			);
 		}
+		
+		public static Thickness operator *(Thickness thickness, int s)
+		{
+			return new Thickness(thickness.Left * s,
+				thickness.Top * s,
+				thickness.Right * s,
+				thickness.Bottom * s);
+		}
+		public static Thickness operator /(Thickness thickness, int s)
+		{
+			return new Thickness(thickness.Left / s,
+				thickness.Top / s,
+				thickness.Right / s,
+				thickness.Bottom / s);
+		}
 
 		public static Point operator +(Point p, Thickness b)
 		{

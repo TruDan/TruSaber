@@ -30,7 +30,7 @@ namespace TruSaber
         {
             _game = game;
             //AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClipToBounds = false;
+            ClipToBounds = true;
             //Background = Color.GreenYellow;
             UpdateSize(width, height);
             _viewport = new Viewport(0, 0, Width, Height);
@@ -69,13 +69,13 @@ namespace TruSaber
             var graphics = game.GuiManager.GuiSpriteBatch;
             
                 //using (_game.GraphicsDevice.PushRenderTarget(_renderTarget))
-                using (var cxt = graphics.BranchContext(BlendState.AlphaBlend, DepthStencilState.None, RasterizerState.CullNone, SamplerState.PointClamp))
+                using (var cxt = graphics.BranchContext(BlendState.AlphaBlend, DepthStencilState.None, RasterizerState.CullNone, SamplerState.LinearClamp))
                     //using (var cxt = graphics.BranchContext())
                 {
                     graphics.Effect.World = Transform.World;
                     graphics.Effect.View = cam.View;
                     graphics.Effect.Projection = cam.Projection;
-                    graphics.Begin(true);
+                    graphics.Begin(false);
 
                     Draw(graphics, gameTime);
                     graphics.End();

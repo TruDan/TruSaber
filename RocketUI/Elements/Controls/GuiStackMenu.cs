@@ -6,21 +6,6 @@ namespace RocketUI.Controls
 {
     public class GuiStackMenu : GuiScrollableStackContainer
     {
-	    private bool _modern = false;
-
-	    public bool ModernStyle
-	    {
-		    get => _modern;
-		    set
-		    {
-			    _modern = value;
-			    foreach (var child in AllChildren.OfType<GuiStackMenuItem>())
-			    {
-				    child.Modern = value;
-			    }
-		    }
-	    }
-
         public GuiStackMenu()
         {
         }
@@ -29,8 +14,7 @@ namespace RocketUI.Controls
         {
             AddChild(new GuiStackMenuItem(label, action, isTranslationKey)
             {
-				Enabled = enabled,
-				Modern = ModernStyle
+				Enabled = enabled
 			});
         }
 

@@ -67,11 +67,11 @@ namespace RocketUI.Abstractions
         [DebuggerVisible] int Width  { get; set; }
         [DebuggerVisible] int Height { get; set; }
         
-        [DebuggerVisible] Thickness Margin  { get; }
-        [DebuggerVisible] Thickness Padding { get; }
+        [DebuggerVisible] Thickness Margin  { get; set; }
+        [DebuggerVisible] Thickness Padding { get; set; }
         
-        [DebuggerVisible] AutoSizeMode AutoSizeMode { get; }
-        [DebuggerVisible] Alignment Anchor { get; set; }
+        [DebuggerVisible] AutoSizeMode AutoSizeMode { get; set; }
+        [DebuggerVisible] Alignment    Anchor       { get; set; }
 
         #endregion
 

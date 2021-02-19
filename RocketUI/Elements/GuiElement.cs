@@ -201,6 +201,8 @@ namespace RocketUI
 
 			OnChildAdded(element);
 
+			ChildAdded?.Invoke(this, new GuiElementChildEventArgs(this, element));
+			
 			InvalidateLayout();
 		}
 
@@ -217,6 +219,8 @@ namespace RocketUI
 
 			if(element.ParentElement == this)
 				element.ParentElement = null;
+			
+			ChildRemoved?.Invoke(this, new GuiElementChildEventArgs(this, element));
 			
 			InvalidateLayout();
 		}
@@ -371,6 +375,9 @@ namespace RocketUI
 
 		#region Event Handlers
 
+		public EventHandler<GuiElementChildEventArgs> ChildAdded;
+		public EventHandler<GuiElementChildEventArgs> ChildRemoved;
+		
 		protected virtual void OnChildAdded(IGuiElement element)
 		{
 		}
@@ -393,5 +400,26 @@ namespace RocketUI
 		}
 
 		#endregion
+	}
+
+	public class GuiElementEventArgs
+	{
+		public IGuiElement Element { get; }
+
+		internal GuiElementEventArgs(IGuiElement element)
+		{
+			Element = element;
+		}
+	}
+	public class GuiElementChildEventArgs
+	{
+		public IGuiElement Parent { get; }
+		public IGuiElement Child { get; }
+
+		public GuiElementChildEventArgs(IGuiElement parent, IGuiElement child)
+		{
+			Parent = parent;
+			Child = child;
+		}
 	}
 }

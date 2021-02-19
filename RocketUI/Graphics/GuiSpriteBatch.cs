@@ -62,8 +62,8 @@ namespace RocketUI.Graphics
             Effect.View = Matrix.Identity;
             Effect.Projection = Matrix.CreateOrthographic(graphicsDevice.PresentationParameters.BackBufferWidth,graphicsDevice.PresentationParameters.BackBufferHeight, 0.1f, 1000.0f);
             
-            Context = GraphicsContext.CreateContext(_graphicsDevice, BlendState.NonPremultiplied, DepthStencilState.None, RasterizerState, SamplerState.PointClamp);
-//            Context = GraphicsContext.CreateContext(_graphicsDevice, BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.AnisotropicWrap);
+//            Context = GraphicsContext.CreateContext(_graphicsDevice, BlendState.NonPremultiplied, DepthStencilState.None, RasterizerState, SamplerState.PointClamp);
+            Context = GraphicsContext.CreateContext(_graphicsDevice, BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.AnisotropicWrap);
 
             Font = _renderer.Font;
             ScaledResolution = _renderer.ScaledResolution;
@@ -106,7 +106,7 @@ namespace RocketUI.Graphics
         {
             if (_hasBegun) return;
 
-            SpriteBatch.Begin(SpriteSortMode.Immediate, Context.BlendState, Context.SamplerState, Context.DepthStencilState, Context.RasterizerState, Effect, withScale ? ScaledResolution.TransformMatrix * RenderMatrix : null);
+            SpriteBatch.Begin(SpriteSortMode.Deferred, Context.BlendState, Context.SamplerState, Context.DepthStencilState, Context.RasterizerState, Effect, withScale ? ScaledResolution.TransformMatrix * RenderMatrix : ScaledResolution.TransformMatrix);
 
             _hasBegun = true;
         }
@@ -185,6 +185,7 @@ namespace RocketUI.Graphics
 
         public IDisposable BeginClipBounds(Rectangle scissorRectangle, bool mergeBounds = false)
         {
+            return new ContextDisposable(() => { });
             //if (scissorRectangle == Rectangle.Empty) return new ContextDisposable(() => {});
 
             var currentScissorRectangle = Context.ScissorRectangle;

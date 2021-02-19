@@ -49,6 +49,7 @@ namespace TruSaber
             
             InitPhysics();
             Ray = new Ray();
+            Scale = Vector3.One / 2f;
         }
 
         private VertexPositionColor[] _rayVerticies;

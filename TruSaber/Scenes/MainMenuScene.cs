@@ -28,19 +28,27 @@ namespace TruSaber.Scenes
             var pos    = (Vector3.Forward * 7.5f) + (Vector3.Up * 2f);
             var aspect = 800f / 600f;
             _guiScreen.Transform.Position = new Vector3(-2f, 3f,-3f);
-            _guiScreen.Transform.Scale = new Vector3(4f / 800f, 3f / 600f, 1f);
+            _guiScreen.Transform.Scale = new Vector3(5f / 800f, 3f / 600f, 1f);
             _guiScreen.Transform.Rotation = Quaternion.CreateFromYawPitchRoll(0f, 180f.ToRadians(), 0f);
             
-            Components.Add(_guiScreen);
 
             var _stack = new GuiStackMenu()
             {
                 Anchor = Alignment.FillLeft,
+                ChildAnchor = Alignment.TopFill,
+                Orientation = Orientation.Vertical,
                 Background = Color.Red,
                 MinWidth = 200,
-                MinHeight = 300
+                MinHeight = 300,
+                Width = 200,
+                Height = 300
+            };
+            _stack.ChildAdded += (sender, args) =>
+            {
+                args.Child.Padding = Thickness.One * 10;
             };
             _guiScreen.AddChild(_stack);
+            
             _stack.AddMenuItem("PLAY", () => TruSaberGame.Instance.SceneManager.SetScene<PlayLevelScene>());
             _stack.AddMenuItem("CHOOSE LEVEL", () => TruSaberGame.Instance.SceneManager.SetScene<SelectLevelScene>());
 
@@ -48,7 +56,9 @@ namespace TruSaber.Scenes
             {
                 Scale = Vector3.One
             };
+            
             Components.Add(_skybox);
+            Components.Add(_guiScreen);
         }
 
         

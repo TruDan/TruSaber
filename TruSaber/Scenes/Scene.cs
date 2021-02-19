@@ -7,8 +7,7 @@ namespace TruSaber.Scenes
 {
     public abstract class Scene : IScene
     {
-        
-        public GameComponentCollection Components => _components;
+        public           GameComponentCollection Components => _components;
         private readonly GameComponentCollection _components;
 
         private SortingFilteringCollection<IDrawable> _drawables = new SortingFilteringCollection<IDrawable>(
@@ -30,8 +29,6 @@ namespace TruSaber.Scenes
         protected Scene()
         {
             _components = new GameComponentCollection();
-            _components.ComponentAdded += Components_ComponentAdded;
-            _components.ComponentRemoved += Components_ComponentRemoved;
         }
 
         private void Components_ComponentAdded(object sender, GameComponentCollectionEventArgs e)
@@ -45,8 +42,14 @@ namespace TruSaber.Scenes
 
         public void Initialize()
         {
-            this.InitializeExistingComponents();
             OnInitialize();
+            this.InitializeExistingComponents();
+
+            this.CategorizeComponents();
+            this._components.ComponentAdded +=
+                new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentAdded);
+            this._components.ComponentRemoved +=
+                new EventHandler<GameComponentCollectionEventArgs>(Components_ComponentRemoved);
         }
 
         public void Show()
@@ -61,8 +64,8 @@ namespace TruSaber.Scenes
 
         public void Update(GameTime gameTime)
         {
-            OnUpdate(gameTime);
             this._updateables.ForEachFilteredItem<GameTime>(Scene.UpdateAction, gameTime);
+            OnUpdate(gameTime);
         }
 
         public void Draw(GameTime gameTime)
@@ -135,14 +138,14 @@ namespace TruSaber.Scenes
         /// </summary>
         private class SortingFilteringCollection<T> : ICollection<T>, IEnumerable<T>, IEnumerable
         {
-            private readonly List<T> _items;
-            private readonly List<AddJournalEntry<T>> _addJournal;
-            private readonly Comparison<AddJournalEntry<T>> _addJournalSortComparison;
-            private readonly List<int> _removeJournal;
-            private readonly List<T> _cachedFilteredItems;
-            private bool _shouldRebuildCache;
-            private readonly Predicate<T> _filter;
-            private readonly Comparison<T> _sort;
+            private readonly List<T>                            _items;
+            private readonly List<AddJournalEntry<T>>           _addJournal;
+            private readonly Comparison<AddJournalEntry<T>>     _addJournalSortComparison;
+            private readonly List<int>                          _removeJournal;
+            private readonly List<T>                            _cachedFilteredItems;
+            private          bool                               _shouldRebuildCache;
+            private readonly Predicate<T>                       _filter;
+            private readonly Comparison<T>                      _sort;
             private readonly Action<T, EventHandler<EventArgs>> _filterChangedSubscriber;
             private readonly Action<T, EventHandler<EventArgs>> _filterChangedUnsubscriber;
             private readonly Action<T, EventHandler<EventArgs>> _sortChangedSubscriber;
@@ -152,10 +155,10 @@ namespace TruSaber.Scenes
                 (x, y) => Comparer<int>.Default.Compare(y, x);
 
             public SortingFilteringCollection(
-                Predicate<T> filter,
+                Predicate<T>                       filter,
                 Action<T, EventHandler<EventArgs>> filterChangedSubscriber,
                 Action<T, EventHandler<EventArgs>> filterChangedUnsubscriber,
-                Comparison<T> sort,
+                Comparison<T>                      sort,
                 Action<T, EventHandler<EventArgs>> sortChangedSubscriber,
                 Action<T, EventHandler<EventArgs>> sortChangedUnsubscriber)
             {
@@ -302,7 +305,7 @@ namespace TruSaber.Scenes
 
             private void Item_SortPropertyChanged(object sender, EventArgs e)
             {
-                T obj = (T) sender;
+                T   obj = (T) sender;
                 int num = _items.IndexOf(obj);
                 _addJournal.Add(new AddJournalEntry<T>(_addJournal.Count, obj));
                 _removeJournal.Add(num);
@@ -314,7 +317,7 @@ namespace TruSaber.Scenes
         private struct AddJournalEntry<T>
         {
             public readonly int Order;
-            public readonly T Item;
+            public readonly T   Item;
 
             public AddJournalEntry(int order, T item)
             {

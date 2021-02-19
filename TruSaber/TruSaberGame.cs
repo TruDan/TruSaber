@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RocketUI;
 using RocketUI.Graphics;
+using RocketUI.Utilities.Helpers;
 using SharpDX;
 using SharpVR;
 using TruSaber.Abstractions;
@@ -31,7 +32,8 @@ namespace TruSaber
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        public SceneManager SceneManager { get; private set; }
+        public SceneManager   SceneManager   { get; private set; }
+        public GuiDebugHelper GuiDebugHelper { get; private set; }
         
         public Player Player { get; private set; }
         
@@ -95,6 +97,9 @@ namespace TruSaber
             Components.Add(GuiManager);
             GuiManager.DrawOrder = 10;
             GuiManager.Init(GraphicsDevice, ServiceProvider);
+            
+            
+            GuiDebugHelper = new GuiDebugHelper(this, GuiManager);
             
             SceneManager.SetScene<MainMenuScene>();
 //            SceneManager.SetScene<PlayLevelScene>();
