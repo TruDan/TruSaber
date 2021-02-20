@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using RocketUI.Input.Listeners;
+using SharpVR;
 
 namespace RocketUI.Input
 {
@@ -15,31 +17,40 @@ namespace RocketUI.Input
             InputListener = inputListener;
         }
     }
-    
+
     public class PlayerInputManager
     {
-
         public PlayerIndex PlayerIndex { get; }
-        public InputType InputType { get; private set; }
+        public InputType   InputType   { get; private set; }
+
+        public ICursorInputListener CursorInputListener
+        {
+            get => _cursorInputListener;
+        }
 
         private List<IInputListener> InputListeners { get; } = new List<IInputListener>();
 
         public List<InputActionBinding> Bindings { get; } = new List<InputActionBinding>();
 
         public EventHandler<InputListenerAdded> InputListenerAdded;
-        
+
+        private bool                 _isVr = false;
+        private ICursorInputListener _cursorInputListener;
+
         public PlayerInputManager(PlayerIndex playerIndex, InputType inputType = InputType.GamePad)
         {
             PlayerIndex = playerIndex;
             InputType = inputType;
-            
-            AddListener(new GamePadInputListener(playerIndex));
         }
 
         public void AddListener(IInputListener listener)
         {
             InputListeners.Add(listener);
-            
+            if (listener is ICursorInputListener cursorInputListener)
+            {
+                _cursorInputListener = cursorInputListener;
+            }
+
             InputListenerAdded?.Invoke(this, new InputListenerAdded(listener));
         }
 
@@ -85,6 +96,9 @@ namespace RocketUI.Input
             return InputListeners.Any(l => l.IsPressed(command));
         }
 
-
+        public Ray GetCursorRay()
+        {
+            return _cursorInputListener.GetCursorRay();
+        }
     }
 }

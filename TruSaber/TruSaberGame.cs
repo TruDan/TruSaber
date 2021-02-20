@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RocketUI;
 using RocketUI.Graphics;
+using RocketUI.Input;
 using RocketUI.Utilities.Helpers;
 using SharpDX;
 using SharpVR;
@@ -33,6 +34,7 @@ namespace TruSaber
         private SpriteBatch _spriteBatch;
 
         public SceneManager   SceneManager   { get; private set; }
+        public InputManager   InputManager   { get; private set; }
         public GuiDebugHelper GuiDebugHelper { get; private set; }
         
         public Player Player { get; private set; }
@@ -69,6 +71,9 @@ namespace TruSaber
             Window.AllowUserResizing = true;
             
             GraphicsDeviceManager.ApplyChanges();
+
+            InputManager = ServiceProvider.GetRequiredService<InputManager>();
+            Components.Add(InputManager);            
             
             Components.Add(SceneManager = ServiceProvider.GetRequiredService<SceneManager>());
             var vr = ServiceProvider.GetRequiredService<IVRService>();
@@ -100,6 +105,7 @@ namespace TruSaber
             
             
             GuiDebugHelper = new GuiDebugHelper(this, GuiManager);
+            GuiDebugHelper.Enabled = true;
             
             SceneManager.SetScene<MainMenuScene>();
 //            SceneManager.SetScene<PlayLevelScene>();

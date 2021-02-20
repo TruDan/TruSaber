@@ -72,6 +72,11 @@ namespace RocketUI
 
         }
 
+        public void InvokeDrawScreen(GuiScreen screen, GameTime gameTime)
+        {
+            DrawScreen?.Invoke(this, new GuiDrawScreenEventArgs(screen, gameTime));
+        }
+        
         private void ScaledResolutionOnScaleChanged(object sender, UiScaleEventArgs args)
         {
             Init(Game.GraphicsDevice, ServiceProvider);
@@ -155,7 +160,8 @@ namespace RocketUI
         public void AddScreen(GuiScreen screen)
         {
             screen.Init(GuiRenderer);
-            screen.UpdateSize(ScaledResolution.ScaledWidth, ScaledResolution.ScaledHeight);
+            if(!(screen is IGuiScreen3D))
+                screen.UpdateSize(ScaledResolution.ScaledWidth, ScaledResolution.ScaledHeight);
             Screens.Add(screen);
         }
 

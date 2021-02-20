@@ -32,29 +32,24 @@ namespace RocketUI.Input
         }
     }
     
-    public class InputManager
+    public class InputManager : GameComponent
     {
-        private Game Game;
-
         private Dictionary<PlayerIndex, PlayerInputManager> PlayerInputManagers { get; } = new Dictionary<PlayerIndex, PlayerInputManager>();
-
-        public ICursorInputListener CursorInputListener { get; }
 
         public int PlayerCount => PlayerInputManagers.Count;
 
         public EventHandler<PlayerInputManagerAdded> InputManagerAdded;
 
-        public InputManager(Game game)
+        public InputManager(Game game) : base(game)
         {
-            Game = game;
-
-            var playerOne = GetOrAddPlayerManager(PlayerIndex.One);
+            
+            var playerOne     = GetOrAddPlayerManager(PlayerIndex.One);
             var mouseListener = new MouseInputListener(PlayerIndex.One);
+            var vrListener    = new VRControllerInputListener(PlayerIndex.One);
 
             playerOne.AddListener(mouseListener);
+            playerOne.AddListener(vrListener);
             playerOne.AddListener(new KeyboardInputListener());
-
-            CursorInputListener = mouseListener;
         }
 
         public PlayerInputManager GetOrAddPlayerManager(PlayerIndex playerIndex)
@@ -70,8 +65,10 @@ namespace RocketUI.Input
             return playerInputManager;
         }
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+            
             if (!Game.IsActive)
                 return;
             

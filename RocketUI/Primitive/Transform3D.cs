@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace TruSaber
+namespace RocketUI.Primitive
 {
     public class Transform3D
     {

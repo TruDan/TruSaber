@@ -10,7 +10,7 @@ using TruSaber.Abstractions;
 
 namespace TruSaber
 {
-    public class GuiScreenEntity : GuiScreen, IGuiManaged, IGameComponent, IUpdateable, IDrawable
+    public class GuiScreenEntity : GuiScreen, IGuiManaged, IGameComponent, IUpdateable, IDrawable, IGuiScreen3D
     {
         private readonly Game        _game;
         public           Transform3D Transform { get; } = new Transform3D();
@@ -75,9 +75,11 @@ namespace TruSaber
                     graphics.Effect.World = Transform.World;
                     graphics.Effect.View = cam.View;
                     graphics.Effect.Projection = cam.Projection;
-                    graphics.Begin(false);
+                    graphics.Begin(true);
 
                     Draw(graphics, gameTime);
+                    
+                    game.GuiManager.InvokeDrawScreen(this, gameTime);
                     graphics.End();
                 }
             

@@ -45,7 +45,9 @@ namespace TruSaber.Scenes
             };
             _stack.ChildAdded += (sender, args) =>
             {
-                args.Child.Padding = Thickness.One * 10;
+                args.Child.Margin = Thickness.One * 50;
+                args.Child.Padding = Thickness.One * 50;
+                args.Child.Height = 100;
             };
             _guiScreen.AddChild(_stack);
             
@@ -75,14 +77,14 @@ namespace TruSaber.Scenes
 
         protected override void OnShow()
         {
-           // _guiManager.AddScreen(_guiScreen);
+            _guiManager.AddScreen(_guiScreen);
             base.OnShow();            
         }
 
         protected override void OnHide()
         {
             base.OnHide();
-            //_guiManager.RemoveScreen(_guiScreen);
+            _guiManager.RemoveScreen(_guiScreen);
         }
     }
 }

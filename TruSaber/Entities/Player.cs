@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.Graphics.Effects;
+using RocketUI.Input;
 using SharpVR;
 using TruSaber.Abstractions;
 
@@ -24,10 +25,14 @@ namespace TruSaber
         public HandEntity LeftHand { get; }
         public HandEntity RightHand { get; }
 
+        private PlayerInputManager _playerInputManager;
+
         public Player(IGame game) : base(game)
         {
             LeftHand = new HandEntity(game, this, Hand.Left);
             RightHand = new HandEntity(game, this, Hand.Right);
+
+            _playerInputManager = game.InputManager.GetOrAddPlayerManager(PlayerIndex.One);
         }
 
         public override void Initialize()

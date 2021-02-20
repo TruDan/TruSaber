@@ -81,7 +81,13 @@ namespace RocketUI.Input.Listeners
             return CurrentState.Position.ToVector2();
         }
 
-	    public bool IsButtonDown(MouseButton button)
+        public Ray GetCursorRay()
+        {
+            var pos = CurrentState.Position.ToVector2();
+            return new Ray(new Vector3(pos.X, pos.Y, 0), Vector3.Forward);
+        }
+
+        public bool IsButtonDown(MouseButton button)
 	    {
 		    return CheckButtonState(CurrentState, button, ButtonState.Pressed);
 	    }

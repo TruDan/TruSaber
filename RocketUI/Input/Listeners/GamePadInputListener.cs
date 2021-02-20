@@ -95,5 +95,11 @@ namespace RocketUI.Input.Listeners
         {
             return CurrentState.ThumbSticks.Right;
         }
+
+        public Ray GetCursorRay()
+        {
+            var pos = CurrentState.ThumbSticks.Right;
+            return new Ray(new Vector3(pos.X, pos.Y, 0), Vector3.Forward);
+        }
     }
 }
