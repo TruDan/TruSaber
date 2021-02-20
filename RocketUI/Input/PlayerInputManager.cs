@@ -76,24 +76,23 @@ namespace RocketUI.Input
             }
         }
 
-        public bool IsDown(InputCommand command)
+        public bool IsUp(params InputCommand[] commands)
         {
-            return InputListeners.Any(l => l.IsDown(command));
+            return InputListeners.Any(l => commands.Any(l.IsUp));
+        }
+        public bool IsDown(params InputCommand[] commands)
+        {
+            return InputListeners.Any(l => commands.Any(l.IsDown));
         }
 
-        public bool IsUp(InputCommand command)
+        public bool IsBeginPress(params InputCommand[] commands)
         {
-            return InputListeners.Any(l => l.IsUp(command));
+            return InputListeners.Any(l => commands.Any(l.IsBeginPress));
         }
 
-        public bool IsBeginPress(InputCommand command)
+        public bool IsPressed(params InputCommand[] commands)
         {
-            return InputListeners.Any(l => l.IsBeginPress(command));
-        }
-
-        public bool IsPressed(InputCommand command)
-        {
-            return InputListeners.Any(l => l.IsPressed(command));
+            return InputListeners.Any(l => commands.Any(l.IsPressed));
         }
 
         public Ray GetCursorRay()

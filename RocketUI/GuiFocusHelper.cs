@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using RocketUI.Abstractions;
 using RocketUI.Input;
 using RocketUI.Input.Listeners;
+using RocketUI.Primitive;
 
 namespace RocketUI
 {
@@ -63,24 +64,12 @@ namespace RocketUI
             }
         }
 
-        private GamePadInputListener _gamePadInputListener;
 
         public GuiFocusHelper(GuiManager guiManager, InputManager inputManager, GraphicsDevice graphicsDevice)
         {
             GuiManager = guiManager;
             InputManager = inputManager;
             GraphicsDevice = graphicsDevice;
-
-            var ip = InputManager.GetOrAddPlayerManager(PlayerIndex.One);
-
-            if (ip.TryGetListener<GamePadInputListener>(out var gamePadInputListener))
-            {
-                _gamePadInputListener = gamePadInputListener;
-            }
-            else
-            {
-                _gamePadInputListener = new GamePadInputListener(PlayerIndex.One);
-            }
         }
 
 
@@ -129,35 +118,34 @@ namespace RocketUI
             }
         }
 
-        private Vector2 _previousGamepadPosition = Vector2.Zero;
 
         private void UpdateHighlightedElement()
         {
-            if (_gamePadInputListener != null)
-            {
-                var gamepadPosition = _gamePadInputListener.GetVirtualCursorPosition();
-
-                if (gamepadPosition != _previousGamepadPosition)
-                {
-                    var gp = gamepadPosition.ToPoint();
-                    Mouse.SetPosition(gp.X, gp.Y);
-
-                    UpdateCursor(gamepadPosition);
-
-                    _previousGamepadPosition = gamepadPosition;
-                    return;
-                }
-            }
+            // if (_gamePadInputListener != null)
+            // {
+            //     var gamepadPosition = _gamePadInputListener.GetVirtualCursorPosition();
+            //
+            //     if (gamepadPosition != _previousGamepadPosition)
+            //     {
+            //         var gp = gamepadPosition.ToPoint();
+            //         Mouse.SetPosition(gp.X, gp.Y);
+            //
+            //         UpdateCursor(gamepadPosition);
+            //
+            //         _previousGamepadPosition = gamepadPosition;
+            //         return;
+            //     }
+            // }
 
 
             var cursorRay = CursorInputListener.GetCursorRay();
             var screen    = FindScreen(cursorRay);
             if (screen.HasValue)
             {
-                var (screen3d, rawCursorPosition) = screen.Value;
-                var cursorPosition = GuiManager.GuiRenderer.Unproject(rawCursorPosition);
+                var (screen3d, cursorPosition) = screen.Value;
+                cursorPosition = GuiManager.GuiRenderer.Unproject(cursorPosition);
 
-                if (Vector2.DistanceSquared(rawCursorPosition, _previousCursorPosition) >= 1)
+                //if (Vector2.DistanceSquared(rawCursorPosition, _previousCursorPosition) >= 1)
                 {
                     ActiveFocusContext = screen3d;
                     _previousCursorPosition = CursorPosition;
@@ -169,21 +157,19 @@ namespace RocketUI
 
         private (IGuiScreen screen, Vector2 cursorPos)? FindScreen(Ray cursorRay)
         {
-            var screens = GuiManager.Screens.ToArray();
+            var screens = GuiManager.Screens.ToArray().Reverse();
             foreach (var screen in screens)
             {
-                Matrix transform = Matrix.Identity;
+                Transform3D transform = new Transform3D();
                 if (screen is IGuiScreen3D screen3d)
                 {
-                    transform = screen3d.Transform.World;
+                    transform = screen3d.Transform;
                 }
 
-                var position = Vector3.Transform(Vector3.Zero, transform);
-                var normal   = Vector3.Transform(Vector3.Forward, transform);
-
+                var normal   = Vector3.Transform(Vector3.Backward, transform.Rotation);
                 normal.Normalize();
 
-                var plane        = new Plane(position, normal);
+                var plane        = new Plane(transform.Position, normal);
                 var intersection = cursorRay.Intersects(plane);
                 if (intersection.HasValue)
                 {
@@ -191,7 +177,7 @@ namespace RocketUI
                     var intersectionPoint = cursorRay.Position + (cursorRay.Direction * intersection.Value);
 
                     // unproject
-                    var cursorPos = Vector3.Transform(intersectionPoint, Matrix.Invert(transform));
+                    var cursorPos = Vector3.Transform(intersectionPoint, Matrix.Invert(transform.World));
                     return (screen, new Vector2(cursorPos.X, cursorPos.Y));
                 }
             }
@@ -259,15 +245,15 @@ namespace RocketUI
             }
 
             if (HighlightedElement == null) return;
-
-            if ((CursorInputListener.IsBeginPress(InputCommand.LeftClick) ||
-                 _gamePadInputListener.IsBeginPress(InputCommand.Navigate)) && HighlightedElement.CanFocus)
+            
+            if (InputManager.Any(x =>
+                x.IsBeginPress(InputCommand.A, InputCommand.Navigate, InputCommand.LeftClick)) && HighlightedElement.CanFocus)
             {
                 FocusedElement = HighlightedElement;
             }
 
-            var isDown = CursorInputListener.IsDown(InputCommand.LeftClick) ||
-                         _gamePadInputListener.IsDown(InputCommand.Navigate);
+            var isDown = InputManager.Any(x =>
+                x.IsDown(InputCommand.A, InputCommand.Navigate, InputCommand.LeftClick));
 
             if (CursorPosition != _previousCursorPosition)
             {
@@ -279,18 +265,20 @@ namespace RocketUI
                 FocusedElement?.InvokeCursorDown(CursorPosition);
             }
 
-            if (HighlightedElement == FocusedElement && (CursorInputListener.IsPressed(InputCommand.LeftClick) ||
-                                                         _gamePadInputListener.IsPressed(InputCommand.Navigate)))
+            if (HighlightedElement == FocusedElement && InputManager.Any(x =>
+                x.IsPressed(InputCommand.A, InputCommand.Navigate, InputCommand.LeftClick)))
             {
                 FocusedElement?.InvokeCursorPressed(CursorPosition, MouseButton.Left);
             }
 
-            if (HighlightedElement == FocusedElement && CursorInputListener.IsPressed(InputCommand.RightClick))
+            if (HighlightedElement == FocusedElement && InputManager.Any(x =>
+                x.IsBeginPress(InputCommand.B, InputCommand.RightClick)))
             {
                 FocusedElement?.InvokeCursorPressed(CursorPosition, MouseButton.Right);
             }
 
-            if (HighlightedElement == FocusedElement && CursorInputListener.IsPressed(InputCommand.MiddleClick))
+            if (HighlightedElement == FocusedElement && InputManager.Any(x =>
+                x.IsBeginPress(InputCommand.MiddleClick)))
             {
                 FocusedElement?.InvokeCursorPressed(CursorPosition, MouseButton.Middle);
             }
@@ -415,7 +403,8 @@ namespace RocketUI
         {
             foreach (var screen in GuiManager.Screens.ToArray().Reverse())
             {
-                if (TryGetElementAt(screen, position, predicate, out element))
+                //if(!(screen is IGuiScreen3D) && TryGetElementAt(screen, position, predicate, out element))
+                if(TryGetElementAt(screen, position, predicate, out element))
                     return true;
             }
 

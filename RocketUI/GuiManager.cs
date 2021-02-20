@@ -159,6 +159,7 @@ namespace RocketUI
 
         public void AddScreen(GuiScreen screen)
         {
+            screen.GuiManager = this;
             screen.Init(GuiRenderer);
             if(!(screen is IGuiScreen3D))
                 screen.UpdateSize(ScaledResolution.ScaledWidth, ScaledResolution.ScaledHeight);
@@ -168,6 +169,7 @@ namespace RocketUI
         public void RemoveScreen(GuiScreen screen)
         {
             Screens.Remove(screen);
+            screen.GuiManager = null;
         }
 
         public bool HasScreen(GuiScreen screen)

@@ -4591,24 +4591,27 @@ namespace Valve.VR
 
     public enum EVRButtonId
     {
-        System          = 0b0000000,
-        ApplicationMenu = 0b0000001,
-        Grip            = 0b0000010,
-        DPadLeft        = 0b0000011,
-        DPadUp          = 0b0000100,
-        DPadRight       = 0b0000101,
-        DPadDown        = 0b0000110,
-        A               = 0b0000111,
-        ProximitySensor = 0b0011111,
-        Axis0           = 0b0100000,
-        Axis1           = 0b0100001,
-        Axis2           = 0b0100010,
-        Axis3           = 0b0100011,
-        Axis4           = 0b0100100,
-        SteamVRTouchpad = 0b0100000, // Axis0
-        SteamVRTrigger  = 0b0100001, // Axis1
-        DashboardBack   = 0b0000010,
-        Max             = 0b1000000,
+        System          = 0,
+        ApplicationMenu = 1,
+        Grip            = 2,
+        DPadLeft        = 3,
+        DPadUp          = 4,
+        DPadRight       = 5,
+        DPadDown        = 6,
+        A               = 7,
+        ProximitySensor = 31,
+        Axis0           = 32, // Touchpad?
+        Axis1           = 33, // Trigger?
+        Axis2           = 34, 
+        Axis3           = 35, // Joystick?
+        Axis4           = 36, 
+        SteamVRTouchpad = 32, // Axis0
+        SteamVRTrigger  = 33, // Axis1
+        IndexA          = 2, 
+        IndexB          = 1, 
+        IndexJoystick   = 35, 
+        DashboardBack   = 2, 
+        Max             = 64, 
     }
 
     public enum EVRMouseButton

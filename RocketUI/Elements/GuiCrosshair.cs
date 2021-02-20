@@ -1,4 +1,5 @@
-﻿using RocketUI.Graphics;
+﻿using Microsoft.Xna.Framework;
+using RocketUI.Graphics;
 using RocketUI.Primitive;
 
 namespace RocketUI
@@ -7,14 +8,25 @@ namespace RocketUI
     {
         public GuiCrosshair()
         {
-            Anchor = Alignment.MiddleCenter;
+            AutoSizeMode = AutoSizeMode.None;
+            Anchor = Alignment.TopLeft;
             Width = 15;
             Height = 15;
         }
 
         protected override void OnInit(IGuiRenderer renderer)
         {
-            Background = renderer.GetTexture(GuiTextures.Crosshair);
+            Background = GuiTextures.Crosshair;
+        }
+
+        protected override void OnUpdate(GameTime gameTime)
+        {
+            if (Screen.GuiManager != null)
+            {
+                var pos = Screen.GuiManager.FocusManager.CursorPosition.ToPoint();
+                Margin = new Thickness(pos.X, pos.Y, 0, 0);
+            }
+            base.OnUpdate(gameTime);
         }
     }
 }

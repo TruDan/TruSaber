@@ -30,6 +30,20 @@
         ScrollBarDownButtonDefault,
         ScrollBarDownButtonHover,
         ScrollBarDownButtonFocused,
-        ScrollBarDownButtonDisabled
+        ScrollBarDownButtonDisabled,
+        
+        BarShadow,
+        BarBlue,
+        BarGreen,
+        BarOrange,
+        BarYellow,
+        BatWhite,
+        
+        DotShadow,
+        DotBlue,
+        DotGreen,
+        DotOrange,
+        DotYellow,
+        DotWhite
     }
 }

@@ -55,19 +55,68 @@ namespace TruSaber.Graphics
             LoadTextureFromSpriteSheet(GuiTextures.ButtonFocused, buttons, ButtonBackgroundFocus, new Thickness(50));
             LoadTextureFromSpriteSheet(GuiTextures.ButtonDisabled, buttons, ButtonBackgroundDisabled, new Thickness(50));
             
+            LoadTextureFromSpriteSheet(GuiTextures.PanelGeneric, buttons, PanelSolid, new Thickness(15));
+            LoadTextureFromSpriteSheet(GuiTextures.Crosshair, buttons, CrosshairWhite, Thickness.Zero);
+            
+            LoadTextureFromSpriteSheet(GuiTextures.DotBlue, buttons,StatusDotBlue, Thickness.Zero);
+            LoadTextureFromSpriteSheet(GuiTextures.DotGreen, buttons,StatusDotGreen, Thickness.Zero);
+            LoadTextureFromSpriteSheet(GuiTextures.DotOrange, buttons,StatusDotOrange, Thickness.Zero);
+            LoadTextureFromSpriteSheet(GuiTextures.DotYellow, buttons,StatusDotYellow, Thickness.Zero);
+            LoadTextureFromSpriteSheet(GuiTextures.DotWhite, buttons,StatusDotWhite, Thickness.Zero);
+            LoadTextureFromSpriteSheet(GuiTextures.DotShadow, buttons,StatusDotShadow, Thickness.Zero);
+            
+            LoadTextureFromSpriteSheet(GuiTextures.ProgressBar, buttons,ProgressBar, Thickness.Zero);
+            
             var scrollbar = c.Load<Texture2D>(basePath + "ScrollBar");
         }
 
 
         #region Impl
 
+        private static readonly Rectangle ProgressBar = new Rectangle(632, 112, 12, 12);
 
         #region Buttons
 
+        // Buttons Region: 0,0 -> 432,416
         private static readonly Rectangle ButtonBackgroundDefault  = new Rectangle(0, 0, 432, 104);
         private static readonly Rectangle ButtonBackgroundHover    = new Rectangle(0, 104, 432, 104);
         private static readonly Rectangle ButtonBackgroundFocus    = new Rectangle(0, 208, 432, 104);
         private static readonly Rectangle ButtonBackgroundDisabled = new Rectangle(0, 312, 432, 104);
+        
+        #endregion
+
+        #region Panels
+
+        private static readonly Point PanelsOffset = new Point(432, 0);
+        private static readonly Rectangle PanelSolid = new Rectangle(PanelsOffset.X + 0, PanelsOffset.Y + 0, 100, 100);
+        private static readonly Rectangle PanelGlassTL = new Rectangle(PanelsOffset.X + 0, PanelsOffset.Y + 100, 100, 100);
+        private static readonly Rectangle PanelGlassBL = new Rectangle(PanelsOffset.X + 0, PanelsOffset.Y + 200, 100, 100);
+        private static readonly Rectangle PanelGlassTR = new Rectangle(PanelsOffset.X + 100, PanelsOffset.Y + 100, 100, 100);
+        private static readonly Rectangle PanelGlassBR = new Rectangle(PanelsOffset.X + 100, PanelsOffset.Y + 200, 100, 100);
+        private static readonly Rectangle PanelGlassInset = new Rectangle(PanelsOffset.X + 0, PanelsOffset.Y + 300, 100, 100);
+        private static readonly Rectangle PanelGlass = new Rectangle(PanelsOffset.X + 100, PanelsOffset.Y + 300, 100, 100);
+
+        #endregion
+
+        #region Crosshairs
+
+        private static readonly Point     CrosshairsOffset = new Point(632, 0);
+        private static readonly Size      CrosshairsSize   = new Size(32, 32);
+        private static readonly Rectangle CrosshairWhite = new Rectangle(CrosshairsOffset + Point.Zero, CrosshairsSize);
+        private static readonly Rectangle CrosshairBlack = new Rectangle(CrosshairsOffset + new Point(CrosshairsSize.Width*1, 0), CrosshairsSize);
+        private static readonly Rectangle CrosshairRed = new Rectangle(CrosshairsOffset + new Point(CrosshairsSize.Width*2, 0), CrosshairsSize);
+        private static readonly Rectangle CrosshairBlue = new Rectangle(CrosshairsOffset + new Point(CrosshairsSize.Width*3, 0), CrosshairsSize);
+
+        #endregion
+
+        #region Dots
+
+        public static readonly Rectangle StatusDotBlue   = new Rectangle(632, 88, 24, 24);
+        public static readonly Rectangle StatusDotGreen  = new Rectangle(632 + 24, 88, 24, 24);
+        public static readonly Rectangle StatusDotOrange = new Rectangle(632 + (2 * 24), 88, 24, 24);
+        public static readonly Rectangle StatusDotYellow = new Rectangle(632 + (3 * 24), 88, 24, 24);
+        public static readonly Rectangle StatusDotWhite  = new Rectangle(632 + (4 * 24), 88, 24, 24);
+        public static readonly Rectangle StatusDotShadow = new Rectangle(632 + (5 * 24), 88, 24, 24);
         
         #endregion
 

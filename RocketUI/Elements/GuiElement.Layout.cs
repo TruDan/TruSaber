@@ -504,12 +504,15 @@ namespace RocketUI
         {
             var bounds = new LayoutBoundingRectangle(availableBounds, padding, child.Margin, child.Size);
 
-            PositionChildCore(child, ref bounds, offset, forceAlignment ? alignment : (child.Anchor & alignment));
-            
-            child.LayoutOffsetY = bounds.RelativeY;
-            child.LayoutHeight  = bounds.Height;
-            child.LayoutOffsetX = bounds.RelativeX;
-            child.LayoutWidth   = bounds.Width;
+            if (child.Anchor != Alignment.Fixed)
+            {
+                PositionChildCore(child, ref bounds, offset, forceAlignment ? alignment : (child.Anchor & alignment));
+
+                child.LayoutOffsetY = bounds.RelativeY;
+                child.LayoutHeight = bounds.Height;
+                child.LayoutOffsetX = bounds.RelativeX;
+                child.LayoutWidth = bounds.Width;
+            }
 
             child.IsLayoutDirty = false;
 

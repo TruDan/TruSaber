@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace RocketUI.Input.Listeners
 {
-    public abstract class InputListenerBase<TState, TButtons> : IInputListener, IEnumerable<KeyValuePair<InputCommand, TButtons>>
+    public abstract class InputListenerBase<TState, TButtons> : IInputListener
     {
         public PlayerIndex PlayerIndex { get; }
 
-        private readonly IDictionary<InputCommand, TButtons> _buttonMap = new Dictionary<InputCommand, TButtons>();
+        private readonly IDictionary<InputCommand, List<TButtons>> _buttonMap = new Dictionary<InputCommand, List<TButtons>>();
 
         protected TState PreviousState, CurrentState;
 
@@ -39,11 +40,14 @@ namespace RocketUI.Input.Listeners
         {
             if (_buttonMap.ContainsKey(command))
             {
-                _buttonMap[command] = buttons;
+                if (!_buttonMap[command].Contains(buttons))
+                {
+                    _buttonMap[command].Add(buttons);
+                }
             }
             else
             {
-                _buttonMap.Add(command, buttons);
+                _buttonMap.Add(command, new List<TButtons>(){buttons});
             }
         }
 
@@ -55,38 +59,35 @@ namespace RocketUI.Input.Listeners
         
         public bool IsDown(InputCommand command)
         {
-            return (TryGetButtons(command, out var buttons) && IsButtonDown(CurrentState, buttons));
+            return (TryGetButtons(command, out var buttons) && buttons.Any(button => IsButtonDown(CurrentState, button)));
         }
 
         public bool IsUp(InputCommand command)
         {
-            return (TryGetButtons(command, out var buttons) && IsButtonUp(CurrentState, buttons));
+            return (TryGetButtons(command, out var buttons) && buttons.Any(button => IsButtonUp(CurrentState, button)));
         }
         
         public bool IsBeginPress(InputCommand command)
         {
-            return (TryGetButtons(command, out var buttons) && IsButtonDown(CurrentState, buttons) && IsButtonUp(PreviousState, buttons));
+            return (TryGetButtons(command, out var buttons) && buttons.Any(button => IsButtonDown(CurrentState, button) && IsButtonUp(PreviousState, button)));
         }
 
         public bool IsPressed(InputCommand command)
         {
-            return (TryGetButtons(command, out var buttons) && IsButtonUp(CurrentState, buttons) && IsButtonDown(PreviousState, buttons));
+            return (TryGetButtons(command, out var buttons) && buttons.Any(button => IsButtonUp(CurrentState, button) && IsButtonDown(PreviousState, button)));
         }
         
-        private bool TryGetButtons(InputCommand command, out TButtons buttons)
+        private bool TryGetButtons(InputCommand command, out TButtons[] buttons)
         {
-            return _buttonMap.TryGetValue(command, out buttons);
-        }
+            List<TButtons> btns;
+            if (_buttonMap.TryGetValue(command, out btns))
+            {
+                buttons = btns.ToArray();
+                return true;
+            }
 
-        public IEnumerator<KeyValuePair<InputCommand, TButtons>> GetEnumerator()
-        {
-            foreach (var kv in _buttonMap)
-                yield return kv;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+            buttons = new TButtons[0];
+            return false;
         }
     }
 }

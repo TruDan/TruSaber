@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using RocketUI;
 using RocketUI.Controls;
 using RocketUI.Primitive;
+using TruSaber.Graphics.Gui;
 
 namespace TruSaber.Scenes
 {
@@ -61,6 +62,11 @@ namespace TruSaber.Scenes
             
             Components.Add(_skybox);
             Components.Add(_guiScreen);
+            
+            _guiScreen.AddChild(new GuiVRControlDebug()
+            {
+                Anchor = Alignment.FillRight
+            });
         }
 
         

@@ -63,7 +63,7 @@ namespace RocketUI.Graphics
             Effect.Projection = Matrix.CreateOrthographic(graphicsDevice.PresentationParameters.BackBufferWidth,graphicsDevice.PresentationParameters.BackBufferHeight, 0.1f, 1000.0f);
             
 //            Context = GraphicsContext.CreateContext(_graphicsDevice, BlendState.NonPremultiplied, DepthStencilState.None, RasterizerState, SamplerState.PointClamp);
-            Context = GraphicsContext.CreateContext(_graphicsDevice, BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullNone, SamplerState.AnisotropicWrap);
+            Context = GraphicsContext.CreateContext(_graphicsDevice, BlendState.AlphaBlend, DepthStencilState.None, RasterizerState.CullNone, SamplerState.AnisotropicWrap);
 
             Font = _renderer.Font;
             ScaledResolution = _renderer.ScaledResolution;

@@ -5,8 +5,9 @@ namespace RocketUI.Primitive
 {
     [Flags]
 
-    public enum Alignment
+    public enum Alignment : int
     {
+        Fixed   = -0b11111111,
         None    = 0b00000000,
 
         NoneX   = 0b00000001, 

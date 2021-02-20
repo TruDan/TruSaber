@@ -105,7 +105,7 @@ namespace TruSaber
             
             
             GuiDebugHelper = new GuiDebugHelper(this, GuiManager);
-            GuiDebugHelper.Enabled = true;
+            //GuiDebugHelper.Enabled = true;
             
             SceneManager.SetScene<MainMenuScene>();
 //            SceneManager.SetScene<PlayLevelScene>();

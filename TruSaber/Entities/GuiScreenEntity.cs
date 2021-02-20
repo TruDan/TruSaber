@@ -20,6 +20,7 @@ namespace TruSaber
 
         private RenderTarget2D _renderTarget;
 
+        private GuiCrosshair _crosshair;
         public float DotsPerInch
         {
             get => _dotsPerMm / 25.4f;
@@ -29,16 +30,20 @@ namespace TruSaber
         public GuiScreenEntity(Game game, int width, int height) : base()
         {
             _game = game;
+            Background = GuiTextures.PanelGeneric;
             //AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClipToBounds = true;
             //Background = Color.GreenYellow;
             UpdateSize(width, height);
             _viewport = new Viewport(0, 0, Width, Height);
+            _crosshair = new GuiCrosshair();
+            AddChild(_crosshair);
         }
 
         protected override void OnInit(IGuiRenderer renderer)
         {
             base.OnInit(renderer);
+            
             _renderTarget = new RenderTarget2D(_game.GraphicsDevice, Width, Height, false, _game.GraphicsDevice.PresentationParameters.BackBufferFormat, DepthFormat.Depth24, 0, RenderTargetUsage.PreserveContents);
             _verticies = new VertexPositionTexture[4];
             _indicies = new short[6];

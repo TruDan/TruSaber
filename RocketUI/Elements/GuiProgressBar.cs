@@ -8,9 +8,9 @@ namespace RocketUI
     public class GuiProgressBar : GuiElement
     {
 
-        public int MinValue { get; set; } = 0;
-        public int Value { get; set; } = 0;
-        public int MaxValue { get; set; } = 100;
+        public float MinValue { get; set; } = 0;
+        public float Value    { get; set; } = 0;
+        public float MaxValue { get; set; } = 100;
 
         public float Percent => Math.Max(0, Math.Min(1, Value / (float)Math.Abs(MaxValue - MinValue)));
 
@@ -18,11 +18,18 @@ namespace RocketUI
         public ITexture2D Highlight { get; set; }
 
 		public GuiProgressBar()
-        {
-        }
+		{
+			Height = 15;
+			Width = 100;
+			MinHeight = 15;
+			MinWidth = 100;
+
+		}
 
         protected override void OnInit(IGuiRenderer renderer)
         {
+	        base.OnInit(renderer);
+	        
 			var texture = renderer.GetTexture(GuiTextures.ProgressBar);
             var b = texture.ClipBounds;
 

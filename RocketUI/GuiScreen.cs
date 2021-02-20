@@ -36,7 +36,9 @@ namespace RocketUI
             InvalidateLayout(true);
         }
         
-        private object _updateLock = new object();
+        private object     _updateLock = new object();
+        public  GuiManager GuiManager { get; internal set; }
+
         public void UpdateLayout()
         {
             if (!IsLayoutDirty || IsLayoutInProgress) return;

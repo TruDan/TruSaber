@@ -89,10 +89,16 @@ namespace RocketUI.Controls
             base.OnCursorMove(cursorPosition, previousCursorPosition, isCursorDown);
         }
 
+        protected override void OnFocusActivate()
+        {
+            base.OnFocusActivate();
+            Action?.Invoke();
+        }
+
         protected override void OnCursorPressed(Point cursorPosition, MouseButton button)
         {
             //Focus();
-            Action?.Invoke();
+            //Action?.Invoke();
         }
 
         protected override void OnDraw(GuiSpriteBatch graphics, GameTime gameTime)
