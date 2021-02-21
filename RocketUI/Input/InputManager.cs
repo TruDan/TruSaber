@@ -42,7 +42,7 @@ namespace RocketUI.Input
 
         public InputManager(Game game) : base(game)
         {
-            
+            UpdateOrder = -10;
             var playerOne     = GetOrAddPlayerManager(PlayerIndex.One);
             var mouseListener = new MouseInputListener(PlayerIndex.One);
             var vrListener    = new VRControllerInputListener(PlayerIndex.One);

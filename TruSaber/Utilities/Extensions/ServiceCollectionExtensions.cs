@@ -31,6 +31,7 @@ namespace TruSaber.Abstractions
             services.AddSingleton<InputManager>();
             services.AddSingleton<IGuiRenderer, GuiRenderer>();
             services.AddSingleton<GuiManager>();
+            services.AddSingleton<LevelManager>();
         }
 
         public static void AddPlugins(this IServiceCollection services, params string[] pluginPaths)

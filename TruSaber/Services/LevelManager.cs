@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,18 +11,18 @@ namespace TruSaber.Services
 {
     public class LevelManager
     {
-        private readonly IOptions<GameOptions> _optionsAccessor;
+        private readonly GameOptions _options;
 
         public List<BeatLevel> Levels { get; set; }
 
-        public LevelManager(IOptions<GameOptions> optionsAccessor)
+        public LevelManager(GameOptions options)
         {
-            _optionsAccessor = optionsAccessor;
+            _options = options;
         }
 
         public async Task LoadLevels()
         {
-            var dir = _optionsAccessor.Value.LevelDirectory;
+            var dir = _options.LevelDirectory;
             if (!Directory.Exists(dir))
                 return;
 
@@ -30,21 +31,30 @@ namespace TruSaber.Services
             var allFiles = Directory.GetFileSystemEntries(dir);
             foreach (var allFile in allFiles)
             {
-                var info = new FileInfo(allFile);
-                if ((info.Attributes & FileAttributes.Directory) != 0)
+                try
                 {
-                    // load as directory
-                    var beatLevel = new BeatLevel(info.FullName);
-                    levels.Add(beatLevel);
-                }
-                else if (info.Extension.ToLowerInvariant() == "zip")
-                {
-                    // load as zip
+                    var info = new FileInfo(allFile);
+                    if ((info.Attributes & FileAttributes.Directory) != 0)
+                    {
+                        // load as directory
+                        var beatLevel = new BeatLevel(info.FullName);
+                        await beatLevel.LoadLevelInfoAsync();
+                        levels.Add(beatLevel);
+                    }
+                    else if (info.Extension.ToLowerInvariant() == "zip")
+                    {
+                        // load as zip
+
+                    }
                     
+                }
+                catch
+                {
+                    Console.WriteLine($"Failed to load level at {allFile}");
                 }
             }
 
-            await Task.WhenAll(levels.Select(l => l.LoadLevelInfoAsync()));
+            Levels = levels;
         }
         
     }

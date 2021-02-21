@@ -30,7 +30,7 @@ namespace TruSaber
         public GuiScreenEntity(Game game, int width, int height) : base()
         {
             _game = game;
-            Background = GuiTextures.PanelGeneric;
+            Background = (Color.Black * 0.2f);
             //AutoSizeMode = AutoSizeMode.GrowAndShrink;
             ClipToBounds = true;
             //Background = Color.GreenYellow;
@@ -101,21 +101,6 @@ namespace TruSaber
             //             VertexPositionTexture.VertexDeclaration);
             //     }
             // }
-        }
-        
-        /// <summary>Draw this component.</summary>
-        /// <param name="gameTime">The time elapsed since the last call to <see cref="M:Microsoft.Xna.Framework.DrawableGameComponent.Draw(Microsoft.Xna.Framework.GameTime)" />.</param>
-        protected override void OnDraw(GuiSpriteBatch graphics, GameTime gameTime)
-        {
-            //using (var context = graphics.BeginTransform(Transform.World))
-                //cxt.Viewport = _viewport;
-               // graphics.ScaledResolution.ViewportSize = _viewport.Bounds.Size;
-
-                base.OnDraw(graphics, gameTime);
-                graphics.DrawRectangle(new Rectangle(50, 50, 200, 200), Color.Aqua, 5);
-               // graphics.FillRectangle(RenderBounds, Color.LimeGreen);
-
-
         }
 
         public void Initialize()

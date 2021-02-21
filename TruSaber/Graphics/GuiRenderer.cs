@@ -56,6 +56,8 @@ namespace TruSaber.Graphics
             LoadTextureFromSpriteSheet(GuiTextures.ButtonDisabled, buttons, ButtonBackgroundDisabled, new Thickness(50));
             
             LoadTextureFromSpriteSheet(GuiTextures.PanelGeneric, buttons, PanelSolid, new Thickness(15));
+            LoadTextureFromSpriteSheet(GuiTextures.PanelGlass, buttons, PanelGlass, new Thickness(15));
+            LoadTextureFromSpriteSheet(GuiTextures.PanelGlassHighlight, buttons, PanelGlassInset, new Thickness(15));
             LoadTextureFromSpriteSheet(GuiTextures.Crosshair, buttons, CrosshairWhite, Thickness.Zero);
             
             LoadTextureFromSpriteSheet(GuiTextures.DotBlue, buttons,StatusDotBlue, Thickness.Zero);

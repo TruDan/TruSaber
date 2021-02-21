@@ -62,13 +62,13 @@ namespace RocketUI.Input.Listeners
         {
             if (buttons.HasFlag(VRButtons.Right))
             {
-                var vrButtons = (ulong) (buttons & VRButtons.ButtonMask);
-                return (state.Right.ButtonPressed & vrButtons) == vrButtons;
+                var vrButtons = (ulong) (1ul << (int) (buttons & ~VRButtons.Right));
+                return (state.Right.ButtonPressed & vrButtons) != 0;
             }
             else
             {
-                var vrButtons = (ulong) (buttons & VRButtons.ButtonMask);
-                return (state.Left.ButtonPressed & vrButtons) == vrButtons;
+                var vrButtons = (ulong) (1ul << (int) buttons);
+                return (state.Left.ButtonPressed & vrButtons) != 0;
             }
         }
 
@@ -76,12 +76,12 @@ namespace RocketUI.Input.Listeners
         {
             if (buttons.HasFlag(VRButtons.Right))
             {
-                var vrButtons = (ulong) (buttons & VRButtons.ButtonMask);
+                var vrButtons = (ulong) (1ul << (int) (buttons & ~VRButtons.Right));
                 return (state.Right.ButtonPressed & vrButtons) == 0;
             }
             else
             {
-                var vrButtons = (ulong) (buttons & VRButtons.ButtonMask);
+                var vrButtons = (ulong) (1ul << (int) buttons);
                 return (state.Left.ButtonPressed & vrButtons) == 0;
             }
         }

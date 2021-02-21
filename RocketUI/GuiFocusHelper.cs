@@ -16,8 +16,6 @@ namespace RocketUI
         private GraphicsDevice GraphicsDevice { get; }
         private InputManager   InputManager   { get; }
 
-        private ICursorInputListener CursorInputListener => InputManager.GetOrAddPlayerManager(PlayerIndex.One).CursorInputListener;
-
         private Viewport Viewport => GraphicsDevice.Viewport;
 
         private Vector2 _previousCursorPosition;
@@ -138,7 +136,7 @@ namespace RocketUI
             // }
 
 
-            var cursorRay = CursorInputListener.GetCursorRay();
+            var cursorRay = InputManager.GetOrAddPlayerManager(PlayerIndex.One).GetCursorRay();
             var screen    = FindScreen(cursorRay);
             if (screen.HasValue)
             {
@@ -147,10 +145,10 @@ namespace RocketUI
 
                 //if (Vector2.DistanceSquared(rawCursorPosition, _previousCursorPosition) >= 1)
                 {
-                    ActiveFocusContext = screen3d;
+                    //ActiveFocusContext = screen3d;
                     _previousCursorPosition = CursorPosition;
                     CursorPosition = cursorPosition;
-                    UpdateCursor(CursorPosition);
+                    UpdateCursor(CursorPosition, screen3d);
                 }
             }
         }

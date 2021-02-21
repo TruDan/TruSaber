@@ -45,7 +45,6 @@ namespace RocketUI.Input.Listeners
         RightMax             = Right | EVRButtonId.Max,
 
         Left       = 0b00000000,
-        Right      = 0b10000000,
-        ButtonMask = 0x01111111
+        Right      = 0b10000000
     }
 }

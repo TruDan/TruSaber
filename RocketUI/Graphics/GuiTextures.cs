@@ -7,6 +7,8 @@
         SplashBackground,
 
         PanelGeneric,
+        PanelGlass,
+        PanelGlassHighlight,
         
         Crosshair,
         
