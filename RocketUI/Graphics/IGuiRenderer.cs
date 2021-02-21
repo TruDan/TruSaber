@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using RocketUI.Graphics.Textures;
 using RocketUI.Graphics.Typography;
@@ -12,9 +13,11 @@ namespace RocketUI.Graphics
         void Init(GraphicsDevice graphics, IServiceProvider serviceProvider);
 
         IFont Font { get; set; }
-        
-        TextureSlice2D GetTexture(GuiTextures guiTexture);
-        Texture2D GetTexture2D(GuiTextures guiTexture);
+
+        SoundEffectInstance GetSoundEffect(GuiSoundEffects soundEffects);
+        TextureSlice2D GetTexture(GuiTextures                     guiTexture);
+        TextureSlice2D GetTexture(string                          texturePath);
+        Texture2D GetTexture2D(GuiTextures                        guiTexture);
 
         string GetTranslation(string key);
 

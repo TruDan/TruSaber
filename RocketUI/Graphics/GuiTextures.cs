@@ -1,5 +1,12 @@
 ﻿namespace RocketUI.Graphics
 {
+    public enum GuiSoundEffects
+    {
+        None,
+        ButtonHighlight,
+        ButtonClick
+    }
+    
     public enum GuiTextures
     {
         GameLogo,

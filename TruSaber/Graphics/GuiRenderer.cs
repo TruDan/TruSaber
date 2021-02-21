@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using RocketUI;
 using RocketUI.Graphics;
@@ -16,6 +19,8 @@ namespace TruSaber.Graphics
         
         private GraphicsDevice                          _graphicsDevice;
         private Dictionary<GuiTextures, TextureSlice2D> _textureCache = new Dictionary<GuiTextures, TextureSlice2D>();
+        private Dictionary<string, TextureSlice2D> _pathedTextureCache = new Dictionary<string, TextureSlice2D>();
+        private Dictionary<GuiSoundEffects, SoundEffect> _soundEffectCache = new Dictionary<GuiSoundEffects, SoundEffect>();
         
         
         public void Init(GraphicsDevice graphics, IServiceProvider serviceProvider)
@@ -24,6 +29,7 @@ namespace TruSaber.Graphics
             Font = (WrappedSpriteFont) TruSaberGame.Instance.Game.Content.Load<SpriteFont>("Fonts/Default");
             
             LoadTexturesFromContent();
+            LoadSoundsFromContent();
         }
 
         public IFont Font { get; set; }
@@ -41,7 +47,45 @@ namespace TruSaber.Graphics
         {
             return GetTexture(guiTexture).Texture;
         }
+        
+        public TextureSlice2D GetTexture(string texturePath)
+        {
+            texturePath = texturePath.ToLowerInvariant();
+            
+            if (!_pathedTextureCache.TryGetValue(texturePath, out TextureSlice2D texture))
+            {
+                texture = Texture2D.FromFile(_graphicsDevice, texturePath);
+                _pathedTextureCache.Add(texturePath, texture);
+            }
 
+            return texture;
+        }
+
+
+        public SoundEffectInstance GetSoundEffect(GuiSoundEffects soundEffects)
+        {
+            if (_soundEffectCache.TryGetValue(soundEffects, out var soundEffect))
+            {
+                return soundEffect.CreateInstance();
+            }
+
+            return null;
+        }
+
+        private void LoadSoundsFromContent()
+        {
+            var c        = TruSaberGame.Instance.Game.Content;
+            var basePath = "Audio/UI/";
+
+            LoadSoundEffect(GuiSoundEffects.ButtonClick, c.Load<SoundEffect>(basePath + "Focus"));
+            LoadSoundEffect(GuiSoundEffects.ButtonHighlight, c.Load<SoundEffect>(basePath + "Hover"));
+        }
+
+        private void LoadSoundEffect(GuiSoundEffects guiSoundEffects, SoundEffect soundEffect)
+        {
+            _soundEffectCache[guiSoundEffects] = soundEffect;
+        }
+        
         #region Texture Loading
 
         private void LoadTexturesFromContent()
@@ -56,8 +100,8 @@ namespace TruSaber.Graphics
             LoadTextureFromSpriteSheet(GuiTextures.ButtonDisabled, buttons, ButtonBackgroundDisabled, new Thickness(50));
             
             LoadTextureFromSpriteSheet(GuiTextures.PanelGeneric, buttons, PanelSolid, new Thickness(15));
-            LoadTextureFromSpriteSheet(GuiTextures.PanelGlass, buttons, PanelGlass, new Thickness(15));
-            LoadTextureFromSpriteSheet(GuiTextures.PanelGlassHighlight, buttons, PanelGlassInset, new Thickness(15));
+            LoadTextureFromSpriteSheet(GuiTextures.PanelGlass, buttons, PanelGlass, new Thickness(10));
+            LoadTextureFromSpriteSheet(GuiTextures.PanelGlassHighlight, buttons, PanelGlassInset, new Thickness(10));
             LoadTextureFromSpriteSheet(GuiTextures.Crosshair, buttons, CrosshairWhite, Thickness.Zero);
             
             LoadTextureFromSpriteSheet(GuiTextures.DotBlue, buttons,StatusDotBlue, Thickness.Zero);
@@ -80,10 +124,10 @@ namespace TruSaber.Graphics
         #region Buttons
 
         // Buttons Region: 0,0 -> 432,416
-        private static readonly Rectangle ButtonBackgroundDefault  = new Rectangle(0, 0, 432, 104);
-        private static readonly Rectangle ButtonBackgroundHover    = new Rectangle(0, 104, 432, 104);
-        private static readonly Rectangle ButtonBackgroundFocus    = new Rectangle(0, 208, 432, 104);
-        private static readonly Rectangle ButtonBackgroundDisabled = new Rectangle(0, 312, 432, 104);
+        private static readonly Rectangle ButtonBackgroundDefault  = new Rectangle(0, 0, 400, 100);
+        private static readonly Rectangle ButtonBackgroundHover    = new Rectangle(0, 100, 400, 100);
+        private static readonly Rectangle ButtonBackgroundFocus    = new Rectangle(0, 200, 400, 100);
+        private static readonly Rectangle ButtonBackgroundDisabled = new Rectangle(0, 300, 400, 100);
         
         #endregion
 

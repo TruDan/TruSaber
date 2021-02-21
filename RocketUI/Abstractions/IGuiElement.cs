@@ -9,7 +9,8 @@ namespace RocketUI.Abstractions
 {
     public interface IGuiElement
     {
-        [DebuggerVisible] Guid Id { get; }
+        [DebuggerVisible] Guid Id  { get; }
+        object                 Tag { get; set; }
 
         IGuiScreen Screen { get; }
         IGuiElement ParentElement { get; set; }

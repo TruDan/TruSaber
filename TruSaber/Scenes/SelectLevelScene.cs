@@ -1,11 +1,13 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Media;
 using RocketUI;
 using RocketUI.Controls;
 using RocketUI.Graphics;
 using RocketUI.Layout;
 using RocketUI.Primitive;
+using TruSaber.Graphics.Gui;
 using TruSaber.Models;
 using TruSaber.Services;
 
@@ -16,7 +18,8 @@ namespace TruSaber.Scenes
         private GuiButton        _playButton;
         private LevelManager     _levelManager;
         private GuiSelectionList _selectionList;
-
+        private GuiLevelInfo     _levelInfo;
+        
         public SelectLevelScene()
         {
         }
@@ -27,24 +30,44 @@ namespace TruSaber.Scenes
 
             _levelManager = TruSaberGame.Instance.ServiceProvider.GetRequiredService<LevelManager>();
 
-            var page = new GuiStackContainer()
+            var page = new GuiMultiStackContainer()
             {
-                Orientation = Orientation.Horizontal,
+                Orientation = Orientation.Vertical,
                 Anchor = Alignment.Fill,
-                ChildAnchor = Alignment.Fill
+                ChildAnchor = Alignment.TopFill
             };
 
             _selectionList = new GuiSelectionList()
             {
                 Background = (Color.Black * 0.2f),
                 Anchor = Alignment.Fill,
-                Height = 600,
-                Width = 800
+                Height = 500,
+                Width = 400
             };
-            //page.AddChild(_selectionList);
-            AddChild(_selectionList);
+            _levelInfo = new GuiLevelInfo()
+            {
+                Background = (Color.Black * 0.5f),
+                Anchor = Alignment.Fill,
+                Height = 500,
+                Width = 400
 
+            };
+            page.AddRow(new GuiButton("< BACK", () => TruSaberGame.Instance.SceneManager.Back()), new GuiTextElement("LEVEL SELECT"));
+            page.AddRow(_selectionList, _levelInfo);
+            
+            AddChild(page);
+
+            _selectionList.SelectedItemChanged += SelectionListOnSelectedItemChanged;
+            
             LoadSelectionList();
+        }
+
+        private void SelectionListOnSelectedItemChanged(object? sender, GuiSelectionListItem e)
+        {
+            var item = e as LevelSelectGuiSelectionListItem;
+            if(item == null) return;
+            
+            UpdateSelectedLevel(item.Level);
         }
 
         private void LoadSelectionList()
@@ -60,11 +83,50 @@ namespace TruSaber.Scenes
             }
         }
 
+
+        private BeatLevel _previewNowPlaying;
+        private void UpdateSelectedLevel(BeatLevel beatLevel)
+        {
+            _levelInfo.Level = beatLevel;
+            MediaPlayer.Stop();
+            MediaPlayer.Volume = 1f;
+            MediaPlayer.Play(Song.FromUri(beatLevel.MapInfo.SongName, new Uri(beatLevel.SongPath)), beatLevel.PreviewStartTime);
+            _previewNowPlaying = beatLevel;
+        }
+
+        protected override void OnHide()
+        {
+            base.OnHide();
+            MediaPlayer.Stop();
+        }
+
+        protected override void OnUpdate(GameTime gameTime)
+        {
+            base.OnUpdate(gameTime);
+            if (MediaPlayer.State == MediaState.Playing)
+            {
+                if (MediaPlayer.Queue.ActiveSong.Name == _previewNowPlaying.MapInfo.SongName)
+                {
+                    if (MediaPlayer.PlayPosition >=
+                        (_previewNowPlaying.PreviewStartTime + _previewNowPlaying.PreviewDuration))
+                    {
+                        MediaPlayer.Volume -= (float)(0.5f * gameTime.ElapsedGameTime.TotalSeconds);
+                        if (MediaPlayer.Volume == 0)
+                        {
+                            MediaPlayer.Stop();
+                            MediaPlayer.Volume = 1f;
+                        }
+                    }
+                }
+            }
+        }
+
         class LevelSelectGuiSelectionListItem : GuiSelectionListItem
         {
             public BeatLevel Level { get; }
 
-            private GuiStackContainer _stack;
+            private GuiMultiStackContainer _stack;
+            private GuiImage          _cover;
             private GuiTextElement    _title;
             private GuiTextElement    _author;
 
@@ -74,16 +136,21 @@ namespace TruSaber.Scenes
                 Background = GuiTextures.PanelGlass;
                 Background.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
 
-                SetFixedSize(500, 50);
+                SetFixedSize(350, 50);
 
-                AddChild(_stack = new GuiStackContainer()
+
+                
+                AddChild(_stack = new GuiMultiStackContainer()
                 {
-                    Orientation = Orientation.Vertical,
-                    ChildAnchor = Alignment.Fill
-                });
-
-                _stack.AddChild(_title = new GuiTextElement(level.MapInfo.SongName));
-                _stack.AddChild(_author = new GuiTextElement(level.MapInfo.SongAuthorName));
+                    Anchor = Alignment.FillLeft,
+                    Orientation = Orientation.Horizontal,
+                    ChildAnchor = Alignment.TopLeft,
+                    Height = 50,
+                    Width = 350
+                });     
+                
+                _stack.AddRow(_cover = new GuiImage(level.CoverImagePath, TextureRepeatMode.ScaleToFit){ Width = 50, Height = 50, ResizeToImageSize = false, Anchor = Alignment.MiddleLeft });
+                _stack.AddRow(_title = new GuiTextElement(level.MapInfo.SongName),_author = new GuiTextElement(level.MapInfo.SongAuthorName));
             }
         }
     }

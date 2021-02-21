@@ -5,6 +5,7 @@
 //  *
 //  * /
 
+using System;
 using RocketUI.Abstractions;
 using RocketUI.Layout;
 
@@ -12,8 +13,18 @@ namespace RocketUI.Controls
 {
 	public class GuiButtonGroup : GuiStackContainer
 	{
+		private IValuedControl<bool>                   _checkedControl;
+		public event EventHandler<GuiElementEventArgs> CheckedControlChanged;
 
-		public IValuedControl<bool> CheckedControl { get; private set; }
+		public IValuedControl<bool> CheckedControl
+		{
+			get => _checkedControl;
+			private set
+			{
+				_checkedControl = value;
+				CheckedControlChanged?.Invoke(this, new GuiElementEventArgs(_checkedControl));
+			}
+		}
 
 		protected override void OnChildAdded(IGuiElement element)
 		{

@@ -36,9 +36,8 @@ namespace TruSaber.Scenes
             };
             AddChild(stack);
             
-            stack.AddMenuItem("PLAY", () => TruSaberGame.Instance.SceneManager.SetScene<PlayLevelScene>());
-            stack.AddMenuItem("CHOOSE LEVEL", () => TruSaberGame.Instance.SceneManager.SetScene<SelectLevelScene>());
-            stack.AddMenuItem("OPTIONS", () => TruSaberGame.Instance.SceneManager.SetScene<OptionsScene>());
+            stack.AddMenuItem("PLAY", () => TruSaberGame.Instance.SceneManager.PushScene<SelectLevelScene>());
+            stack.AddMenuItem("OPTIONS", () => TruSaberGame.Instance.SceneManager.PushScene<OptionsScene>());
             stack.AddMenuItem("EXIT", () => TruSaberGame.Instance.Exit());
 
             

@@ -14,11 +14,13 @@ namespace RocketUI
 	public delegate bool GuiElementPredicate<in TGuiElement>(TGuiElement element)
 		where TGuiElement : class, IGuiElement;
 
-	public partial class GuiElement : IGuiElement
+	public partial class GuiElement : IGuiElement, IDisposable
 	{
 		[DebuggerVisible]
 		public Guid Id { get; } = Guid.NewGuid();
 
+		public object Tag { get; set; }
+		
 		private IGuiScreen       _screen;
 		private IGuiElement      _parentElement;
 		private IGuiFocusContext _focusContext;
@@ -400,6 +402,24 @@ namespace RocketUI
 		}
 
 		#endregion
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+			}
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		~GuiElement()
+		{
+			Dispose(false);
+		}
 	}
 
 	public class GuiElementEventArgs

@@ -69,8 +69,8 @@ namespace RocketUI.Input
         {
             base.Update(gameTime);
             
-            if (!Game.IsActive)
-                return;
+            //if (!Game.IsActive)
+            //    return;
             
             foreach (var playerInputManager in PlayerInputManagers.Values.ToArray())
             {

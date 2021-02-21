@@ -20,6 +20,22 @@ namespace TruSaber.Models
         {
             get => Path.Combine(Directory, MapInfo.SongFilename);
         }
+
+        public string CoverImagePath
+        {
+            get => Path.Combine(Directory, MapInfo.CoverImageFilename);
+        }
+
+        public TimeSpan PreviewStartTime
+        {
+            get => TimeSpan.FromSeconds(MapInfo.PreviewStartTime);
+        }
+        
+        public TimeSpan PreviewDuration
+        {
+            get => TimeSpan.FromSeconds(MapInfo.PreviewDuration);
+        }
+        
         public string Directory { get; set; }
 
         private bool _infoLoaded;

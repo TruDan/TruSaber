@@ -23,7 +23,9 @@ namespace TruSaber.Scenes
 
         private ILogger<PlayLevelScene> _logger;
         private double                  _beat;
-        public  BeatLevel               Level { get; set; }
+        public  BeatLevel               Level          { get; }
+        public  Characteristic          Characteristic { get; }
+        public  Difficulty              Difficulty     { get; }
 
         private Queue<NoteEntity> _noteEntities;
         private List<NoteEntity> _activeNoteEntities;
@@ -36,26 +38,16 @@ namespace TruSaber.Scenes
         private ParallelLooper _parallelLooper;
         private Space          _space;
 
-        public PlayLevelScene() : this(TruSaberGame.Instance.ServiceProvider.GetRequiredService<GameOptions>().DebugLevel)
+        public PlayLevelScene(BeatLevel beatlevel, Characteristic characteristic, Difficulty difficulty)
         {
-        }
-
-        public PlayLevelScene(string level)
-        {
-            _logger = TruSaberGame.Instance.ServiceProvider.GetRequiredService<ILogger<PlayLevelScene>>();
-            Level = new BeatLevel(level);
-            _player = TruSaberGame.Instance.Player;
-
-            _activeNoteEntities = new List<NoteEntity>();
+            Level = beatlevel;
+            Characteristic = characteristic;
+            Difficulty = difficulty;
             
-            // _parallelLooper = new ParallelLooper();
-            // for(int i = 0; i < Math.Min(Environment.ProcessorCount, 8); i++)
-            // {
-            //     _parallelLooper.AddThread();
-            // }
-            // _space = new Space(_parallelLooper);
+            _logger = TruSaberGame.Instance.ServiceProvider.GetRequiredService<ILogger<PlayLevelScene>>();
+            _player = TruSaberGame.Instance.Player;
+            _activeNoteEntities = new List<NoteEntity>();
             _space = new Space(Level);
-            //_space.Solver.IterationLimit = 1;
 
         }
         
@@ -65,17 +57,17 @@ namespace TruSaber.Scenes
             base.OnInitialize();
             Components.Add(new PlatformEntity(TruSaberGame.Instance));
 
-            Level.LoadLevelInfoAsync().GetAwaiter().GetResult();
-            var selectedDifficulty = Level.AvailableDifficulties.FirstOrDefault();
-            var map = Level.LoadDifficulty(selectedDifficulty.Key, selectedDifficulty.Value.LastOrDefault()).GetAwaiter()
-                .GetResult();
+            var map = Level.LoadDifficulty(Characteristic, Difficulty).GetAwaiter().GetResult();
 
+            InitBeatmap(map);
+        }
+
+        private BeatMapDifficulty _map;
+        
+        private void InitBeatmap(BeatMapDifficulty map)
+        {
+            _map = map;
             var bpm = Level.MapInfo.BeatsPerMinute;
-            _beatmap = Level.MapInfo.DifficultyBeatmapSets
-                .FirstOrDefault(d => d.BeatmapCharacteristicName == selectedDifficulty.Key).DifficultyBeatmaps
-                .FirstOrDefault(b => b.Difficulty == selectedDifficulty.Value.LastOrDefault());
-
-            _noteEntities = new Queue<NoteEntity>();
             foreach (var note in map.Notes)
             {
                 var noteEntity = new NoteEntity(TruSaberGame.Instance, note, (float) bpm, _speed, 0f);
@@ -83,9 +75,7 @@ namespace TruSaber.Scenes
                 SpawnNote(noteEntity);
                 //_noteEntities.Enqueue(noteEntity);
             }
-
-            _space.Start(TimeSpan.FromSeconds(Level.MapInfo.SongTimeOffset));
-
+            
             InitPhysics();
         }
 
@@ -137,6 +127,7 @@ namespace TruSaber.Scenes
             }
         }*/
 
+        private bool        _isReady;
         private bool        _started;
         private int         noteIndex;
         private int         noteTotal;
@@ -145,7 +136,7 @@ namespace TruSaber.Scenes
 
         protected override void OnUpdate(GameTime gameTime)
         {
-            if (!_started)
+            if (!_started && _isReady)
             {
                 Start();
             }
@@ -279,6 +270,7 @@ namespace TruSaber.Scenes
             noteTotal = _noteEntities.Count;
             //_activeNoteEntities.Clear();
             _speedOffset = TimeSpan.FromSeconds((1f / (float) _speed)* (60f / Level.MapInfo.BeatsPerMinute));
+            _space.Start(TimeSpan.FromSeconds(Level.MapInfo.SongTimeOffset));
         }
 
         private void Stop()

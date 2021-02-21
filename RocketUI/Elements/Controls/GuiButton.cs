@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 using RocketUI.Abstractions;
 using RocketUI.Graphics;
@@ -28,6 +29,9 @@ namespace RocketUI.Controls
 
         public Color DisabledColor = Color.DarkGray;
         public Color EnabledColor  = Color.White;
+        
+        public GuiSound HighlightSound { get; set; }
+        public GuiSound ClickSound { get; set; }
 
         public GuiButton(Action action = null) : this(string.Empty, action)
         {
@@ -45,6 +49,9 @@ namespace RocketUI.Controls
             HighlightedBackground.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
             FocusedBackground.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
 
+            ClickSound = GuiSoundEffects.ButtonClick;
+            HighlightSound = GuiSoundEffects.ButtonHighlight;
+
             Action = action;
             MinHeight = 20;
             MinWidth = 20;
@@ -53,6 +60,8 @@ namespace RocketUI.Controls
             //MaxWidth = 200;
             Padding = new Thickness(5, 5);
             Margin = new Thickness(2);
+            
+            
 
             AddChild(TextElement = new GuiTextElement()
             {
@@ -72,10 +81,18 @@ namespace RocketUI.Controls
             }
         }
 
+        protected override void OnInit(IGuiRenderer renderer)
+        {
+            base.OnInit(renderer);
+            ClickSound.TryResolve(renderer);
+            HighlightSound.TryResolve(renderer);
+        }
+
         protected override void OnHighlightActivate()
         {
             base.OnHighlightActivate();
             TextElement.TextColor = Color.Yellow;
+            HighlightSound.Play();
         }
 
         protected override void OnHighlightDeactivate()
@@ -92,6 +109,7 @@ namespace RocketUI.Controls
         protected override void OnFocusActivate()
         {
             base.OnFocusActivate();
+            ClickSound.Play();
             Action?.Invoke();
         }
 
@@ -130,5 +148,6 @@ namespace RocketUI.Controls
 
             return base.OnKeyInput(character, key);
         }
+
     }
 }
