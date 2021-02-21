@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BeatMapInfo;
 using BEPUutilities.Threading;
+using DiscordRPC;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
@@ -63,6 +64,8 @@ namespace TruSaber.Scenes
         }
 
         private BeatMapDifficulty _map;
+
+        private float _countdown;
         
         private void InitBeatmap(BeatMapDifficulty map)
         {
@@ -77,6 +80,9 @@ namespace TruSaber.Scenes
             }
             
             InitPhysics();
+
+            _countdown = 5f;
+            _isReady = true;
         }
 
         private void InitPhysics()
@@ -136,21 +142,22 @@ namespace TruSaber.Scenes
 
         protected override void OnUpdate(GameTime gameTime)
         {
+            base.OnUpdate(gameTime);
+            
             if (!_started && _isReady)
             {
+                if (_countdown > 0)
+                {
+                    _countdown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    return;
+                }
+                
                 Start();
             }
+            
+            if(!_started) return;
 
             var playPosition       = MediaPlayer.PlayPosition + _speedOffset;
-
-            var dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
-          //  _space.TimeStepSettings.TimeStepDuration = (float) gameTime.ElapsedGameTime.TotalSeconds;
-         //   try
-          //  {
-         //       _space.Update(dt);
-         //   }
-         //   catch {}
 
             _space.Update(gameTime);
 
@@ -162,30 +169,6 @@ namespace TruSaber.Scenes
                     CheckHandCollision(_player.RightHand, note);
                 }
             }
-            
-            base.OnUpdate(gameTime);
-
-            //
-            // foreach (var note in _noteEntities)
-            // {
-            //     if (note.Position.Z > 10f)
-            //     {
-            //         DespawnNote(note);
-            //     }
-            //
-            //     if (!note.Visible && note.Enabled && note.Position.Z >= -_speed)
-            //     {
-            //         note.Visible = true;
-            //         //_space.Add(note.PhysicsEntity);
-            //     }
-            //
-            //     if (note.Type == NoteType.LeftNote)
-            //     {
-            //         
-            //     }
-            // }
-            //
-            //
         }
 
         private void CheckHandCollision(HandEntity hand, NoteEntity note)
@@ -199,23 +182,23 @@ namespace TruSaber.Scenes
                     if (note.Type == NoteType.LeftNote && hand.Hand == Hand.Left)
                     {
                         // woohoo!!
-                        Console.WriteLine($"Left Hand hit a Left Block!!! +50 points to griffindor!");
+                        //Console.WriteLine($"Left Hand hit a Left Block!!! +50 points to griffindor!");
                         DespawnNote(note);
                     }
                     else if (note.Type == NoteType.RightNote && hand.Hand == Hand.Right)
                     {
                         // woohoo!
-                        Console.WriteLine($"Right Hand hit a Right Block!!! +50 points to griffindor!");
+                       // Console.WriteLine($"Right Hand hit a Right Block!!! +50 points to griffindor!");
                         DespawnNote(note);
                     }
                     else
                     {
-                        Console.WriteLine($"Block was hit, but using the wrong hand!");
+                        //Console.WriteLine($"Block was hit, but using the wrong hand!");
                     }
                 }
                 else
                 {
-                   Console.WriteLine($"Block interscected but its currently too far away to do anything with it");
+                   //Console.WriteLine($"Block interscected but its currently too far away to do anything with it");
                 }
             }
         }
@@ -241,6 +224,14 @@ namespace TruSaber.Scenes
             
             base.OnDraw(gameTime);
         }
+
+        public override RichPresence GetPresence() =>
+            new RichPresence()
+            {
+                State = "Playing",
+                Details = Level.MapInfo.SongAuthorName + " - " + Level.MapInfo.SongName,
+                Timestamps = Timestamps.Now
+            };
 
         private void SpawnNote(NoteEntity note)
         {

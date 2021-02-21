@@ -1,4 +1,5 @@
 ﻿using System;
+using DiscordRPC;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using RocketUI;
@@ -47,5 +48,11 @@ namespace TruSaber.Scenes
             // });
         }
 
+        public override RichPresence GetPresence() =>
+            new RichPresence()
+            {
+                State = "In Menus",
+                Timestamps = Timestamps.Now
+            };
     }
 }

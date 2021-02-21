@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DiscordRPC;
+using Microsoft.Xna.Framework;
 
 namespace TruSaber.Scenes
 {
@@ -11,5 +12,7 @@ namespace TruSaber.Scenes
         void Hide();
         void Update(GameTime gameTime);
         void Draw(GameTime gameTime);
+
+        RichPresence GetPresence();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DiscordRPC;
 using Microsoft.Xna.Framework;
 
 namespace TruSaber.Scenes
@@ -130,6 +131,8 @@ namespace TruSaber.Scenes
                 return;
             _drawables.Remove((IDrawable) component);
         }
+
+        public abstract RichPresence GetPresence();
 
         /// <summary>
         /// The SortingFilteringCollection class provides efficient, reusable

@@ -43,10 +43,13 @@ namespace RocketUI
         protected override void GetPreferredSize(out Size size, out Size minSize, out Size maxSize)
         {
             base.GetPreferredSize(out size, out minSize, out maxSize);
-            if (Background.HasValue)
+            if (ResizeToImageSize)
             {
-                size = new Size(Background.Width, Background.Height);
-                size = Size.Clamp(size, minSize, maxSize);
+                if (Background.HasValue)
+                {
+                    size = new Size(Background.Width, Background.Height);
+                    size = Size.Clamp(size, minSize, maxSize);
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using DiscordRPC;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Media;
@@ -34,20 +35,22 @@ namespace TruSaber.Scenes
             {
                 Orientation = Orientation.Vertical,
                 Anchor = Alignment.Fill,
-                ChildAnchor = Alignment.TopFill
+                ChildAnchor = Alignment.TopFill,
+                Width = 800,
+                Height = 600
             };
 
             _selectionList = new GuiSelectionList()
             {
                 Background = (Color.Black * 0.2f),
-                Anchor = Alignment.Fill,
+                Anchor = Alignment.FillLeft,
                 Height = 500,
                 Width = 400
             };
             _levelInfo = new GuiLevelInfo()
             {
                 Background = (Color.Black * 0.5f),
-                Anchor = Alignment.Fill,
+                Anchor = Alignment.FillRight,
                 Height = 500,
                 Width = 400
 
@@ -120,6 +123,13 @@ namespace TruSaber.Scenes
                 }
             }
         }
+
+        public override RichPresence GetPresence()
+            => new RichPresence()
+            {
+                State = "In Menus",
+                Details = "Selecting Song"
+            };
 
         class LevelSelectGuiSelectionListItem : GuiSelectionListItem
         {

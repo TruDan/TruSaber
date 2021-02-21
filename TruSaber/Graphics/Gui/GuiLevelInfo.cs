@@ -80,7 +80,7 @@ namespace TruSaber.Graphics.Gui
             var characteristics = _level.AvailableCharacteristics;
             foreach (var characteristic in characteristics)
             {
-                _characteristicSelect.AddChild(new GuiButton(characteristic.ToString())
+                _characteristicSelect.AddChild(new GuiToggleButton(characteristic.ToString())
                 {
                     Tag = characteristic
                 });
@@ -97,7 +97,7 @@ namespace TruSaber.Graphics.Gui
             {
                 foreach (var difficulty in difficulties)
                 {
-                    _difficultySelect.AddChild(new GuiButton(difficulty.ToString())
+                    _difficultySelect.AddChild(new GuiToggleButton(difficulty.ToString())
                     {
                         Tag = difficulty
                     });
