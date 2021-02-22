@@ -30,6 +30,9 @@ namespace BeatMapInfo
 
         [JsonProperty("_waypoints", NullValueHandling = NullValueHandling.Ignore)]
         public Waypoint[] Waypoints { get; set; }
+        
+        [JsonIgnore]
+        public Beatmap BeatMap { get; set; }
     }
 
     public partial class BeatMapDifficulty

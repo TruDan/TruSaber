@@ -100,17 +100,19 @@ namespace TruSaber.Models
                 throw new Exception("Difficulty does not exist in map");
 
             var filename = mapDifficulty.BeatmapFilename;
-            return await LoadLevelDifficultyAsync(filename);
+            return await LoadLevelDifficultyAsync(filename, mapDifficulty);
         }
 
-        private async Task<BeatMapDifficulty> LoadLevelDifficultyAsync(string filename)
+        private async Task<BeatMapDifficulty> LoadLevelDifficultyAsync(string filename, Beatmap mapDifficulty)
         {
             var dataPath = Path.Combine(Directory, filename);
             if (!File.Exists(dataPath))
                 throw new Exception("Invalid level: no " + filename + " found!");
 
             var difficultyJson = await File.ReadAllTextAsync(dataPath);
-            return BeatMapDifficulty.FromJson(difficultyJson);
+            var beatMapDifficulty = BeatMapDifficulty.FromJson(difficultyJson);
+            beatMapDifficulty.BeatMap = mapDifficulty;
+            return beatMapDifficulty;
         }
         
     }

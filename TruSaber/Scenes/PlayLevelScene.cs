@@ -23,20 +23,15 @@ namespace TruSaber.Scenes
     {
 
         private ILogger<PlayLevelScene> _logger;
-        private double                  _beat;
         public  BeatLevel               Level          { get; }
         public  Characteristic          Characteristic { get; }
         public  Difficulty              Difficulty     { get; }
 
-        private Queue<NoteEntity> _noteEntities;
         private List<NoteEntity> _activeNoteEntities;
 
-        private Beatmap _beatmap;
-        private float   _speed => (float) (_beatmap?.NoteJumpMovementSpeed ?? 0f);
-        private string  _songPath;
+        private float   _speed => (float) (_map.BeatMap?.NoteJumpMovementSpeed ?? 0f);
         private Player  _player;
 
-        private ParallelLooper _parallelLooper;
         private Space          _space;
 
         public PlayLevelScene(BeatLevel beatlevel, Characteristic characteristic, Difficulty difficulty)
@@ -258,7 +253,7 @@ namespace TruSaber.Scenes
             MediaPlayer.Play(Song.FromUri(Level.MapInfo.SongName, new Uri(Level.SongPath)));
             _started = true;
             noteIndex = 0;
-            noteTotal = _noteEntities.Count;
+            noteTotal = _map.Notes.Length;
             //_activeNoteEntities.Clear();
             _speedOffset = TimeSpan.FromSeconds((1f / (float) _speed)* (60f / Level.MapInfo.BeatsPerMinute));
             _space.Start(TimeSpan.FromSeconds(Level.MapInfo.SongTimeOffset));
@@ -276,7 +271,6 @@ namespace TruSaber.Scenes
         {
             base.OnHide();
             if (_started) Stop();
-            _parallelLooper.Dispose();
         }
     }
 }
