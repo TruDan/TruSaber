@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RocketUI.Graphics;
 using TruSaber.Abstractions;
 
 namespace TruSaber
@@ -9,7 +10,7 @@ namespace TruSaber
     {
         private bool _initialized;
         private bool _disposed;
-        private int _drawOrder;
+        private int  _drawOrder;
         private bool _visible = true;
 
         public bool Initialized => _initialized;
@@ -48,7 +49,7 @@ namespace TruSaber
 
         /// <inheritdoc />
         public event EventHandler<EventArgs> VisibleChanged;
-        
+
         protected Model Model { get; set; }
 
         public DrawableEntity(IGame game) : base(game)
@@ -85,28 +86,20 @@ namespace TruSaber
         /// <param name="gameTime">The time elapsed since the last call to <see cref="M:Microsoft.Xna.Framework.DrawableGameComponent.Draw(Microsoft.Xna.Framework.GameTime)" />.</param>
         public virtual void Draw(GameTime gameTime)
         {
-            if(!Visible) return;
-            
-            if (Model != null)
-            {
-                var rasterBefore = GraphicsDevice.RasterizerState;
-                var pencilBefore = GraphicsDevice.DepthStencilState;
-                var blend        = GraphicsDevice.BlendState;
-                
-                GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-                GraphicsDevice.BlendState = BlendState.AlphaBlend;
+            if (!Visible) return;
 
-                try
+            DrawModel(Model);
+        }
+
+        protected void DrawModel(Model model)
+        {
+            if (model != null)
+            {
+                using (GraphicsContext.CreateContext(GraphicsDevice, BlendState.AlphaBlend, DepthStencilState.Default,
+                    RasterizerState.CullNone))
                 {
                     var camera = ((IGame) Game).Camera;
-                Model.Draw(Transform.World, camera.View, camera.Projection);
-                }
-                finally
-                {
-                    GraphicsDevice.RasterizerState = rasterBefore;
-                    GraphicsDevice.DepthStencilState = pencilBefore;
-                    GraphicsDevice.BlendState = blend;
+                    model.Draw(Transform.World, camera.View, camera.Projection);
                 }
             }
         }
@@ -116,13 +109,15 @@ namespace TruSaber
         /// </summary>
         /// <param name="sender">This <see cref="T:Microsoft.Xna.Framework.DrawableGameComponent" />.</param>
         /// <param name="args">Arguments to the <see cref="E:Microsoft.Xna.Framework.DrawableGameComponent.VisibleChanged" /> event.</param>
-        protected virtual void OnVisibleChanged(object sender, EventArgs args) => EventHelpers.Raise<EventArgs>(sender, this.VisibleChanged, args);
+        protected virtual void OnVisibleChanged(object sender, EventArgs args) =>
+            EventHelpers.Raise<EventArgs>(sender, this.VisibleChanged, args);
 
         /// <summary>
         /// Called when <see cref="P:Microsoft.Xna.Framework.DrawableGameComponent.DrawOrder" /> changed.
         /// </summary>
         /// <param name="sender">This <see cref="T:Microsoft.Xna.Framework.DrawableGameComponent" />.</param>
         /// <param name="args">Arguments to the <see cref="E:Microsoft.Xna.Framework.DrawableGameComponent.DrawOrderChanged" /> event.</param>
-        protected virtual void OnDrawOrderChanged(object sender, EventArgs args) => EventHelpers.Raise<EventArgs>(sender, this.DrawOrderChanged, args);
+        protected virtual void OnDrawOrderChanged(object sender, EventArgs args) =>
+            EventHelpers.Raise<EventArgs>(sender, this.DrawOrderChanged, args);
     }
 }

@@ -16,15 +16,23 @@ namespace SharpVR
         private Vector3    _position;
         private Vector3    _scale;
         private Quaternion _rotation;
+        private Vector3    _nextPosition;
+        private Vector3    _nextScale;
+        private Quaternion _nextRotation;
 
         public void GetRelativePosition(ref Vector3    position) => position = _position;
         public void GetRelativeRotation(ref Quaternion rotation) => rotation = _rotation;
         public void GetRelativeScale(ref    Vector3    scale) => scale = _scale;
-
+        
         public Vector3    LocalPosition => _position;
         public Quaternion LocalRotation => _rotation;
         public Vector3    LocalScale    => _scale;
 
+        public Vector3    NextLocalPosition => _nextPosition;
+        public Quaternion NextLocalRotation => _nextRotation;
+        public Vector3    NextLocalScale    => _nextScale;
+
+        
         private TrackedDevicePose_t Pose
         {
             get => Context.ValidDevicePoses[Index];
@@ -72,9 +80,18 @@ namespace SharpVR
                     _scale = scale;
                     _rotation = rotation;
                     _position = position;
-
-                    //var rotationEuler = _rotation.ToEuler();
-                    //Debug.WriteLine($"[VR][Device {Index}] Position: X={_position.X:F2}, Y={_position.Y:F2}, Z={_position.Z:F2}\tRotation: Yaw={MathHelper.ToDegrees(rotationEuler.X):F2}, Pitch={MathHelper.ToDegrees(rotationEuler.Y):F2}, Roll={MathHelper.ToDegrees(rotationEuler.Z):F2}\t Scale: X={_scale.X:F2}, Y={_scale.Y:F2}, Z={_scale.Z:F2}");
+                }
+            }
+            
+            if (NextPose.bPoseIsValid)
+            {
+                var transform = GetNextPose();
+                transform = Matrix.Invert(transform);
+                if (transform.Decompose(out var scale, out var rotation, out var position))
+                {
+                    _nextScale = scale;
+                    _nextRotation = rotation;
+                    _nextPosition = position;
                 }
             }
         }

@@ -43,7 +43,7 @@ namespace TruSaber
             Hand = hand;
             Color = hand == Hand.Left ? Color.Red : Color.Blue;
             VrContext = game.ServiceProvider.GetRequiredService<IVrContext>();
-            ControllerOffset = Quaternion.CreateFromYawPitchRoll(0f, -90f.ToRadians(), 0f);
+            ControllerOffset = Quaternion.Identity; //Quaternion.CreateFromYawPitchRoll(0f, -90f.ToRadians(), 0f);
             // PhysicsEntity = new TransformableEntity(Position.ToBEPU(),
             //     new BoxShape(0.04f, 0.75f, 0.04f), Matrix3x3.CreateFromMatrix(World.ToBEPU()));
             
@@ -97,8 +97,19 @@ namespace TruSaber
         protected override void LoadContent()
         {
             base.LoadContent();
-            Model = Game.Content.Load<Model>("Models/Saber");
-            
+            Model = Game.Content.Load<Model>("Models/saberMesh");
+
+            foreach (var mesh in Model.Meshes)
+            {
+                foreach (var effect in mesh.Effects)
+                {
+                    _effect.EnableDefaultLighting();
+                    _effect.DiffuseColor = Color.ToVector3();
+                    //_effect.SpecularColor = Color.ToVector3();
+
+                    _effect.Alpha = 1.0f;
+                }
+            }
         }
 
         private void InitPhysics()
@@ -128,7 +139,7 @@ namespace TruSaber
             {
 
                 var nearPoint = Vector3.Transform(Vector3.Zero, World);
-                var farPoint  = Vector3.Transform(Vector3.Up, World);
+                var farPoint  = Vector3.Transform(Vector3.Forward, World);
                 var direction = farPoint - nearPoint;
 
                 //var direction = Vector3.Transform(Vector3.Up, World);

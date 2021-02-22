@@ -204,10 +204,10 @@ namespace SharpVR
 
         public Ray GetPointer()
         {
-            var r         = Quaternion.Multiply(LocalRotation, ControllerOffset);
-            var p = Matrix.Identity * Matrix.CreateFromQuaternion(r) * Matrix.CreateTranslation(LocalPosition);
+            var r         = LocalRotation; //Quaternion.Multiply(LocalRotation, ControllerOffset);
+            var p         = Matrix.Identity * Matrix.CreateFromQuaternion(r) * Matrix.CreateTranslation(LocalPosition);
             var nearPoint = Vector3.Transform(Vector3.Zero, p);
-            var farPoint  = Vector3.Transform(Vector3.Up, p);
+            var farPoint  = Vector3.Transform(Vector3.Forward, p);
             var direction = farPoint - nearPoint;
 
             //var direction = Vector3.Transform(Vector3.Up, World);
@@ -218,16 +218,16 @@ namespace SharpVR
 
         public Ray GetNextPointer()
         {
-            var r = Quaternion.Multiply(LocalRotation, ControllerOffset);
-            var p = GetPose();//Matrix.Identity * Matrix.CreateFromQuaternion(r) * Matrix.CreateTranslation(LocalPosition);
+            var r = NextLocalRotation; //Quaternion.Multiply(LocalRotation, ControllerOffset);
+            var p = GetNextPose();//Matrix.Identity * Matrix.CreateFromQuaternion(r) * Matrix.CreateTranslation(LocalPosition);
             var nearPoint = Vector3.Transform(Vector3.Zero, p);
-            var farPoint  = Vector3.Transform(Vector3.Up, p);
+            var farPoint  = Vector3.Transform(Vector3.Forward, p);
             var direction = farPoint - nearPoint;
 
             //var direction = Vector3.Transform(Vector3.Up, World);
             direction.Normalize();
 
-            return new Ray(LocalPosition, direction);
+            return new Ray(NextLocalPosition, direction);
         }
 
 
