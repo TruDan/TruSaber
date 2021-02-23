@@ -18,12 +18,31 @@ namespace RocketUI
 	
 	[RuntimeNameProperty(nameof(Id))]
 	[ContentProperty(nameof(Children))]
-	public partial class GuiElement : RocketElement, IGuiElement, IDisposable
+	public partial class GuiElement : IGuiElement, IDisposable
 	{
+		private PropertyStore _properties;
+
+		/// <summary>
+		/// Gets the dictionary of properties for this widget
+		/// </summary>
+		public PropertyStore Properties
+		{
+			get
+			{
+				if (_properties == null)
+				{
+					_properties = new PropertyStore(this);
+				}
+
+				return _properties;
+			}
+		}
+
 		[DebuggerVisible]
 		public Guid Id { get; } = Guid.NewGuid();
-
-		public object Tag { get; set; }
+        
+		public string Name { get; set; }
+		public object Tag  { get; set; }
 		
 		private IGuiScreen       _screen;
 		private IGuiElement      _parentElement;
@@ -161,6 +180,13 @@ namespace RocketUI
 
 		public GuiElement()
 		{
+		}
+		
+		public T FindControl<T>(string name) 
+			where T : class, IGuiElement
+		{
+			TryFindDeepestChildOfType<T>(element => !string.IsNullOrWhiteSpace(element.Name) && string.Equals(name, element.Name), out var element);
+			return element;
 		}
 
 		#region Methods

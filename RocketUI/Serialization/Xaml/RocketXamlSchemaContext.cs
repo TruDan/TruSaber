@@ -44,7 +44,7 @@ namespace RocketUI.Serialization.Xaml
 			var info = type.GetTypeInfo();
 
 			if (
-				info.IsSubclassOf(typeof(RocketElement))
+				info.IsSubclassOf(typeof(GuiElement))
 				|| info.Assembly == RocketAssembly // struct
 				|| (
 					   // nullable struct
@@ -75,7 +75,7 @@ namespace RocketUI.Serialization.Xaml
 				_isInResourceMember = true;
 				try
 				{
-					_resourceMember = typeof(RocketElement).GetRuntimeProperty("Properties");
+					_resourceMember = typeof(GuiElement).GetRuntimeProperty("Properties");
 				}
 				finally
 				{

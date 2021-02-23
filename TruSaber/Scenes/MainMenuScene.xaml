@@ -9,8 +9,8 @@
                   MinHeight="300"
                   Width="300" 
                   Height="400">
-        <GuiStackMenuItem x:Name="PlayButton" Text="PLAY" />
-        <GuiStackMenuItem x:Name="OptionsButton" Text="OPTIONS" />
-        <GuiStackMenuItem x:Name="ExitButton" Text="EXIT" />
+        <GuiStackMenuItem Name="PlayButton" Text="PLAY" />
+        <GuiStackMenuItem Name="OptionsButton" Text="OPTIONS" />
+        <GuiStackMenuItem Name="ExitButton" Text="EXIT" />
     </GuiStackMenu>
 </GuiScreen>

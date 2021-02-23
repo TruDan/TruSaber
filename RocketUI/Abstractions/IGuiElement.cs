@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using RocketUI.Attributes;
+using RocketUI.Serialization;
 
 namespace RocketUI
 {
     public interface IGuiElement
     {
-        [DebuggerVisible] Guid Id  { get; }
-        object                 Tag { get; set; }
+        [DebuggerVisible]
+        Guid Id { get; }
+        string        Name       { get; set; }
+        PropertyStore Properties { get; }
+        object        Tag        { get; set; }
 
         IGuiScreen Screen { get; }
         IGuiElement ParentElement { get; set; }

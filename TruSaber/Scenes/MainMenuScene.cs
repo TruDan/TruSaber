@@ -13,6 +13,10 @@ namespace TruSaber.Scenes
         public MainMenuScene()
         {
             RocketXamlLoader.Load(GuiScreen, $"{GetType().FullName}.xaml");
+            
+            GuiScreen.FindControl<GuiStackMenuItem>("PlayButton").Action = () => TruSaberGame.Instance.SceneManager.PushScene<SelectLevelScene>();
+            GuiScreen.FindControl<GuiStackMenuItem>("OptionsButton").Action = () => TruSaberGame.Instance.SceneManager.PushScene<OptionsScene>();
+            GuiScreen.FindControl<GuiStackMenuItem>("ExitButton").Action = () => TruSaberGame.Instance.Exit();
         }
 
         protected override void OnInitialize()
