@@ -1,6 +1,6 @@
 ﻿using RocketUI.Attributes;
 
-namespace RocketUI.Abstractions
+namespace RocketUI
 {
     public interface IFocusableElement : IGuiElement
     {

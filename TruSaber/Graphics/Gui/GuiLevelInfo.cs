@@ -3,8 +3,6 @@ using System.Linq;
 using BeatMapInfo;
 using Microsoft.Xna.Framework;
 using RocketUI;
-using RocketUI.Controls;
-using RocketUI.Graphics;
 using RocketUI.Layout;
 using TruSaber.Models;
 using TruSaber.Scenes;

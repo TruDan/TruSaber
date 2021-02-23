@@ -1,7 +1,5 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using RocketUI.Graphics;
-using RocketUI.Graphics.Textures;
 
 namespace RocketUI
 {

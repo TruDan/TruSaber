@@ -1,13 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using RocketUI.Abstractions;
-using RocketUI.Graphics;
-using RocketUI.Graphics.Typography;
 using RocketUI.Input;
-using RocketUI.Primitive;
 using RocketUI.Utilities.Helpers;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
     public class GuiSlider : GuiControl, IValuedControl<double>
     {

@@ -78,13 +78,14 @@ namespace TruSaber.Graphics
 
         protected virtual void OnPositionChanged()
         {
-            _forward = Vector3.Transform(Vector3.Backward, _rotation);
+            _forward = Vector3.Transform(Vector3.Forward, _rotation);
             _up = Vector3.Transform(Vector3.Up, _rotation);
 
-            World = Matrix.Identity
-                    * Matrix.CreateScale(_scale)
-                    * Matrix.CreateFromQuaternion(_rotation)
-                    * Matrix.CreateTranslation(_position);
+            // World = Matrix.Identity
+            //         * Matrix.CreateScale(_scale)
+            //         * Matrix.CreateFromQuaternion(_rotation)
+            //         * Matrix.CreateTranslation(_position);
+            World = Matrix.CreateLookAt(_position, _position + _forward, _up);
             UpdateViewMatrix();
 
         }
@@ -135,9 +136,11 @@ namespace TruSaber.Graphics
             return renderTarget;
         }
 
+        
         private void UpdateViewMatrix()
         {
-            View = Matrix.Invert(World) * (_vrContext.Hmd.GetPose() * _vrContext.GetEyeMatrix(Eye));
+            //View = Matrix.Invert(World) * (_vrContext.Hmd.GetPose() * _vrContext.GetEyeMatrix(Eye));
+            View = World * (_vrContext.Hmd.GetPose() * _vrContext.GetEyeMatrix(Eye));
         }
 
         private void UpdateProjectionMatrix()

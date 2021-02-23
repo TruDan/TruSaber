@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using RocketUI.Utilities.Converters;
 
-namespace RocketUI.Primitive
+namespace RocketUI
 {
     [Flags]
+    [TypeConverter(typeof(EnumTypeConverter<Alignment>))]
 
     public enum Alignment : int
     {
@@ -61,7 +64,7 @@ namespace RocketUI.Primitive
 
     public static class AlignmentExtensions
     {
-        private static Alignment[] BaseAlignments = new Alignment[]
+        private static Alignment[] _baseAlignments = new Alignment[]
         {
             Alignment.NoneX,
             Alignment.MinX,
@@ -76,7 +79,7 @@ namespace RocketUI.Primitive
             Alignment.FillY
         };
 
-        public static Alignment SwapXY(this Alignment alignment)
+        public static Alignment SwapXy(this Alignment alignment)
         {
             var vertical = (alignment & Alignment.OrientationY);
             var horizontal = (alignment & Alignment.OrientationX);
@@ -110,7 +113,7 @@ namespace RocketUI.Primitive
 
         private static string ToFullStringParts(Alignment alignment, Alignment[] checkAlignments = null)
         {
-            checkAlignments = checkAlignments ?? BaseAlignments;
+            checkAlignments = checkAlignments ?? _baseAlignments;
 
             var parts = new List<string>();
 

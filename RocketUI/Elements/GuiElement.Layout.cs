@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using RocketUI.Abstractions;
 using RocketUI.Attributes;
 using RocketUI.Layout;
-using RocketUI.Primitive;
 
 namespace RocketUI
 {

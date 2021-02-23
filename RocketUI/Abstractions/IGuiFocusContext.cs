@@ -1,4 +1,4 @@
-﻿namespace RocketUI.Abstractions
+﻿namespace RocketUI
 {
     public interface IGuiFocusContext
     {

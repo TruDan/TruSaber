@@ -5,11 +5,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using RocketUI.Attributes;
-using RocketUI.Controls;
-using RocketUI.Graphics;
-using RocketUI.Primitive;
 
-namespace RocketUI.Layout
+namespace RocketUI
 {
 	public class GuiScrollableStackContainer : GuiStackContainer, IScrollable
 	{

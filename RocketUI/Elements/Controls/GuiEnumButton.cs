@@ -1,7 +1,6 @@
 ﻿using System;
-using RocketUI.Abstractions;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
     public class GuiEnumButton<TEnum> : GuiButton, IValuedControl<TEnum> where TEnum : struct
     {

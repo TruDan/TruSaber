@@ -1,4 +1,4 @@
-﻿namespace RocketUI.Graphics
+﻿namespace RocketUI
 {
     public enum GuiSoundEffects
     {

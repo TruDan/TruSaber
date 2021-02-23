@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
-using RocketUI.Layout;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
     public class GuiStackMenu : GuiScrollableStackContainer
     {

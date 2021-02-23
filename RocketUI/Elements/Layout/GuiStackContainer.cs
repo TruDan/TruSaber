@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using RocketUI.Abstractions;
 using RocketUI.Attributes;
-using RocketUI.Graphics;
-using RocketUI.Primitive;
 
-namespace RocketUI.Layout
+namespace RocketUI
 {
 	public class GuiStackContainer : GuiContainer
 	{

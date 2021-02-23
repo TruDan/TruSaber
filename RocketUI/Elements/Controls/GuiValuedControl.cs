@@ -1,7 +1,6 @@
 ﻿using System;
-using RocketUI.Abstractions;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
     public class GuiValuedControl<TValue> : GuiControl, IValuedControl<TValue> where TValue : IEquatable<TValue>
     {

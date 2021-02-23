@@ -1,11 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using RocketUI.Abstractions;
-using RocketUI.Graphics;
 using RocketUI.Input;
-using RocketUI.Primitive;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
     public class GuiToggleButton : GuiButton, IValuedControl<bool>
     {

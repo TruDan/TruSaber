@@ -90,4 +90,10 @@
       <Folder Include="Graphics\VR" />
       <Folder Include="Input" />
     </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="**\*.xaml">
+            <Generator>MSBuild:Compile</Generator>
+        </EmbeddedResource>
+    </ItemGroup>
 </Project>

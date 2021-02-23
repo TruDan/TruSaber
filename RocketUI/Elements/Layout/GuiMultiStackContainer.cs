@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using RocketUI.Abstractions;
-using RocketUI.Primitive;
 
-namespace RocketUI.Layout
+namespace RocketUI
 {
     public class GuiScrollableMultiStackContainer : GuiScrollableStackContainer
     {
@@ -39,7 +37,7 @@ namespace RocketUI.Layout
             var stack = new GuiStackContainer()
             {
                 Orientation = Orientation == Orientation.Horizontal ? Orientation.Vertical : Orientation.Horizontal,
-                ChildAnchor = ChildAnchor.SwapXY()
+                ChildAnchor = ChildAnchor.SwapXy()
             };
 
             _defaultRowBuilder?.Invoke(stack);
@@ -96,7 +94,7 @@ namespace RocketUI.Layout
             var stack = new GuiStackContainer()
             {
                 Orientation = Orientation == Orientation.Horizontal ? Orientation.Vertical : Orientation.Horizontal,
-                ChildAnchor = ChildAnchor.SwapXY()
+                ChildAnchor = ChildAnchor.SwapXy()
             };
 
             _defaultRowBuilder?.Invoke(stack);

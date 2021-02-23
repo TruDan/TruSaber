@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
     public class GuiStackMenuItem : GuiButton
     {

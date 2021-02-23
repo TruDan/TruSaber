@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using RocketUI.Abstractions;
 using RocketUI.Input;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
     public class GuiEnumSwitchButton<TEnum> : GuiButton, IValuedControl<TEnum> where TEnum : Enum
     {

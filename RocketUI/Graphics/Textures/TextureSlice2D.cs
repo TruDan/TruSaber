@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace RocketUI.Graphics.Textures
+namespace RocketUI
 {
     public class TextureSlice2D : ITexture2D
     {

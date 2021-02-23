@@ -1,14 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
-using RocketUI.Abstractions;
-using RocketUI.Graphics;
-using RocketUI.Graphics.Typography;
 using RocketUI.Input;
-using RocketUI.Primitive;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
     public class GuiButton : GuiControl, IGuiButton
     {

@@ -4,9 +4,6 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using RocketUI.Abstractions;
-using RocketUI.Graphics;
-using RocketUI.Graphics.Typography;
 using RocketUI.Input;
 using SharpVR;
 

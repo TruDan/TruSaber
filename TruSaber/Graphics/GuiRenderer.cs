@@ -6,10 +6,6 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using RocketUI;
-using RocketUI.Graphics;
-using RocketUI.Graphics.Textures;
-using RocketUI.Graphics.Typography;
-using RocketUI.Primitive;
 
 namespace TruSaber.Graphics
 {

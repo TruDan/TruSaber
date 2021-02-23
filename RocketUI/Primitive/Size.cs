@@ -1,12 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using Microsoft.Xna.Framework;
+using RocketUI.Utilities.Converters;
 
-namespace RocketUI.Primitive
+namespace RocketUI
 {
     [DataContract]
     [DebuggerDisplay("{DebugDisplayString,nq}")]
+    [TypeConverter(typeof(SizeConverter))]
     public struct Size : IEquatable<Size>
     {
         public static Size Zero { get; } = new Size(0, 0);

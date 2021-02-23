@@ -2,11 +2,7 @@
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using RocketUI.Abstractions;
-using RocketUI.Graphics;
-using RocketUI.Graphics.Typography;
 using RocketUI.Layout;
-using RocketUI.Primitive;
 using RocketUI.Utilities.Extensions;
 
 namespace RocketUI.Utilities.Helpers
@@ -39,9 +35,9 @@ namespace RocketUI.Utilities.Helpers
 		private KeyboardState _previousKeyboard, _currentKeyboard;
 		private MouseState _previousMouse, _currentMouse;
 
-		private Vector2 CursorPosition;
+		private Vector2 _cursorPosition;
 		private GuiElement _topMostHighlighted;
-		private GuiElement TopMostFocused;
+		private GuiElement _topMostFocused;
 
 		public IGuiElement HighlightedElement;
 
@@ -88,21 +84,21 @@ namespace RocketUI.Utilities.Helpers
 			if ((_previousMouse.LeftButton == ButtonState.Pressed && _currentMouse.LeftButton != ButtonState.Pressed)
 				|| (_previousMouse.RightButton == ButtonState.Pressed && _currentMouse.RightButton != ButtonState.Pressed))
 				{
-				TopMostFocused = TopMostFocused == null ? _topMostHighlighted : null;
+				_topMostFocused = _topMostFocused == null ? _topMostHighlighted : null;
 			}
 
 			if (_previousKeyboard.IsKeyDown(Keys.Escape) && _currentKeyboard.IsKeyUp(Keys.Escape))
 			{
-				TopMostFocused = null;
+				_topMostFocused = null;
 			}
 
 			// add extra updates below here
-			if (TopMostFocused == null)
+			if (_topMostFocused == null)
 			{
-				CursorPosition = Renderer.Unproject(_currentMouse.Position.ToVector2());
+				_cursorPosition = Renderer.Unproject(_currentMouse.Position.ToVector2());
 			}
 
-			if (GuiManager.FocusManager.TryGetElementAt(CursorPosition, e => e is GuiElement c,
+			if (GuiManager.FocusManager.TryGetElementAt(_cursorPosition, e => e is GuiElement c,
 														out var controlMatchingPosition))
 			{
 				_topMostHighlighted = controlMatchingPosition as GuiElement;
@@ -138,19 +134,19 @@ namespace RocketUI.Utilities.Helpers
                 // draw info at cursor
                 if (HoverInfoEnabled)
                 {
-                	var e = TopMostFocused ?? TopMostHighlighted;
+                	var e = _topMostFocused ?? TopMostHighlighted;
                 	if (e != null)
                 	{
                 		var p = e.ParentElement as GuiElement;
 
                 		var info = GetElementInfo(e);
 
-                		DrawDebugString(CursorPosition, info, Color.WhiteSmoke * 0.85f, Color.Black, 2, 1, 1);
+                		DrawDebugString(_cursorPosition, info, Color.WhiteSmoke * 0.85f, Color.Black, 2, 1, 1);
 
                 		if (p != null)
                 		{
                 			var infoParent = GetElementInfo(p);
-                			DrawDebugString(CursorPosition, infoParent, Color.WhiteSmoke * 0.85f, Color.Black, 2, -1, 1);
+                			DrawDebugString(_cursorPosition, infoParent, Color.WhiteSmoke * 0.85f, Color.Black, 2, -1, 1);
                 		}
                 	}
                 }   
@@ -239,19 +235,19 @@ namespace RocketUI.Utilities.Helpers
 
 			// cursor highlight 
 			{
-				if (element.OuterBounds.Contains(CursorPosition))
+				if (element.OuterBounds.Contains(_cursorPosition))
 				{
 					DrawDebugBounds(element.OuterBounds, Color.OrangeRed, isHighlighted, true, false, false);
 				}
 
-				if (element.Bounds.Contains(CursorPosition))
+				if (element.Bounds.Contains(_cursorPosition))
 				{
 					DrawDebugBounds(element.Bounds, Color.Red, isHighlighted, true, false, isHighlighted, isHighlighted);
 					if (isHighlighted)
 						DrawDebugString(element.Bounds.TopCenter(), element.GetType().Name, Color.Red * 0.25f, Color.White);
 				}
 
-				if (element.Bounds.Contains(CursorPosition))
+				if (element.Bounds.Contains(_cursorPosition))
 				{
 					DrawDebugBounds(element.InnerBounds, Color.MediumVioletRed, isHighlighted, true, false, false);
 				}

@@ -1,15 +1,11 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using RocketUI.Abstractions;
-using RocketUI.Graphics;
 using RocketUI.Input;
-using RocketUI.Layout;
-using RocketUI.Primitive;
 using GuiCursorEventArgs = RocketUI.Events.GuiCursorEventArgs;
 using GuiCursorMoveEventArgs = RocketUI.Events.GuiCursorMoveEventArgs;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
     public class GuiControl : GuiContainer, IGuiControl
     {

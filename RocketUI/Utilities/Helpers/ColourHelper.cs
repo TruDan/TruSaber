@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using Microsoft.Xna.Framework;
-using RocketUI.Primitive;
 
 namespace RocketUI.Utilities.Helpers
 {

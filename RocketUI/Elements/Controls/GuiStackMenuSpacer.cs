@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using RocketUI.Graphics;
-using RocketUI.Primitive;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
 	public class GuiStackMenuSpacer : GuiElement
 	{

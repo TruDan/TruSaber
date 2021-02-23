@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RocketUI.Primitive;
 
-namespace RocketUI.Graphics.Textures
+namespace RocketUI
 {
 	public class NinePatchTexture2D : TextureSlice2D
 	{

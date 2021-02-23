@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using RocketUI.Attributes;
-using RocketUI.Graphics;
 
 namespace RocketUI
 {

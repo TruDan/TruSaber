@@ -79,8 +79,7 @@ namespace RocketUI.Input.Listeners
         
         private bool TryGetButtons(InputCommand command, out TButtons[] buttons)
         {
-            List<TButtons> btns;
-            if (_buttonMap.TryGetValue(command, out btns))
+            if (_buttonMap.TryGetValue(command, out var btns))
             {
                 buttons = btns.ToArray();
                 return true;

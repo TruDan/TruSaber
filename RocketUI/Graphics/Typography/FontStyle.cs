@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RocketUI.Graphics.Typography
+namespace RocketUI
 {
     [Flags]
     public enum FontStyle

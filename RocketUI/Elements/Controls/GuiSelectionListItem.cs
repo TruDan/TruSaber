@@ -1,6 +1,4 @@
-﻿using RocketUI.Primitive;
-
-namespace RocketUI.Controls
+﻿namespace RocketUI
 {
     public class GuiSelectionListItem : GuiControl
     {

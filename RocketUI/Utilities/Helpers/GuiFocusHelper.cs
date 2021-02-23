@@ -3,10 +3,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using RocketUI.Abstractions;
 using RocketUI.Input;
 using RocketUI.Input.Listeners;
-using RocketUI.Primitive;
 
 namespace RocketUI
 {

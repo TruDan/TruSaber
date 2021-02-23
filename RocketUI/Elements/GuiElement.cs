@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using RocketUI.Abstractions;
+using Portable.Xaml.Markup;
 using RocketUI.Attributes;
-using RocketUI.Graphics;
-using RocketUI.Primitive;
+using RocketUI.Serialization;
 
 namespace RocketUI
 {
@@ -14,7 +15,10 @@ namespace RocketUI
 	public delegate bool GuiElementPredicate<in TGuiElement>(TGuiElement element)
 		where TGuiElement : class, IGuiElement;
 
-	public partial class GuiElement : IGuiElement, IDisposable
+	
+	[RuntimeNameProperty(nameof(Id))]
+	[ContentProperty(nameof(Children))]
+	public partial class GuiElement : RocketElement, IGuiElement, IDisposable
 	{
 		[DebuggerVisible]
 		public Guid Id { get; } = Guid.NewGuid();
@@ -85,8 +89,21 @@ namespace RocketUI
 
 		private object _childrenLock = new object();
 
+		private ObservableCollection<IGuiElement> _children;
+		
 		[DebuggerVisible(Visible = false)] 
-		private List<IGuiElement> Children { get; } = new List<IGuiElement>();
+		public ObservableCollection<IGuiElement> Children
+		{
+			get
+			{
+				if (_children == null)
+				{
+					_children = new ObservableCollection<IGuiElement>();
+					_children.CollectionChanged += ChildrenOnCollectionChanged;
+				}
+				return _children;
+			}
+		}
 
 		[DebuggerVisible(Visible = false)]
 		public bool HasChildren => Children.Count > 0;
@@ -225,6 +242,38 @@ namespace RocketUI
 			ChildRemoved?.Invoke(this, new GuiElementChildEventArgs(this, element));
 			
 			InvalidateLayout();
+		}
+		
+		
+		private void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.NewItems != null)
+			{
+				foreach (IGuiElement item in e.NewItems)
+				{
+					item.ParentElement = this;
+					if(_initialised)
+						item.Init(_guiRenderer, true);
+
+					OnChildAdded(item);
+
+					InvalidateLayout();
+				}
+			}
+
+			if (e.OldItems != null)
+			{
+				foreach (IGuiElement item in e.OldItems)
+				{
+					OnChildRemoved(item);
+
+					if (item.ParentElement == this)
+						item.ParentElement = null;
+					
+					InvalidateLayout();
+				}
+			}
+
 		}
 
 		public void ClearChildren()

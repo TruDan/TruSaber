@@ -1,4 +1,4 @@
-﻿namespace RocketUI.Layout
+﻿namespace RocketUI
 {
     public class GuiContainer : GuiElement
 	{

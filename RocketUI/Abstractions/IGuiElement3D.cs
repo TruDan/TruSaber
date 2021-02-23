@@ -1,6 +1,4 @@
-﻿using RocketUI.Graphics;
-
-namespace RocketUI.Abstractions
+﻿namespace RocketUI
 {
     public interface IGuiElement3D : IGuiElement
     {

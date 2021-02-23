@@ -1,9 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RocketUI.Primitive;
 
-namespace RocketUI.Graphics.Textures
+namespace RocketUI
 {
     public class ColorTexture2D : ITexture2D, IDisposable
     {

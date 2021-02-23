@@ -1,9 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Portable.Xaml.Markup;
 using RocketUI.Attributes;
-using RocketUI.Graphics;
-using RocketUI.Graphics.Typography;
-using RocketUI.Primitive;
 using RocketUI.Utilities.Extensions;
 
 namespace RocketUI
@@ -13,6 +11,7 @@ namespace RocketUI
 		public Uri ClickedText;
 	}
 
+	[ContentProperty(nameof(GuiTextElement.Text))]
     public class GuiTextElement : GuiElement //GuiControl
 	{
 	    public static readonly Color DefaultTextBackgroundColor = new Color(Color.Black, 0.6f);

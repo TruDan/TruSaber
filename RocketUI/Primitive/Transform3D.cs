@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace RocketUI.Primitive
+namespace RocketUI
 {
     public class Transform3D
     {

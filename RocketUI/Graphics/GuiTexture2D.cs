@@ -1,10 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using RocketUI.Graphics.Textures;
-using RocketUI.Primitive;
 
-namespace RocketUI.Graphics
+namespace RocketUI
 {
     public struct GuiSound
     {

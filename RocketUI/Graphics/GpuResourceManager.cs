@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace RocketUI.Graphics
+namespace RocketUI
 {
     public static class GpuResourceManager
     {
@@ -31,8 +31,7 @@ namespace RocketUI.Graphics
         {
             if (_managedTextures != null)
             {
-                Texture2D texture;
-                while (_managedTextures.TryTake(out texture))
+                while (_managedTextures.TryTake(out var texture))
                 {
                     texture.Dispose();
                 }

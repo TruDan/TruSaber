@@ -1,10 +1,8 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using RocketUI.Graphics;
 using RocketUI.Input;
-using RocketUI.Primitive;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
     public class ScrollOffsetValueChangedEventArgs : EventArgs
     {
@@ -31,7 +29,7 @@ namespace RocketUI.Controls
             }
         }
 
-        private GuiButton Track;
+        private GuiButton _track;
 
         public GuiTexture2D ThumbBackground;
         public GuiTexture2D ThumbHighlightBackground;
@@ -107,7 +105,7 @@ namespace RocketUI.Controls
             Padding = Thickness.Zero;
             Margin = Thickness.Zero;
 
-            AddChild(Track = new GuiButton()
+            AddChild(_track = new GuiButton()
             {
                 MinWidth = 10,
                 MinHeight = 10,
@@ -128,10 +126,10 @@ namespace RocketUI.Controls
                 DisabledBackground = GuiTextures.ScrollBarTrackDisabled
             });
 
-            Track.Background.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
-            Track.HighlightedBackground.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
-            Track.FocusedBackground.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
-            Track.DisabledBackground.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
+            _track.Background.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
+            _track.HighlightedBackground.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
+            _track.FocusedBackground.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
+            _track.DisabledBackground.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
 
             Orientation = Orientation.Vertical;
         }
@@ -178,11 +176,11 @@ namespace RocketUI.Controls
         {
             if (Orientation == Orientation.Vertical)
             {
-                Track.Anchor = Alignment.FillX | Alignment.MinY;
+                _track.Anchor = Alignment.FillX | Alignment.MinY;
             }
             else
             {
-                Track.Anchor = Alignment.FillY | Alignment.MinX;
+                _track.Anchor = Alignment.FillY | Alignment.MinX;
             }
 
             UpdateTrack();
@@ -204,16 +202,16 @@ namespace RocketUI.Controls
             {
                 if (Orientation == Orientation.Vertical)
                 {
-                    Track.Height = trackSize;
-                    Track.Margin = new Thickness(0, 0, 0, 0);
+                    _track.Height = trackSize;
+                    _track.Margin = new Thickness(0, 0, 0, 0);
                 }
                 else
                 {
-                    Track.Width = trackSize;
-                    Track.Margin = new Thickness(0, 0, 0, 0);
+                    _track.Width = trackSize;
+                    _track.Margin = new Thickness(0, 0, 0, 0);
                 }
 
-                Track.Enabled = false;
+                _track.Enabled = false;
             }
             else
             {
@@ -225,18 +223,18 @@ namespace RocketUI.Controls
 
                 if (Orientation == Orientation.Vertical)
                 {
-                    Track.Height = size;
-                    Track.Width = Size.Width;
-                    Track.Margin = new Thickness(0, positionOffset, 0, 0);
+                    _track.Height = size;
+                    _track.Width = Size.Width;
+                    _track.Margin = new Thickness(0, positionOffset, 0, 0);
                 }
                 else
                 {
-                    Track.Width = size;
-                    Track.Height = Size.Height;
-                    Track.Margin = new Thickness(positionOffset, 0, 0, 0);
+                    _track.Width = size;
+                    _track.Height = Size.Height;
+                    _track.Margin = new Thickness(positionOffset, 0, 0, 0);
                 }
 
-                Track.Enabled = true;
+                _track.Enabled = true;
             }
         }
     }

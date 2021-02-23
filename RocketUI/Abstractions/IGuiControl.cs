@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using RocketUI.Attributes;
 using RocketUI.Input;
 
-namespace RocketUI.Abstractions
+namespace RocketUI
 {
     public interface IGuiControl : IGuiElement
     {

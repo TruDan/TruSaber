@@ -6,10 +6,8 @@
 //  * /
 
 using System;
-using RocketUI.Abstractions;
-using RocketUI.Layout;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
 	public class GuiButtonGroup : GuiStackContainer
 	{

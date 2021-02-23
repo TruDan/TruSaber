@@ -1,6 +1,4 @@
-﻿using RocketUI.Primitive;
-
-namespace RocketUI.Abstractions
+﻿namespace RocketUI
 {
     public interface IGuiScreen3D : IGuiScreen
     {

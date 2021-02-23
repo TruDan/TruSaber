@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace RocketUI.Graphics.Typography
+namespace RocketUI
 {
     public static class BitmapFontSpriteBatchExtensions
 	{

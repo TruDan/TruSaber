@@ -1,11 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using RocketUI;
-using RocketUI.Controls;
-using RocketUI.Graphics;
 using RocketUI.Input.Listeners;
 using RocketUI.Layout;
-using RocketUI.Primitive;
 using SharpVR;
 using Valve.VR;
 

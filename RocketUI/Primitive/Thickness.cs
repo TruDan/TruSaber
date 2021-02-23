@@ -1,8 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using Microsoft.Xna.Framework;
+using RocketUI.Utilities.Converters;
 
-namespace RocketUI.Primitive
+namespace RocketUI
 {
+	[TypeConverter(typeof(ThicknessConverter))]
 	public struct Thickness : IEquatable<Thickness>
 	{
 		public static Thickness Zero => new Thickness(0);

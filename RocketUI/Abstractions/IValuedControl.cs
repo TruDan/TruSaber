@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RocketUI.Abstractions
+namespace RocketUI
 {
     public interface IValuedControl<TValue> : IGuiControl
     {

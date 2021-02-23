@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using RocketUI;
-using RocketUI.Graphics;
 using RocketUI.Input;
 using RocketUI.Utilities.Helpers;
 using SharpDX;

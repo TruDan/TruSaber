@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using RocketUI.Attributes;
-using RocketUI.Graphics;
-using RocketUI.Primitive;
 
-namespace RocketUI.Abstractions
+namespace RocketUI
 {
     public interface IGuiElement
     {

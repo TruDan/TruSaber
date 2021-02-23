@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace RocketUI.Graphics
+namespace RocketUI
 {
     public class GraphicsContext : IDisposable
     {

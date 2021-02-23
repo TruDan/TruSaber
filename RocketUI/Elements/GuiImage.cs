@@ -1,8 +1,4 @@
-﻿using RocketUI.Graphics;
-using RocketUI.Graphics.Textures;
-using RocketUI.Primitive;
-
-namespace RocketUI
+﻿namespace RocketUI
 {
     public class GuiImage : GuiElement
     {

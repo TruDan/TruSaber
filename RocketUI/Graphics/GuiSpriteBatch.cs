@@ -1,12 +1,9 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using RocketUI.Graphics.Textures;
-using RocketUI.Graphics.Typography;
-using RocketUI.Primitive;
 using RocketUI.Utilities.Extensions;
 
-namespace RocketUI.Graphics
+namespace RocketUI
 {
     public class GuiSpriteBatch : IDisposable
     {
@@ -86,11 +83,11 @@ namespace RocketUI.Graphics
             var loc2 = Vector2.Transform((rectangle.Location + rectangle.Size).ToVector2(),
                 ScaledResolution.TransformMatrix);
 
-            var loc1p = new Point((int) Math.Floor(loc1.X), (int) Math.Floor(loc1.Y));
-            var loc2p = new Point((int) Math.Ceiling(loc2.X), (int) Math.Ceiling(loc2.Y));
-            var size = loc2p - loc1p;
+            var loc1P = new Point((int) Math.Floor(loc1.X), (int) Math.Floor(loc1.Y));
+            var loc2P = new Point((int) Math.Ceiling(loc2.X), (int) Math.Ceiling(loc2.Y));
+            var size = loc2P - loc1P;
 
-            return new Rectangle(loc1p, size);
+            return new Rectangle(loc1P, size);
         }
 
         public Rectangle Unproject(Rectangle screen)

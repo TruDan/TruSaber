@@ -1,12 +1,10 @@
 ﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using RocketUI.Graphics;
 using RocketUI.Input;
-using RocketUI.Primitive;
 using RocketUI.Utilities.Helpers;
 
-namespace RocketUI.Controls
+namespace RocketUI
 {
     public class GuiTextInput : GuiValuedControl<string>
     {

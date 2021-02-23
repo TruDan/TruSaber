@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using RocketUI.Utilities.Helpers;
 
-namespace RocketUI.Primitive
+namespace RocketUI
 {
     public struct HslColor
     {
