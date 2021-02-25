@@ -1,0 +1,9 @@
+[submodule "RocketUI/XamlX"]
+	path = RocketUI/XamlX
+	url = git@github.com:kekekeks/XamlX.git
+[submodule "XamlX"]
+	path = XamlX
+	url = git@github.com:kekekeks/XamlX.git
+[submodule "lib/XamlX"]
+	path = lib/XamlX
+	url = git@github.com:kekekeks/XamlX.git
