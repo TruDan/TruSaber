@@ -100,7 +100,7 @@ namespace TruSaber
             GuiManager.AddScreen(_debugGui = new DebugGui());
             Components.Add(GuiManager);
             GuiManager.DrawOrder = 10;
-            GuiManager.Init(GraphicsDevice, ServiceProvider);
+            GuiManager.Init();
             
             
             GuiDebugHelper = new GuiDebugHelper(this, GuiManager);
@@ -109,7 +109,7 @@ namespace TruSaber
             SceneManager.SetScene<MainMenuScene>();
 //            SceneManager.SetScene<PlayLevelScene>();
 
-            _graphics.GraphicsDevice.Viewport = new Viewport(Game.Window.ClientBounds);
+            _graphics.GraphicsDevice.Viewport = new Viewport(Window.ClientBounds);
         }
 
         protected override void Update(GameTime gameTime)

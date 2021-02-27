@@ -31,10 +31,52 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\lib\RocketUI\RocketUI.Design\RocketDesignerGame.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\lib\RocketUI\RocketUI\Elements\RocketElement.Layout.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\lib\RocketUI\RocketUI\Graphics\GuiSpriteBatch.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\lib\RocketUI\RocketUI\GuiManager.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\TruSaber\Scenes\GuiSceneBase.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\src\TruSaber\Scenes\MainMenuScene.xaml">
           <value>
             <Attribute>
               <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\TruSaber\TruSaberGame.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
             </Attribute>
           </value>
         </entry>

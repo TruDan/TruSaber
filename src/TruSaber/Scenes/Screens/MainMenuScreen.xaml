@@ -9,8 +9,8 @@
                   MinHeight="300"
                   Width="300" 
                   Height="400">
-        <StackMenuItem Name="PlayButton" Text="PLAY" />
+        <StackMenuItem Name="PlayButton" Text="PLAY"  />
         <StackMenuItem Name="OptionsButton" Text="OPTIONS" />
         <StackMenuItem Name="ExitButton" Text="EXIT" />
     </StackMenu>
-</Screen>
+</Screen> 

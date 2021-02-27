@@ -13,16 +13,23 @@ namespace TruSaber.Graphics
     {
         public  GuiScaledResolution                     ScaledResolution { get; set; }
         
-        private GraphicsDevice                          _graphicsDevice;
+        private GraphicsDevice _graphicsDevice;
+        private ContentManager _content;
+        
         private Dictionary<GuiTextures, TextureSlice2D> _textureCache = new Dictionary<GuiTextures, TextureSlice2D>();
         private Dictionary<string, TextureSlice2D> _pathedTextureCache = new Dictionary<string, TextureSlice2D>();
         private Dictionary<GuiSoundEffects, SoundEffect> _soundEffectCache = new Dictionary<GuiSoundEffects, SoundEffect>();
-        
+
+        public GuiRenderer()
+        {
+            
+        }
         
         public void Init(GraphicsDevice graphics, IServiceProvider serviceProvider)
         {
             _graphicsDevice = graphics;
-            Font = (WrappedSpriteFont) TruSaberGame.Instance.Game.Content.Load<SpriteFont>("Fonts/Default");
+            _content = ((Game)serviceProvider.GetService(typeof(Game))).Content;
+            Font = (WrappedSpriteFont) _content.Load<SpriteFont>("Fonts/Default");
             
             LoadTexturesFromContent();
             LoadSoundsFromContent();
@@ -70,11 +77,10 @@ namespace TruSaber.Graphics
 
         private void LoadSoundsFromContent()
         {
-            var c        = TruSaberGame.Instance.Game.Content;
             var basePath = "Audio/UI/";
 
-            LoadSoundEffect(GuiSoundEffects.ButtonClick, c.Load<SoundEffect>(basePath + "Focus"));
-            LoadSoundEffect(GuiSoundEffects.ButtonHighlight, c.Load<SoundEffect>(basePath + "Hover"));
+            LoadSoundEffect(GuiSoundEffects.ButtonClick, _content.Load<SoundEffect>(basePath + "Focus"));
+            LoadSoundEffect(GuiSoundEffects.ButtonHighlight, _content.Load<SoundEffect>(basePath + "Hover"));
         }
 
         private void LoadSoundEffect(GuiSoundEffects guiSoundEffects, SoundEffect soundEffect)
@@ -86,10 +92,9 @@ namespace TruSaber.Graphics
 
         private void LoadTexturesFromContent()
         {
-            var c        = TruSaberGame.Instance.Game.Content;
             var basePath = "Textures/UI/";
 
-            var buttons = c.Load<Texture2D>(basePath + "Buttons");
+            var buttons = _content.Load<Texture2D>(basePath + "Buttons");
             LoadTextureFromSpriteSheet(GuiTextures.ButtonDefault, buttons, ButtonBackgroundDefault, new Thickness(50));
             LoadTextureFromSpriteSheet(GuiTextures.ButtonHover, buttons, ButtonBackgroundHover, new Thickness(50));
             LoadTextureFromSpriteSheet(GuiTextures.ButtonFocused, buttons, ButtonBackgroundFocus, new Thickness(50));
@@ -109,7 +114,7 @@ namespace TruSaber.Graphics
             
             LoadTextureFromSpriteSheet(GuiTextures.ProgressBar, buttons,ProgressBar, Thickness.Zero);
             
-            var scrollbar = c.Load<Texture2D>(basePath + "ScrollBar");
+            var scrollbar = _content.Load<Texture2D>(basePath + "ScrollBar");
         }
 
 
