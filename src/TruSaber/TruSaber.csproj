@@ -63,11 +63,13 @@
         <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="SharpVR.MonoGame" Version="1.0.2" />
+        <PackageReference Include="RocketUI" Version="1.0.0" />
+    </ItemGroup>
+    <ItemGroup>
         <ProjectReference Include="..\..\lib\XnaAux\AnimationAux\AnimationAux.csproj" />
         <ProjectReference Include="..\..\lib\XnaAux\AnimationPipeline\AnimationPipeline.csproj" />
         <ProjectReference Include="..\BeatMapLib\BeatMapLib.csproj" />
-        <ProjectReference Include="..\..\lib\RocketUI\RocketUI\RocketUI.csproj" />
-        <ProjectReference Include="..\..\lib\SharpVR\SharpVR\SharpVR.csproj" />
     </ItemGroup>
     <ItemGroup Condition="'$(Configuration)' == 'DirectX'">
         <PackageReference Include="MonoGame.Framework.WindowsDX" Version="3.8.0.1641" />        
