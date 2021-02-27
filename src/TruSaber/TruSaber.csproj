@@ -91,7 +91,7 @@
     <ItemGroup>
       <Folder Include="Graphics\VR" />
       <Folder Include="Input" />
-    </ItemGroup>
+    </ItemGroup> 
 
     <ItemGroup>
         <None Remove="**\*.xaml" />
