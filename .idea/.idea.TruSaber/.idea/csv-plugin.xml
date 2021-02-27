@@ -73,6 +73,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\TruSaber\Scenes\Screens\SelectLevelScreen.xaml">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\src\TruSaber\TruSaberGame.cs">
           <value>
             <Attribute>

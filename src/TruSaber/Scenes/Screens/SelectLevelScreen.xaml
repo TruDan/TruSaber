@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Screen x:Class="TruSaber.Scenes.Screens.SelectLevelScreen"
+        xmlns="clr-namespace:RocketUI;assembly=RocketUI"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gui="clr-namespace:TruSaber.Graphics.Gui">
+    <MultiStackContainer
+        Orientation="Vertical"
+        Anchor="Fill"
+        ChildAnchor="TopFill"
+        Width="800"
+        Height="600">
+        
+        <StackContainer Orientation="Horizontal" ChildAnchor="FillLeft">
+            <Button Name="BackButton" Text="&lt; BACK" />
+            <TextElement Text="LEVEL SELECT" />
+        </StackContainer>
+        
+        <StackContainer Orientation="Horizontal" ChildAnchor="Fill">
+            <SelectionList Name="selectionList" Anchor="Fill"></SelectionList>
+            <gui:LevelInfo Anchor="Fill"></gui:LevelInfo>
+        </StackContainer>
+
+    </MultiStackContainer>
+</Screen>

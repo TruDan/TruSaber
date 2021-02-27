@@ -78,7 +78,6 @@ namespace TruSaber.DebugTool
             if(DesignMode) return;
 
             var b = Bounds;
-            new 
             Camera.RenderTarget = new RenderTarget2D(TruSaberGame.Instance.Game.GraphicsDevice, b.Width, b.Height);
         }
         

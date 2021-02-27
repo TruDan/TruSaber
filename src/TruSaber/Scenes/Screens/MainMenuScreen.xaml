@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Screen x:Class="TruSaber.Scenes.Screens.MainMenuScene"
+<Screen x:Class="TruSaber.Scenes.Screens.MainMenuScreen"
            xmlns="clr-namespace:RocketUI;assembly=RocketUI"
            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <StackMenu Anchor="FillLeft" 
