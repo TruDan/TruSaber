@@ -1,16 +1,11 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using NLog;
 using SharpVR;
 using TruSaber.Abstractions;
 using TruSaber.Configuration;
-using TruSaber.Debugging;
 using TruSaber.Graphics;
-using Valve.VR;
-using ILogger = NLog.ILogger;
 
 namespace TruSaber.Services
 {

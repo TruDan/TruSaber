@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using MonoGame.Extended.Input;
 using RocketUI;
 using TruSaber.Abstractions;
 
@@ -120,7 +119,7 @@ namespace TruSaber.Graphics
 
         public void Update(GameTime gameTime)
         {
-            var keyboard = KeyboardExtended.GetState();
+            var keyboard = Keyboard.GetState();
             if (keyboard.IsKeyDown(Keys.Right))
             {
             }

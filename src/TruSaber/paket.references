@@ -1,0 +1,15 @@
+﻿DiscordRichPresence
+NLog
+NLog.Extensions.Logging
+
+Microsoft.Extensions.Hosting
+Microsoft.Extensions.DependencyInjection.Abstractions
+System.ComponentModel.Composition
+
+MonoGame.Framework.DesktopGL
+MonoGame.Framework.Content.Pipeline
+
+JetBrains.Annotations
+
+SharpVR.MonoGame
+RocketUI

@@ -1,6 +1,5 @@
 ﻿using System;
 using JetBrains.Annotations;
-using Microsoft.Extensions.Logging;
 
 namespace Microsoft.Extensions.Logging
 {

@@ -1,13 +1,9 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SharpVR;
 using TruSaber.Abstractions;
-using TruSaber.Utilities.Extensions;
-using BoundingBox = BEPUutilities.BoundingBox;
 using Quaternion = Microsoft.Xna.Framework.Quaternion;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace TruSaber
 {

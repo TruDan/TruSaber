@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using AnimationAux;
-using BEPUik;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
-using MonoGame.Extended.Graphics.Effects;
 using RocketUI.Input;
 using SharpVR;
 using TruSaber.Abstractions;

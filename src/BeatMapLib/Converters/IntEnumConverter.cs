@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Globalization;
 using System.Reflection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace BeatMapInfo
 {

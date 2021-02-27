@@ -9,7 +9,6 @@
 namespace BeatMapInfo
 {
     using System;
-    using System.Collections.Generic;
     using Newtonsoft.Json;
     using J = Newtonsoft.Json.JsonPropertyAttribute;
     using R = Newtonsoft.Json.Required;

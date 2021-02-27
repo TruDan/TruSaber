@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using RocketUI;
-using TruSaber.Abstractions;
 using TruSaber.Scenes;
 
 namespace TruSaber.Graphics.Gui

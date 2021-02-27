@@ -3,7 +3,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SharpVR;
 using TruSaber.Abstractions;
-using TruSaber.Utilities.Extensions;
 using Valve.VR;
 
 namespace TruSaber.Graphics

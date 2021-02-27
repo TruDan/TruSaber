@@ -1,10 +1,4 @@
-﻿using System;
-using DiscordRPC;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Xna.Framework;
-using RocketUI;
-using RocketUI.Serialization.Xaml;
-using TruSaber.Graphics.Gui;
+﻿using DiscordRPC;
 using TruSaber.Scenes.Screens;
 
 namespace TruSaber.Scenes

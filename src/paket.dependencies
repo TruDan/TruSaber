@@ -1,0 +1,20 @@
+source https://api.nuget.org/v3/index.json
+
+storage: none
+framework: net5.0, netcoreapp3.1, netstandard2.0, netstandard2.1
+
+nuget DiscordRichPresence ~> 1.0.175
+nuget NLog ~> 4.7.7
+nuget NLog.Extensions.Logging ~> 1.7.0
+
+nuget Microsoft.Extensions.Hosting ~> 5.0.0
+nuget Microsoft.Extensions.DependencyInjection.Abstractions ~> 5.0.0
+nuget System.ComponentModel.Composition ~> 5.0.0
+
+nuget MonoGame.Framework.DesktopGL ~> 3.8.0.1641
+nuget MonoGame.Framework.Content.Pipeline ~> 3.8.0.1641
+
+nuget JetBrains.Annotations ~> 2020.3.0
+
+nuget SharpVR.MonoGame ~> 1.0.2
+nuget RocketUI ~> 1.0.0

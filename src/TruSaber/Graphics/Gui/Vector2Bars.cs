@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using RocketUI;
-using RocketUI.Layout;
 
 namespace TruSaber.Graphics.Gui
 {

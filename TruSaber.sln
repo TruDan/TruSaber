@@ -14,12 +14,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeatMapLib", "src\BeatMapLib\BeatMapLib.csproj", "{BEBB2BF3-AE87-48FC-BC75-D8F8B95E9CCD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7E4C6F2B-47EF-41E5-9A89-DF9F2B3945B9}"
+ProjectSection(SolutionItems) = preProject
+	src\paket.dependencies = src\paket.dependencies
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{6DE9EAA4-268B-4B80-B6BC-73C56C1AF24F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "XnaAux", "XnaAux", "{E3DC2619-9C12-40A6-948A-376C3C3F5968}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{22964393-1068-4899-8197-0B981B73E4B7}"
+ProjectSection(SolutionItems) = preProject
+	.gitignore = .gitignore
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

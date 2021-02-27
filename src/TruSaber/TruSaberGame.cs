@@ -8,12 +8,10 @@ using Microsoft.Xna.Framework.Input;
 using RocketUI;
 using RocketUI.Input;
 using RocketUI.Utilities.Helpers;
-using SharpDX;
 using SharpVR;
 using TruSaber.Abstractions;
 using TruSaber.Debugging;
 using TruSaber.Graphics;
-using TruSaber.Graphics.Gui;
 using TruSaber.Scenes;
 using Vector3 = Microsoft.Xna.Framework.Vector3;
 

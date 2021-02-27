@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using BeatMapInfo;
-using Microsoft.Xna.Framework;
 using RocketUI;
-using RocketUI.Layout;
 using TruSaber.Models;
 using TruSaber.Scenes;
 

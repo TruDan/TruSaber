@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using JetBrains.Annotations;
-using Microsoft.Xna.Framework;
 
 namespace TruSaber
 {
