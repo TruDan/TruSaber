@@ -48,14 +48,14 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="MonoGame.Framework.Content.Pipeline" Version="3.8.*" />
-    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
+    <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.0.1641" />
     <PackageReference Include="NLog" Version="4.7.7" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.7.0" />
     <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SharpVR.MonoGame" Version="1.0.2" />
-    <PackageReference Include="RocketUI" Version="1.0.0" />
+    <PackageReference Include="RocketUI" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\XnaAux\AnimationAux\AnimationAux.csproj" />
@@ -87,5 +87,4 @@
       <DependentUpon>%(Filename).cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
