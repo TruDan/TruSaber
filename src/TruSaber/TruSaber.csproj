@@ -7,7 +7,7 @@
     <TieredCompilation>false</TieredCompilation>
     <LangVersion>latest</LangVersion>
     <Configurations>Release;DirectX;Debug</Configurations>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -55,7 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SharpVR.MonoGame" Version="1.0.2" />
-    <PackageReference Include="RocketUI" Version="1.0.1" />
+<!--    <PackageReference Include="RocketUI" Version="1.0.11" />-->
+    <ProjectReference Include="..\..\lib\RocketUI\src\RocketUI\RocketUI.csproj" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\lib\XnaAux\AnimationAux\AnimationAux.csproj" />
@@ -84,7 +85,7 @@
   <ItemGroup>
     <None Remove="**\*.xaml" />
     <EmbeddedResource Include="**\*.xaml">
-      <DependentUpon>%(Filename).cs</DependentUpon>
+      <DependentUpon Condition="Exists('%(Filename).cs')">%(Filename).cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

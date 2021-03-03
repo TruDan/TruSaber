@@ -3,7 +3,7 @@
 <Screen x:Class="TruSaber.Scenes.Screens.SelectLevelScreen"
         xmlns="clr-namespace:RocketUI;assembly=RocketUI"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:gui="clr-namespace:TruSaber.Graphics.Gui">
+        xmlns:gui="clr-namespace:TruSaber.Graphics.Gui;assembly=TruSaber">
     <MultiStackContainer
         Orientation="Vertical"
         Anchor="Fill"
@@ -11,9 +11,9 @@
         Width="800"
         Height="600">
         
-        <StackContainer Orientation="Horizontal" ChildAnchor="FillLeft">
+        <StackContainer Orientation="Horizontal" ChildAnchor="FillLeft" Margin="0,0,0,20">
             <Button Name="BackButton" Text="&lt; BACK" />
-            <TextElement Text="LEVEL SELECT" />
+            <TextElement Text="LEVEL SELECT" Scale="2" Margin="5,20" />
         </StackContainer>
         
         <StackContainer Orientation="Horizontal" ChildAnchor="Fill">

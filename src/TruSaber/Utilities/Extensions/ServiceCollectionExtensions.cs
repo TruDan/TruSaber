@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RocketUI;
 using RocketUI.Input;
 using RocketUI.Input.Listeners;
+using RocketUI.Utilities.Extensions;
 using SharpVR;
 using TruSaber.Graphics;
 using TruSaber.Scenes;

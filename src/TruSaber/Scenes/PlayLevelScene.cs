@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using RocketUI.Utilities.Helpers;
 using SharpVR;
 using TruSaber.Models;
 using Matrix = Microsoft.Xna.Framework.Matrix;
@@ -29,6 +30,8 @@ namespace TruSaber.Scenes
 
         private Space          _space;
 
+        private ScoreHelper _scoreHelper;
+
         public PlayLevelScene(BeatLevel beatlevel, Characteristic characteristic, Difficulty difficulty)
         {
             Level = beatlevel;
@@ -39,7 +42,7 @@ namespace TruSaber.Scenes
             _player = TruSaberGame.Instance.Player;
             _activeNoteEntities = new List<NoteEntity>();
             _space = new Space(Level);
-
+            _scoreHelper = new ScoreHelper();
         }
         
         protected override void OnInitialize()
@@ -72,6 +75,7 @@ namespace TruSaber.Scenes
             InitPhysics();
 
             _countdown = 5f;
+            _scoreHelper.Reset();
             _isReady = true;
         }
 
@@ -153,6 +157,11 @@ namespace TruSaber.Scenes
 
             foreach (var note in _activeNoteEntities.ToArray())
             {
+                if (note.Position.Z > 0 && note.Spawned)
+                {
+                    _scoreHelper.RegisterMissedBlock();
+                    DespawnNote(note);
+                }
                 if (note.Position.Z > -10)
                 {
                     CheckHandCollision(_player.LeftHand, note);
@@ -173,12 +182,14 @@ namespace TruSaber.Scenes
                     {
                         // woohoo!!
                         //Console.WriteLine($"Left Hand hit a Left Block!!! +50 points to griffindor!");
+                        _scoreHelper.RegisterHitBlock(115f);
                         DespawnNote(note);
                     }
                     else if (note.Type == NoteType.RightNote && hand.Hand == Hand.Right)
                     {
                         // woohoo!
                        // Console.WriteLine($"Right Hand hit a Right Block!!! +50 points to griffindor!");
+                       _scoreHelper.RegisterHitBlock(115f);
                         DespawnNote(note);
                     }
                     else

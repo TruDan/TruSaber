@@ -7,6 +7,12 @@
       "commands": [
         "paket"
       ]
+    },
+    "rocketui.design.host": {
+      "version": "1.0.11",
+      "commands": [
+        "rocketui"
+      ]
     }
   }
 }

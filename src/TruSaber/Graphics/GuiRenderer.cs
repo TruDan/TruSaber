@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using RocketUI;
+using TruSaber.Graphics.Gui;
 
 namespace TruSaber.Graphics
 {
@@ -21,7 +22,7 @@ namespace TruSaber.Graphics
 
         public GuiRenderer()
         {
-            
+            LevelInfo levelInfo;
         }
         
         public void Init(GraphicsDevice graphics, IServiceProvider serviceProvider)

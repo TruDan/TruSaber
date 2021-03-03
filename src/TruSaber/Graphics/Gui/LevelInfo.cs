@@ -32,13 +32,28 @@ namespace TruSaber.Graphics.Gui
         
         public LevelInfo()
         {
-            _difficultySelect = new ButtonGroup();
+            _difficultySelect = new ButtonGroup()
+            {
+                Margin = new Thickness(10),
+                Anchor = Alignment.Fill,
+                ChildAnchor = Alignment.Fill
+            };
             _title = new TextElement();
             _author = new TextElement();
             _albumImage = new Image(GuiTextures.PanelGlass);
-            _difficultySelect = new ButtonGroup();
+            _difficultySelect = new ButtonGroup()
+            {
+                Margin = new Thickness(10),
+                Anchor = Alignment.Fill,
+                ChildAnchor = Alignment.Fill
+            };
             _difficultySelect.CheckedControlChanged += DifficultySelectOnCheckedControlChanged;
-            _characteristicSelect = new ButtonGroup();
+            _characteristicSelect = new ButtonGroup()
+            {
+                Margin = new Thickness(10),
+                Anchor = Alignment.Fill,
+                ChildAnchor = Alignment.Fill
+            };
             _characteristicSelect.CheckedControlChanged += CharacteristicSelectOnCheckedControlChanged;
             _playButton = new Button("PLAY", () => OnPlayClicked());
 

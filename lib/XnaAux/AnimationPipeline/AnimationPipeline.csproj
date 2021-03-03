@@ -15,7 +15,7 @@
     <RootNamespace>AnimationPipeline</RootNamespace>
     <AssemblyName>AnimationPipeline</AssemblyName>
     <Configurations>Debug;Release;DirectX</Configurations>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="bin\netcoreapp3.1\*.dll" Pack="True" PackagePath="tools\" />

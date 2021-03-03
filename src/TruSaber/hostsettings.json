@@ -8,8 +8,7 @@
     },
     "LevelDirectory": "../../../../Test Levels/",
     "PluginPaths": [
-        "./Plugins",
-        "../../../../TruSaber.DebugTool/bin/x86/Debug/net5.0-windows"
+        "./Plugins"
     ],
     "EmulateVr": false
 }
