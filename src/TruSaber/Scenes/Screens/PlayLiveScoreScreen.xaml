@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Screen x:Class="TruSaber.Scenes.Screens.PlayLiveScoreScreen"
+           xmlns="clr-namespace:RocketUI;assembly=RocketUI"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackContainer Orientation="Vertical" Anchor="MiddleCenter">
+        <TextElement Text="0" Name="ScoreText" Margin="5" />
+        <TextElement Text="SCORE" Margin="5" />
+    </StackContainer>
+</Screen> 

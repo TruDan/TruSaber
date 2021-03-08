@@ -7,7 +7,7 @@
     <MultiStackContainer
         Orientation="Vertical"
         Anchor="Fill"
-        ChildAnchor="TopFill"
+        ChildAnchor="Fill"
         Width="800"
         Height="600">
         
@@ -17,8 +17,8 @@
         </StackContainer>
         
         <StackContainer Orientation="Horizontal" ChildAnchor="Fill">
-            <SelectionList Name="selectionList" Anchor="Fill"></SelectionList>
-            <gui:LevelInfo Anchor="Fill"></gui:LevelInfo>
+            <SelectionList Name="selectionList" Anchor="FillLeft"></SelectionList>
+            <gui:LevelInfo Anchor="FillRight" ChildAnchor="Fill"></gui:LevelInfo>
         </StackContainer>
 
     </MultiStackContainer>

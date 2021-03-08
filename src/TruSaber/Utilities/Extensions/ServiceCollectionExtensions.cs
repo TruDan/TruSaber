@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using RocketUI;
+using RocketUI.Debugger;
 using RocketUI.Input;
 using RocketUI.Input.Listeners;
 using RocketUI.Utilities.Extensions;
@@ -37,6 +38,8 @@ namespace TruSaber.Abstractions
             services.AddSingleton<InputManager>();
             services.AddSingleton<IGuiRenderer, GuiRenderer>();
             services.AddSingleton<GuiManager>();
+            services.AddSingleton<RocketDebugSocketServer>();
+            services.AddHostedService<RocketDebugSocketServer>(sp => sp.GetRequiredService<RocketDebugSocketServer>());
             services.AddSingleton<LevelManager>();
         }
 

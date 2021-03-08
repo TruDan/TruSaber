@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Media;
 using RocketUI.Utilities.Helpers;
 using SharpVR;
 using TruSaber.Models;
+using TruSaber.Scenes.Screens;
 using Matrix = Microsoft.Xna.Framework.Matrix;
 using Vector3 = Microsoft.Xna.Framework.Vector3;
 
@@ -32,6 +33,8 @@ namespace TruSaber.Scenes
 
         private ScoreHelper _scoreHelper;
 
+        private GuiScreenEntity _liveScoreScreenEntity;
+
         public PlayLevelScene(BeatLevel beatlevel, Characteristic characteristic, Difficulty difficulty)
         {
             Level = beatlevel;
@@ -43,6 +46,17 @@ namespace TruSaber.Scenes
             _activeNoteEntities = new List<NoteEntity>();
             _space = new Space(Level);
             _scoreHelper = new ScoreHelper();
+
+            _liveScoreScreenEntity = new GuiScreenEntity(TruSaberGame.Instance.Game)
+            {
+                Screen = new PlayLiveScoreScreen(TruSaberGame.Instance.Game, _scoreHelper),
+                Transform =
+                {
+                    Position = Vector3.Forward * 4
+                },
+            };
+            
+            Components.Add(_liveScoreScreenEntity);
         }
         
         protected override void OnInitialize()

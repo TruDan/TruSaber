@@ -30,7 +30,7 @@ namespace TruSaber.Graphics.Gui
         public Characteristic? SelectedCharacteristic => _characteristicSelect.CheckedControl?.Tag as Characteristic?;
         public Difficulty?     SelectedDifficulty     => _difficultySelect.CheckedControl?.Tag as Difficulty?;
         
-        public LevelInfo()
+        public LevelInfo() : base()
         {
             _difficultySelect = new ButtonGroup()
             {
@@ -55,13 +55,21 @@ namespace TruSaber.Graphics.Gui
                 ChildAnchor = Alignment.Fill
             };
             _characteristicSelect.CheckedControlChanged += CharacteristicSelectOnCheckedControlChanged;
-            _playButton = new Button("PLAY", () => OnPlayClicked());
+            _playButton = new Button("PLAY", () => OnPlayClicked())
+            {
+                Anchor = Alignment.Fill
+            };
 
             AddRow(_albumImage, _title);
             AddRow(_author);
             AddRow(_characteristicSelect);
             AddRow(_difficultySelect);
-            AddRow(_playButton);
+            AddRow(row =>
+            {
+                row.Anchor = Alignment.Fill;
+                row.ChildAnchor = Alignment.Fill;
+                row.AddChild(_playButton);
+            });
         }
 
         private void DifficultySelectOnCheckedControlChanged(object? sender, GuiElementEventArgs e)

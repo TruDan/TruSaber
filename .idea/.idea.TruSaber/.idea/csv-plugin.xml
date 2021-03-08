@@ -59,6 +59,55 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\lib\RocketUI\src\RocketUI.Design.Host\RocketDesignerHost.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\lib\RocketUI\src\RocketUI\Graphics\GuiRenderArgs.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\lib\RocketUI\src\RocketUI\Graphics\GuiSpriteBatch.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\lib\RocketUI\src\RocketUI\GuiManager.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\lib\RocketUI\src\RocketUI\Primitive\Alignment.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\lib\RocketUI\src\RocketUI\Primitive\Transform3D.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\lib\RocketUI\src\RocketUI\Utilities\Helpers\GuiFocusHelper.cs">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\src\TruSaber\Scenes\GuiSceneBase.cs">
           <value>
             <Attribute>
