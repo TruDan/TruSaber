@@ -24,6 +24,9 @@ namespace TruSaber.Scenes.Screens
             _levelManager = TruSaberGame.Instance.ServiceProvider.GetRequiredService<LevelManager>();
 
 
+            _playButton = FindControl<Button>("playButton"); 
+            _levelInfo = FindControl<LevelInfo>("levelInfo");
+            
             _selectionList = FindControl<SelectionList>("selectionList");
             _selectionList.SelectedItemChanged += SelectionListOnSelectedItemChanged;
 

@@ -1,9 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Screen x:Class="TruSaber.Scenes.Screens.PlayLiveScoreScreen"
            xmlns="clr-namespace:RocketUI;assembly=RocketUI"
-           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <StackContainer Orientation="Vertical" Anchor="MiddleCenter">
-        <TextElement Text="0" Name="ScoreText" Margin="5" />
-        <TextElement Text="SCORE" Margin="5" />
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           Width="800"
+           Height="600">
+    <StackContainer Orientation="Vertical" Anchor="MiddleLeft">
+        <TextElement Name="ComboMultiplierText" Text="0" Margin="5" Scale="6" />
+        <TextElement Text="COMBO" Margin="5" Scale="3" />
+        <TextElement Name="ComboText" Text="0" Margin="5" Scale="3" />
+        
+        </StackContainer>
+    <StackContainer Orientation="Vertical" Anchor="MiddleRight">
+        <TextElement Text="SCORE" Margin="5" Scale="4" />
+        <TextElement Name="ScoreText" Text="0" Margin="5" Scale="3" />
     </StackContainer>
 </Screen> 

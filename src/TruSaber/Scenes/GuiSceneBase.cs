@@ -29,18 +29,19 @@ namespace TruSaber.Scenes
         
         protected GuiSceneBase()
         {
+            _guiManager = TruSaberGame.Instance.ServiceProvider.GetRequiredService<GuiManager>();
+            _guiManager.ScaledResolution.ScaleChanged += ScaledResolutionOnScaleChanged;
+            
             GuiScreen = new GuiScreenEntity(TruSaberGame.Instance.Game);
             
             GuiScreen.Transform.Position = new Vector3(-2f, 3f,-3f);
-            GuiScreen.Transform.Scale = new Vector3(ScreenSize.X / 1f, ScreenSize.Y / 1f, 1f);
+            GuiScreen.Transform.Scale = new Vector3(ScreenSize.X / _guiManager.ScaledResolution.ScaledWidth, ScreenSize.Y / _guiManager.ScaledResolution.ScaledHeight, 1f);
             GuiScreen.Transform.Rotation = Quaternion.CreateFromYawPitchRoll(0f, 180f.ToRadians(), 0f);
 
         }
 
         protected override void OnInitialize()
         {
-            _guiManager = TruSaberGame.Instance.ServiceProvider.GetRequiredService<GuiManager>();
-            _guiManager.ScaledResolution.ScaleChanged += ScaledResolutionOnScaleChanged;
             
             base.OnInitialize();
             
@@ -58,17 +59,6 @@ namespace TruSaber.Scenes
             GuiScreen.Transform.Scale = new Vector3(ScreenSize.X / e.ScaledWidth, ScreenSize.Y / e.ScaledHeight, 1f);
         }
 
-        protected override void OnShow()
-        {
-            _guiManager.AddScreen(GuiScreen.Screen);
-            base.OnShow();            
-        }
-
-        protected override void OnHide()
-        {
-            base.OnHide();
-            _guiManager.RemoveScreen(GuiScreen.Screen);
-        }
 
     }
 }

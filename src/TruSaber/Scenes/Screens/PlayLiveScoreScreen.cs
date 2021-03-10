@@ -9,6 +9,7 @@ namespace TruSaber.Scenes.Screens
         private readonly ScoreHelper _scoreHelper;
         private          TextElement _scoreText;
         private          TextElement _comboText;
+        private          TextElement _comboMultiplierText;
         
         public PlayLiveScoreScreen(Game game, ScoreHelper scoreHelper) : base()
         {
@@ -17,6 +18,7 @@ namespace TruSaber.Scenes.Screens
 
             _scoreText = FindControl<TextElement>("ScoreText");
             _comboText = FindControl<TextElement>("ComboText");
+            _comboMultiplierText = FindControl<TextElement>("ComboMultiplierText");
         }
 
         protected override void OnUpdate(GameTime gameTime)
@@ -24,7 +26,8 @@ namespace TruSaber.Scenes.Screens
             base.OnUpdate(gameTime);
 
             _scoreText.Text = $"{_scoreHelper.Score:F0}";
-            _comboText.Text = $"{_scoreHelper.ComboMultiplier:F0}x";
+            _comboText.Text = $"{_scoreHelper.Combo:F0}";
+            _comboMultiplierText.Text = $"{_scoreHelper.ComboMultiplier:F0}x";
         }
     }
 }

@@ -16,12 +16,10 @@ namespace TruSaber
         public Screen Screen
         {
             get => _screen;
-            set
-            {
-                _screen = value;
-                SetupScreen(_screen);
-            }
+            set { SetupScreen(value); }
         }
+
+        private GuiManager GuiManager => ((IGame) Game).GuiManager;
 
         public GuiScreenEntity(Game game) : base((IGame) game)
         {
@@ -31,14 +29,28 @@ namespace TruSaber
 
         private void SetupScreen(Screen screen)
         {
+            if (_screen != null)
+            {
+                GuiManager.RemoveScreen(_screen);
+            }
+            _screen = screen;
+
             if (screen == null) return;
 
             screen.Tag = this;
             screen.IsSelfManaged = true;
             screen.Background = (Color.Black * 0.2f);
             screen.ClipToBounds = true;
-            //screen.UpdateSize();
+            //screen.UpdateSize(screen.Width, screen.Height);
+
             screen.AddChild(_crosshair);
+            GuiManager.AddScreen(_screen);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            _screen?.Update(gameTime);
+            base.Update(gameTime);
         }
 
         public void Draw(GameTime gameTime)

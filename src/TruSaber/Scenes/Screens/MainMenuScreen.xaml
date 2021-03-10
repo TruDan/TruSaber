@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Screen x:Class="TruSaber.Scenes.Screens.MainMenuScreen"
            xmlns="clr-namespace:RocketUI;assembly=RocketUI"
-           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           Width="800"
+           Height="480">
     <StackMenu Anchor="FillLeft" 
                   ChildAnchor="MiddleFill" 
                   Orientation="Vertical" 

@@ -16,7 +16,7 @@ using Vector3 = Microsoft.Xna.Framework.Vector3;
 
 namespace TruSaber.Scenes
 {
-    public class PlayLevelScene : Scene
+    public class PlayLevelScene : GuiSceneBase
     {
 
         private ILogger<PlayLevelScene> _logger;
@@ -47,16 +47,8 @@ namespace TruSaber.Scenes
             _space = new Space(Level);
             _scoreHelper = new ScoreHelper();
 
-            _liveScoreScreenEntity = new GuiScreenEntity(TruSaberGame.Instance.Game)
-            {
-                Screen = new PlayLiveScoreScreen(TruSaberGame.Instance.Game, _scoreHelper),
-                Transform =
-                {
-                    Position = Vector3.Forward * 4
-                },
-            };
-            
-            Components.Add(_liveScoreScreenEntity);
+            GuiScreen.Screen = new PlayLiveScoreScreen(TruSaberGame.Instance.Game, _scoreHelper);
+            GuiScreen.Transform.Position += Vector3.Forward * 4;
         }
         
         protected override void OnInitialize()

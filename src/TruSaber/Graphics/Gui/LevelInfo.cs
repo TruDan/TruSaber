@@ -57,6 +57,7 @@ namespace TruSaber.Graphics.Gui
             _characteristicSelect.CheckedControlChanged += CharacteristicSelectOnCheckedControlChanged;
             _playButton = new Button("PLAY", () => OnPlayClicked())
             {
+                Name = "playButton",
                 Anchor = Alignment.Fill
             };
 
