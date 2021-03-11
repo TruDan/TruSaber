@@ -194,23 +194,26 @@ namespace TruSaber
             }
             
             var arrowToHideName = CutDirection == CutDirection.Any ? "Arrow" : "Dot";
-            
-            foreach(var mesh in ArrowModel.Meshes)
-            foreach (var effect in mesh.Effects)
-            {
-                if (effect is BasicEffect basicEffect)
-                {
-                    if (arrowToHideName == mesh.Name)
-                    {
-                        basicEffect.Alpha = 0.0f;
-                    }
-                    else
-                    {
-                        basicEffect.Alpha = 1.0f;
-                    }
 
-                    basicEffect.LightingEnabled = true;
-                    basicEffect.EnableDefaultLighting();
+            if (ArrowModel != null)
+            {
+                foreach (var mesh in ArrowModel.Meshes)
+                foreach (var effect in mesh.Effects)
+                {
+                    if (effect is BasicEffect basicEffect)
+                    {
+                        if (arrowToHideName == mesh.Name)
+                        {
+                            basicEffect.Alpha = 0.0f;
+                        }
+                        else
+                        {
+                            basicEffect.Alpha = 1.0f;
+                        }
+
+                        basicEffect.LightingEnabled = true;
+                        basicEffect.EnableDefaultLighting();
+                    }
                 }
             }
 
@@ -229,7 +232,7 @@ namespace TruSaber
             // }
 
             var cam = (Game as IGame).Camera;
-            ArrowModel.DrawModelWithExclusions(World, cam.View, cam.Projection, arrowToHideName);
+            ArrowModel?.DrawModelWithExclusions(World, cam.View, cam.Projection, arrowToHideName);
             
             BoundingBox.Draw(GraphicsDevice, Color);
         }

@@ -8,8 +8,7 @@
         <TextElement Name="ComboMultiplierText" Text="0" Margin="5" Scale="6" />
         <TextElement Text="COMBO" Margin="5" Scale="3" />
         <TextElement Name="ComboText" Text="0" Margin="5" Scale="3" />
-        
-        </StackContainer>
+    </StackContainer>
     <StackContainer Orientation="Vertical" Anchor="MiddleRight">
         <TextElement Text="SCORE" Margin="5" Scale="4" />
         <TextElement Name="ScoreText" Text="0" Margin="5" Scale="3" />

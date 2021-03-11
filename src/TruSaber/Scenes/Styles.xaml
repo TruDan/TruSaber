@@ -1,8 +1,16 @@
 ﻿<StyleSheet xmlns="clr-namespace:RocketUI;assembly=RocketUI"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:markup="clr-namespace:Portable.Xaml.Markup;assembly=Portable.Xaml">
+
+    <StyleSheet.Resources>
+        <ResourceDictionary>
+            <SpriteSheetResource Source="Resources/Buttons.png" />
+            <NinePatchTextureSpriteSheetItem x:Key="ButtonDefault" X="0" Y="0"  />
+        </ResourceDictionary>
+    </StyleSheet.Resources>
 
     <Style TargetType="Button">
         <Setter Property="Padding" Value="50,20" />
     </Style>
-    
+
 </StyleSheet>

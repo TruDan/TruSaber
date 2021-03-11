@@ -39,7 +39,7 @@ namespace TruSaber
 
             screen.Tag = this;
             screen.IsSelfManaged = true;
-            screen.Background = (Color.Black * 0.2f);
+            //screen.Background = (Color.Black * 0.2f);
             screen.ClipToBounds = true;
             //screen.UpdateSize(screen.Width, screen.Height);
 

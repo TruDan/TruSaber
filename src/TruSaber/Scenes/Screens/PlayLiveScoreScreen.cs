@@ -15,7 +15,7 @@ namespace TruSaber.Scenes.Screens
         {
             _scoreHelper = scoreHelper;
             RocketXamlLoader.Load(this);
-
+            
             _scoreText = FindControl<TextElement>("ScoreText");
             _comboText = FindControl<TextElement>("ComboText");
             _comboMultiplierText = FindControl<TextElement>("ComboMultiplierText");
