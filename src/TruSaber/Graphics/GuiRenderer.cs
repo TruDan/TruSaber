@@ -226,5 +226,20 @@ namespace TruSaber.Graphics
         {
             return Vector2.Transform(screen, ScaledResolution.InverseTransformMatrix);
         }
+
+        public IStyle[] ResolveStyles(Type elementType, string[] classNames)
+        {
+            return null;
+        }
+
+        public Style ResolveStyle(IGuiElement guiElement)
+        {
+            return new Style();
+        }
+
+        public void ApplyStyle(IGuiElement guiElement, Style style)
+        {
+            
+        }
     }
 }
