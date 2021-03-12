@@ -231,15 +231,5 @@ namespace TruSaber.Graphics
         {
             return null;
         }
-
-        public Style ResolveStyle(IGuiElement guiElement)
-        {
-            return new Style();
-        }
-
-        public void ApplyStyle(IGuiElement guiElement, Style style)
-        {
-            
-        }
     }
 }
