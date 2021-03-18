@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Screen x:Class="TruSaber.Scenes.Screens.MainMenuScreen"
+        xmlns="clr-namespace:RocketUI;assembly=RocketUI"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="800"
+        Height="480">
+    <StackContainer Anchor="MiddleCenter" Orientation="Vertical" ChildAnchor="MiddleCenter">
+        <TextElement Text="SongName" Scale="3" TextAlignment="Center" />
+        <TextElement Text="SongArtist" Scale="2" TextAlignment="Center" />
+        
+        <TextElement Text="Score" Scale="2" TextAlignment="Center" Margin="15,0,0,0" />
+        <TextElement Name="Score" Text="00000" Scale="6" TextAlignment="Center" Margin="0,0,15,0" />
+        
+        <Button Name="BackToMenu" Text="Main Menu" />
+    </StackContainer>
+</Screen>

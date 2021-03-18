@@ -189,7 +189,7 @@
 /processorParam:PremultiplyVertexColors=True
 /processorParam:ResizeTexturesToPowerOfTwo=False
 /processorParam:RotationX=0
-/processorParam:RotationY=-90
+/processorParam:RotationY=90
 /processorParam:RotationZ=180
 /processorParam:Scale=0.0075
 /processorParam:SwapWindingOrder=False
@@ -208,8 +208,8 @@
 /processorParam:PremultiplyVertexColors=True
 /processorParam:ResizeTexturesToPowerOfTwo=False
 /processorParam:RotationX=0
-/processorParam:RotationY=-90
-/processorParam:RotationZ=0
+/processorParam:RotationY=90
+/processorParam:RotationZ=180
 /processorParam:Scale=0.0075
 /processorParam:SwapWindingOrder=False
 /processorParam:TextureFormat=Compressed

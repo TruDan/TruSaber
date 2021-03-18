@@ -86,4 +86,15 @@
       <DependentUpon Condition="Exists('%(Filename).cs')">%(Filename).cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Scenes\Screens\PlayLiveScoreScreen.cs">
+      <DependentUpon>PlayLiveScoreScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Scenes\Screens\MainMenuScreen.cs">
+      <DependentUpon>MainMenuScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Scenes\Screens\EndLevelScreen.cs">
+      <DependentUpon>EndLevelScreen.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

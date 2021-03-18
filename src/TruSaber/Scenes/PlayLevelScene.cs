@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BeatMapInfo;
 using DiscordRPC;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using RocketUI;
 using RocketUI.Utilities.Helpers;
 using SharpVR;
 using TruSaber.Models;
@@ -18,6 +20,8 @@ namespace TruSaber.Scenes
 {
     public class PlayLevelScene : GuiSceneBase
     {
+        public const float CountdownTime     = 5F;
+        public const float TimeToScoreScreen = 5F;
 
         private ILogger<PlayLevelScene> _logger;
         public  BeatLevel               Level          { get; }
@@ -33,7 +37,8 @@ namespace TruSaber.Scenes
 
         private ScoreHelper _scoreHelper;
 
-        private GuiScreenEntity _liveScoreScreenEntity;
+        private GuiScreenEntity _countdownScreenEntity;
+        private TextElement     _countdownText;
 
         public PlayLevelScene(BeatLevel beatlevel, Characteristic characteristic, Difficulty difficulty)
         {
@@ -49,6 +54,19 @@ namespace TruSaber.Scenes
 
             GuiScreen.Screen = new PlayLiveScoreScreen(TruSaberGame.Instance.Game, _scoreHelper);
             GuiScreen.Transform.Position += Vector3.Forward * 4;
+
+            _countdownScreenEntity = new GuiScreenEntity((Game) TruSaberGame.Instance);
+            _countdownScreenEntity.Transform.Position = new Vector3(-(ScreenSize.X /2f), ScreenSize.Y,-3f);
+            _countdownScreenEntity.Transform.Scale = new Vector3((float)ScreenSize.X / GuiManager.ScaledResolution.ScaledWidth, (float)ScreenSize.Y / GuiManager.ScaledResolution.ScaledHeight, 1f);
+
+            _countdownScreenEntity.Screen = new Screen();
+            _countdownScreenEntity.Screen.UpdateSize(500, 500);
+            _countdownText = new TextElement("...")
+            {
+                TextAlignment = TextAlignment.Center,
+                Anchor = Alignment.MiddleCenter,
+                Scale = 10F,
+            };
         }
         
         protected override void OnInitialize()
@@ -63,7 +81,10 @@ namespace TruSaber.Scenes
         }
 
         private BeatMapDifficulty _map;
-
+        private TimeSpan          _mapDuration;
+        private DateTime          _startTime;
+        private Song              _song;
+        
         private float _countdown;
         
         private void InitBeatmap(BeatMapDifficulty map)
@@ -77,10 +98,17 @@ namespace TruSaber.Scenes
                 SpawnNote(noteEntity);
                 //_noteEntities.Enqueue(noteEntity);
             }
+
+            _song = Song.FromUri(Level.MapInfo.SongName, new Uri(Level.SongPath));
+
+            var mapDuration  = TimeSpan.FromMinutes(map.Notes.Max(n => n.Time) / bpm);
+            var songDuration = _song.Duration;
+            _mapDuration = mapDuration > songDuration ? mapDuration : songDuration;
             
             InitPhysics();
 
-            _countdown = 5f;
+            _countdown = CountdownTime;
+            Components.Add(_countdownScreenEntity);
             _scoreHelper.Reset();
             _isReady = true;
         }
@@ -101,38 +129,6 @@ namespace TruSaber.Scenes
             // _bbEffect.
         }
 
-        /*private void EventsOnContactCreated(EntityCollidable sender, Collidable other, CollidablePairHandler pair)
-        {
-            HandEntity hand;
-            NoteEntity note;
-            if (!(other is EntityCollidable otherEntity))
-                return;
-
-            if (sender.Entity.Tag is NoteEntity noteA && otherEntity.Entity.Tag is HandEntity handB)
-            {
-                note = noteA;
-                hand = handB;
-            }
-            else if (otherEntity.Entity.Tag is NoteEntity noteB && sender.Entity.Tag is HandEntity handA)
-            {
-                note = noteB;
-                hand = handA;
-            }
-            else
-            {
-                return;
-            }
-
-            if (
-                (note.Type == NoteType.LeftNote && hand.Hand == Hand.Left)
-                || (note.Type == NoteType.RightNote && hand.Hand == Hand.Right)
-                || note.Type == NoteType.Bomb
-            )
-            {
-                DespawnNote(note);
-            }
-        }*/
-
         private bool        _isReady;
         private bool        _started;
         private int         noteIndex;
@@ -140,6 +136,26 @@ namespace TruSaber.Scenes
         private TimeSpan    _speedOffset;
         private BasicEffect _bbEffect;
 
+        private int  _prevSec = 6;
+        private bool _finished;
+
+        private void UpdateCountdownText()
+        {
+            var sec = (int)Math.Ceiling(_countdown);
+            if (_prevSec != sec)
+            {
+                _prevSec = sec;
+                
+                // start over with new number
+                _countdownText.Scale = 2F;
+                _countdownText.Text = $"{sec}";
+            }
+
+            var pct = _countdown - ((int) Math.Floor(_countdown)); // 0.0 - 0.999..
+            
+            _countdownText.Scale = 2F + (8F * (1F - pct));
+        }
+        
         protected override void OnUpdate(GameTime gameTime)
         {
             base.OnUpdate(gameTime);
@@ -149,6 +165,7 @@ namespace TruSaber.Scenes
                 if (_countdown > 0)
                 {
                     _countdown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    UpdateCountdownText();
                     return;
                 }
                 
@@ -156,6 +173,13 @@ namespace TruSaber.Scenes
             }
             
             if(!_started) return;
+
+            var now = DateTime.UtcNow;
+            if ((now - _startTime) >= (_mapDuration + TimeSpan.FromSeconds(5)))
+            {
+                // end game pls
+                Stop();
+            }
 
             var playPosition       = MediaPlayer.PlayPosition + _speedOffset;
 
@@ -198,14 +222,6 @@ namespace TruSaber.Scenes
                        _scoreHelper.RegisterHitBlock(115f);
                         DespawnNote(note);
                     }
-                    else
-                    {
-                        //Console.WriteLine($"Block was hit, but using the wrong hand!");
-                    }
-                }
-                else
-                {
-                   //Console.WriteLine($"Block interscected but its currently too far away to do anything with it");
                 }
             }
         }
@@ -219,10 +235,6 @@ namespace TruSaber.Scenes
             
             _bbEffect.View = view;
             _bbEffect.Projection = proj;
-            
-           // _modelDrawer.Draw(view.ToBEPU(), proj.ToBEPU());
-           // _contactDrawer.Draw(_bbEffect, _space);
-           // _bbDrawer.Draw(_bbEffect, _space);
         }
 
         protected override void OnDraw(GameTime gameTime)
@@ -248,7 +260,6 @@ namespace TruSaber.Scenes
             _activeNoteEntities.Add(note);
         //    _modelDrawer.Add(note.PhysicsEntity);
         }
-
         private void DespawnNote(NoteEntity note)
         {
             if(!note.Spawned) return;
@@ -261,21 +272,35 @@ namespace TruSaber.Scenes
 
         private void Start()
         {
+            if(_started) return;
+        
+            _countdownText.Text = "";
+            Components.Remove(_countdownScreenEntity);
             MediaPlayer.Stop();
-            MediaPlayer.Play(Song.FromUri(Level.MapInfo.SongName, new Uri(Level.SongPath)));
+            MediaPlayer.Play(_song);
             _started = true;
+            _finished = false;
             noteIndex = 0;
             noteTotal = _map.Notes.Length;
             //_activeNoteEntities.Clear();
             _speedOffset = TimeSpan.FromSeconds((1f / (float) _speed)* (60f / Level.MapInfo.BeatsPerMinute));
             _space.Start(TimeSpan.FromSeconds(Level.MapInfo.SongTimeOffset));
+            _startTime = DateTime.UtcNow;
         }
 
         private void Stop()
         {
+            if(!_started) return;
+            if(_finished) return;
+            _finished = true;
             if (MediaPlayer.State == MediaState.Playing)
             {
                 MediaPlayer.Stop();
+            }
+            else
+            {
+                // must have actually played the level, so go to the end-game
+                TruSaberGame.Instance.SceneManager.SetScene(new EndLevelScene(Level, _map, _scoreHelper));
             }
         }
 

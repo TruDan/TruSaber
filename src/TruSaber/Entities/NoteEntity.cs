@@ -2,6 +2,7 @@
 using BeatMapInfo;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RocketUI.Utilities.Helpers;
 using TruSaber.Abstractions;
 using TruSaber.Graphics;
 using TruSaber.Utilities.Extensions;
@@ -234,7 +235,8 @@ namespace TruSaber
             var cam = (Game as IGame).Camera;
             ArrowModel?.DrawModelWithExclusions(World, cam.View, cam.Projection, arrowToHideName);
             
-            BoundingBox.Draw(GraphicsDevice, Color);
+            if(false)
+                BoundingBox.Draw(GraphicsDevice, Color);
         }
     }
 }
