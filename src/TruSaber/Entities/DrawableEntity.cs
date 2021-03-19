@@ -96,7 +96,7 @@ namespace TruSaber
             if (model != null)
             {
                 using (GraphicsContext.CreateContext(GraphicsDevice, BlendState.AlphaBlend, DepthStencilState.Default,
-                    RasterizerState.CullNone))
+                    RasterizerState.CullCounterClockwise))
                 {
                     var camera = ((IGame) Game).Camera;
                     model.Draw(Transform.World, camera.View, camera.Projection);

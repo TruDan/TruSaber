@@ -99,6 +99,8 @@ namespace TruSaber
             Components.Add(GuiManager);
             GuiManager.DrawOrder = 10;
             GuiManager.Init();
+
+            Options = ServiceProvider.GetRequiredService<IOptions<GameOptions>>().Value;
             
             
             GuiDebugHelper = new GuiDebugHelper(this, GuiManager);
@@ -110,16 +112,22 @@ namespace TruSaber
             _graphics.GraphicsDevice.Viewport = new Viewport(Window.ClientBounds);
         }
 
+        public GameOptions Options { get; set; }
+
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
                 Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            var hmd = ServiceProvider.GetRequiredService<IVrContext>().Hmd;
-            _cam.Position = hmd.LocalPosition;
-            _cam.Rotation = hmd.LocalRotation;
-            
+
+            if (!Options.EmulateVr)
+            {
+                var hmd = ServiceProvider.GetRequiredService<IVrContext>().Hmd;
+                _cam.Position = hmd.LocalPosition;
+                _cam.Rotation = hmd.LocalRotation;
+            }
+
             base.Update(gameTime);
         }
         

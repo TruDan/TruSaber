@@ -2,6 +2,7 @@
 using BeatMapInfo;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RocketUI;
 using RocketUI.Utilities.Helpers;
 using TruSaber.Abstractions;
 using TruSaber.Graphics;
@@ -50,7 +51,7 @@ namespace TruSaber
             LineLayer = note.LineLayer;
             //  DueTime = TimeSpan.FromSeconds((_offset + note.Time) * (60f / _bpm));
 
-            Color = Type == NoteType.Bomb ? Color.DarkGray : (Type == NoteType.LeftNote ? Color.Red : Color.Blue);
+            Color = note.Type == NoteType.Bomb ? Color.DarkGray : (note.Type == NoteType.LeftNote ? Color.Red : Color.Blue);
 
 //            PhysicsEntity = new TransformableEntity(Position.ToBEPU(), new BoxShape(1f, 1f, 1f), Matrix3x3.CreateFromMatrix(World.ToBEPU()));
 
@@ -144,60 +145,9 @@ namespace TruSaber
                 Model = Game.Content.Load<Model>("Models/Bomb");
             }
 
-            foreach (var mesh in Model.Meshes)
-            {
-                foreach (var effect in mesh.Effects)
-                {
-                    if (effect is BasicEffect basicEffect)
-                    {
-//                        basicEffect.TextureEnabled = true;
-//                        basicEffect.EnableDefaultLighting();
-//                        basicEffect.AmbientLightColor = Color.White.ToVector3() * 0.2f;
-                        //
-                        // basicEffect.DirectionalLight0.Direction = new Vector3(-1f, 1f, -1f);
-                        // basicEffect.DirectionalLight0.DiffuseColor = Color.White.ToVector3() * 0.8f;
-                        // basicEffect.DirectionalLight0.SpecularColor = Color.Red.ToVector3();
-                        // basicEffect.DirectionalLight0.Enabled = true;
-                        //
-                        // basicEffect.DirectionalLight1.Direction = new Vector3(1f, 1f, -1f);
-                        // basicEffect.DirectionalLight1.DiffuseColor = Color.White.ToVector3() * 0.8f;
-                        // basicEffect.DirectionalLight1.SpecularColor = Color.Blue.ToVector3();
-                        // basicEffect.DirectionalLight1.Enabled = true;
-
-                        /*    basicEffect.DirectionalLight1.Direction = new Vector3(0f, 0f, 1f);
-                            basicEffect.DirectionalLight1.DiffuseColor = Color.Red.ToVector3();
-                            basicEffect.DirectionalLight1.SpecularColor = Color.Blue.ToVector3();
-                            basicEffect.DirectionalLight1.Enabled = true;*/
-
-                        //basicEffect.SpecularColor = Color.ToVector3();
-                        //basicEffect.SpecularPower = 0.1f;
-                        //basicEffect.DiffuseColor = Color.ToVector3();
-//                        basicEffect.Alpha = 1.0f;
-                        // basicEffect.VertexColorEnabled = true;
-                        //basicEffect.DiffuseColor = Color.ToVector3();
-                    }
-                }
-            }
-        }
-
-        public override void Draw(GameTime gameTime)
-        {
-            foreach (var mesh in Model.Meshes)
-            foreach (var effect in mesh.Effects)
-            {
-                if (effect is BasicEffect basicEffect)
-                {
-                    basicEffect.DiffuseColor = Color.ToVector3();
-                    basicEffect.Alpha = 1.0f;
-                    basicEffect.LightingEnabled = true;
-                    basicEffect.EnableDefaultLighting();
-                }
-            }
-            
-            var arrowToHideName = CutDirection == CutDirection.Any ? "Arrow" : "Dot";
-
             if (ArrowModel != null)
             {
+                var arrowToHideName = CutDirection == CutDirection.Any ? "Arrow" : "Dot";
                 foreach (var mesh in ArrowModel.Meshes)
                 foreach (var effect in mesh.Effects)
                 {
@@ -218,6 +168,22 @@ namespace TruSaber
                 }
             }
 
+
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            foreach (var mesh in Model.Meshes)
+            {
+                foreach (var effect in mesh.Effects)
+                {
+                    if (effect is BasicEffect basicEffect)
+                    {
+                        basicEffect.EnableDefaultLighting();
+                        basicEffect.DiffuseColor = Color.ToVector3();
+                    }
+                }
+            }
             base.Draw(gameTime);
             //
             // foreach (var mesh in Model.Meshes)
@@ -231,10 +197,14 @@ namespace TruSaber
             //         }
             //     }
             // }
+            using (GraphicsContext.CreateContext(
+                GraphicsDevice, BlendState.AlphaBlend, DepthStencilState.Default, RasterizerState.CullCounterClockwise))
+            {
+                var cam = ((IGame) Game).Camera;
+                //   var cam = (Game as IGame).Camera;
+                ArrowModel?.DrawModelWithExclusions(World, cam.View, cam.Projection, CutDirection == CutDirection.Any ? "Arrow" : "Dot");
+            }
 
-            var cam = (Game as IGame).Camera;
-            ArrowModel?.DrawModelWithExclusions(World, cam.View, cam.Projection, arrowToHideName);
-            
             if(false)
                 BoundingBox.Draw(GraphicsDevice, Color);
         }
