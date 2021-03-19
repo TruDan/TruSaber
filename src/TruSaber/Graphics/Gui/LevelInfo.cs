@@ -35,6 +35,7 @@ namespace TruSaber.Graphics.Gui
             _difficultySelect = new ButtonGroup()
             {
                 Margin = new Thickness(10),
+                Orientation = Orientation.Horizontal,
                 Anchor = Alignment.Fill,
                 ChildAnchor = Alignment.Fill
             };
@@ -44,6 +45,7 @@ namespace TruSaber.Graphics.Gui
             _difficultySelect = new ButtonGroup()
             {
                 Margin = new Thickness(10),
+                Orientation = Orientation.Horizontal,
                 Anchor = Alignment.Fill,
                 ChildAnchor = Alignment.Fill
             };

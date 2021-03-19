@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using RocketUI;
+using RocketUI.Audio;
+using RocketUI.Audio.Builtin;
 using TruSaber.Graphics.Gui;
 
 namespace TruSaber.Graphics
@@ -65,11 +68,11 @@ namespace TruSaber.Graphics
         }
 
 
-        public SoundEffectInstance GetSoundEffect(GuiSoundEffects soundEffects)
+        public ISoundEffect GetSoundEffect(GuiSoundEffects soundEffects)
         {
             if (_soundEffectCache.TryGetValue(soundEffects, out var soundEffect))
             {
-                return soundEffect.CreateInstance();
+                return new MonogameSoundEffect(soundEffect);
             }
 
             return null;
@@ -229,6 +232,34 @@ namespace TruSaber.Graphics
 
         public IStyle[] ResolveStyles(Type elementType, string[] classNames)
         {
+
+            if (elementType == typeof(Button))
+            {
+                return new[]
+                {
+                    new Style()
+                    {
+                        Setters = new ObservableCollection<Setter>()
+                        {
+                            new Setter(nameof(Button.Background), GuiTextures.ButtonDefault)
+                        }
+                    }
+                };
+            }
+            
+            if (elementType == typeof(SelectionListItem))
+            {
+                return new[]
+                {
+                    new Style()
+                    {
+                        Setters = new ObservableCollection<Setter>()
+                        {
+                            new Setter(nameof(Button.Background), GuiTextures.ButtonDefault)
+                        }
+                    }
+                };
+            }
             return null;
         }
     }

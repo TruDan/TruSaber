@@ -24,9 +24,9 @@ namespace TruSaber.Scenes.Screens
             _levelManager = TruSaberGame.Instance.ServiceProvider.GetRequiredService<LevelManager>();
 
 
-            _playButton = FindControl<Button>("playButton"); 
+            _playButton = FindControl<Button>("playButton");
             _levelInfo = FindControl<LevelInfo>("levelInfo");
-            
+
             _selectionList = FindControl<SelectionList>("selectionList");
             _selectionList.SelectedItemChanged += SelectionListOnSelectedItemChanged;
 
@@ -43,7 +43,7 @@ namespace TruSaber.Scenes.Screens
                     if (MediaPlayer.PlayPosition >=
                         (_previewNowPlaying.PreviewStartTime + _previewNowPlaying.PreviewDuration))
                     {
-                        MediaPlayer.Volume -= (float)(0.5f * gameTime.ElapsedGameTime.TotalSeconds);
+                        MediaPlayer.Volume -= (float) (0.5f * gameTime.ElapsedGameTime.TotalSeconds);
                         if (MediaPlayer.Volume == 0)
                         {
                             MediaPlayer.Stop();
@@ -87,37 +87,39 @@ namespace TruSaber.Scenes.Screens
                 beatLevel.PreviewStartTime);
             _previewNowPlaying = beatLevel;
         }
-        
+
         class LevelSelectSelectionListItem : SelectionListItem
         {
             public BeatLevel Level { get; }
 
-            private MultiStackContainer _stack;
-            private Image               _cover;
-            private TextElement         _title;
-            private TextElement         _author;
+            private StackContainer _stack;
+            private Image          _cover;
+            private TextElement    _title;
+            private TextElement    _author;
 
             internal LevelSelectSelectionListItem(BeatLevel level)
             {
                 Level = level;
-                Background = GuiTextures.PanelGlass;
+                Background.TextureResource = GuiTextures.PanelGlass;
                 Background.RepeatMode = TextureRepeatMode.NoScaleCenterSlice;
 
                 SetFixedSize(350, 50);
 
+                AddChild(_cover = new Image(level.CoverImagePath, TextureRepeatMode.ScaleToFit)
+                    {Width = 50, Height = 50, ResizeToImageSize = false, Anchor = Alignment.MiddleLeft});
 
-                
-                AddChild(_stack = new MultiStackContainer()
+                AddChild(_stack = new StackContainer()
                 {
                     Anchor = Alignment.FillLeft,
-                    Orientation = Orientation.Horizontal,
+                    Orientation = Orientation.Vertical,
                     ChildAnchor = Alignment.TopLeft,
                     Height = 50,
-                    Width = 350
-                });     
+                    Width = 300
+                });
+
                 
-                _stack.AddRow(_cover = new Image(level.CoverImagePath, TextureRepeatMode.ScaleToFit){ Width = 50, Height = 50, ResizeToImageSize = false, Anchor = Alignment.MiddleLeft });
-                _stack.AddRow(_title = new TextElement(level.MapInfo.SongName),_author = new TextElement(level.MapInfo.SongAuthorName));
+                _stack.AddChild(_title = new TextElement(level.MapInfo.SongName));
+                _stack.AddChild(_author = new TextElement(level.MapInfo.SongAuthorName));
             }
         }
     }

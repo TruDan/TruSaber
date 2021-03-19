@@ -1,0 +1,44 @@
+﻿{
+  "_version": "2.0.0",
+  "_songName": "Hey Brother",
+  "_songSubName": "",
+  "_songAuthorName": "(Beatmap by Chandoggie)",
+  "_levelAuthorName": "Avicii",
+  "_beatsPerMinute": 125,
+  "_songTimeOffset": 0,
+  "_shuffle": 0,
+  "_shufflePeriod": 0.5,
+  "_previewStartTime": 34,
+  "_previewDuration": 30,
+  "_songFilename": "Avicii - Hey Brother.egg",
+  "_coverImageFilename": "HeyBrother.jpg",
+  "_environmentName": "TriangleEnvironment",
+  "_customData": {
+    "_contributors": [],
+    "_customEnvironment": "",
+    "_customEnvironmentHash": ""
+  },
+  "_difficultyBeatmapSets": [
+    {
+      "_beatmapCharacteristicName": "Standard",
+      "_difficultyBeatmaps": [
+        {
+          "_difficulty": "Hard",
+          "_difficultyRank": 5,
+          "_beatmapFilename": "Hard.dat",
+          "_noteJumpMovementSpeed": 10,
+          "_noteJumpStartBeatOffset": 0,
+          "_customData": {
+            "_difficultyLabel": "",
+            "_editorOffset": 0,
+            "_editorOldOffset": 0,
+            "_warnings": [],
+            "_information": [],
+            "_suggestions": [],
+            "_requirements": []
+          }
+        }
+      ]
+    }
+  ]
+}

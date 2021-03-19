@@ -14,7 +14,7 @@ namespace TruSaber
         protected override void LoadContent()
         {
             base.LoadContent();
-            Model = Game.Content.Load<Model>("Models/Platform");
+            Model = Game.Content.Load<Model>("Models/PlatformV2/PlatformV2");
             Position = Vector3.Zero;
             Rotation = Quaternion.CreateFromAxisAngle(Vector3.Up, 180f.ToRadians());
         }

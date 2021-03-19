@@ -32,7 +32,6 @@ namespace TruSaber
 
         public SceneManager   SceneManager   { get; private set; }
         public InputManager   InputManager   { get; private set; }
-        public GuiDebugHelper GuiDebugHelper { get; private set; }
         
         public Player Player { get; private set; }
         
@@ -101,11 +100,7 @@ namespace TruSaber
             GuiManager.Init();
 
             Options = ServiceProvider.GetRequiredService<IOptions<GameOptions>>().Value;
-            
-            
-            GuiDebugHelper = new GuiDebugHelper(this, GuiManager);
-            //GuiDebugHelper.Enabled = true;
-            
+
             SceneManager.SetScene<MainMenuScene>();
 //            SceneManager.SetScene<PlayLevelScene>();
 

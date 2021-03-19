@@ -5,12 +5,44 @@ namespace TruSaber.Graphics.Gui
 {
     public class GuiStatusDot : RocketElement
     {
-        private bool? _status;
+        private bool?        _status;
+        private GuiTexture2D _defaultStatusBackground;
+        private GuiTexture2D _activeStatusBackground;
+        private GuiTexture2D _inactiveStatusBackground;
 
-        public GuiTexture2D DefaultStatusBackground;
-        public GuiTexture2D InactiveStatusBackground;
-        public GuiTexture2D ActiveStatusBackground;
-        
+        public GuiTexture2D DefaultStatusBackground
+        {
+            get
+            {
+                if (_defaultStatusBackground == null)
+                    _defaultStatusBackground = new GuiTexture2D();
+                return _defaultStatusBackground;
+            }
+            set => _defaultStatusBackground = value;
+        }
+
+        public GuiTexture2D InactiveStatusBackground
+        {
+            get
+            {
+                if (_inactiveStatusBackground == null)
+                    _inactiveStatusBackground = new GuiTexture2D();
+                return _inactiveStatusBackground;
+            }
+            set => _inactiveStatusBackground = value;
+        }
+
+        public GuiTexture2D ActiveStatusBackground
+        {
+            get
+            {
+                if (_activeStatusBackground == null)
+                    _activeStatusBackground = new GuiTexture2D();
+                return _activeStatusBackground;
+            }
+            set => _activeStatusBackground = value;
+        }
+
         public bool? Status
         {
             get => _status;

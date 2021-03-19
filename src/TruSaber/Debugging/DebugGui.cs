@@ -30,7 +30,11 @@ namespace TruSaber.Debugging
                 TextColor = Color.White
             });
             
-            _topleft.AddChild(new AutoUpdatingTextElement(() => $"ActiveHand: {TruSaberGame.Instance.GuiManager.FocusManager.CursorPosition.ToString()}")
+            _topleft.AddChild(new AutoUpdatingTextElement(() =>
+            {
+                var p = TruSaberGame.Instance.GuiManager.FocusManager.CursorPosition;
+                return $"ActiveHand: {p.X:F2}, {p.Y:F2}";
+            })
             {
                 TextColor = Color.White
             });
