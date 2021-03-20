@@ -4,7 +4,7 @@ namespace BeatMapInfo
 {
     public partial class BeatmapSet
     {
-        [JsonProperty("_beatmapCharacteristicName")] public Characteristic BeatmapCharacteristicName { get; set; }
-        [JsonProperty("_difficultyBeatmaps")]        public Beatmap[] DifficultyBeatmaps { get; set; }    
+        public Characteristic BeatmapCharacteristicName { get; set; }
+        public Beatmap[]      DifficultyBeatmaps        { get; set; }
     }
 }

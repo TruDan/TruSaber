@@ -178,7 +178,7 @@ namespace TruSaber
             var ctrl = Hand == Hand.Left ? VrContext.LeftController : VrContext.RightController;
             if (ctrl != null)
             {
-                ctrl.Vibrate();
+                (ctrl as VRController)?.Vibrate();
             }
         }
     }

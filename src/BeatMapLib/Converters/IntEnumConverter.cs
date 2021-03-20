@@ -73,18 +73,4 @@ namespace BeatMapInfo
             return t.GetTypeInfo().IsEnum;
         }
     }
-
-    public static class ReflectionUtils
-    {
-
-        public static bool IsGenericType(this Type type)
-        {
-            return type.GetTypeInfo().IsGenericType;
-        }
-        
-        public static bool IsNullableType(Type t)
-        {
-            return (t.IsGenericType() && t.GetGenericTypeDefinition() == typeof(Nullable<>));
-        }
-    }
 }
