@@ -6,7 +6,9 @@ namespace TruSaber
 {
     public class Entity : GameComponent, ITransformable
     {
-        public BoundingBox BoundingBox { get; protected set; }
+        public BoundingBox BoundingBox       { get; protected set; }
+        public Vector3     BoundingBoxSize   { get; protected set; } = Vector3.One;
+        public Vector3     BoundingBoxOrigin { get; protected set; } = Vector3.One / 2f;
         
         private Vector3    _velocity = Vector3.Zero;
         public virtual Vector3 Velocity
@@ -43,22 +45,26 @@ namespace TruSaber
         {
             get => Transform.World;
         }
-        
-        
+
+        public bool Initialized => _initialized;
+
+
         public Entity(IGame game) : base(game.Game)
         {
             Position = Vector3.Zero;
             // Scale = Vector3.One / 2f;
-            _dirty = true;
-            Transform.PositionChanged += (sender, args) => OnPositionChanged();
+            Transform.Changed += (sender, args) => OnPositionChanged();
         }
 
         protected virtual void OnPositionChanged()
         {
-            _dirty = true;
+            var min = Vector3.Transform(BoundingBoxOrigin, World);
+            var max = Vector3.Transform(BoundingBoxOrigin + BoundingBoxSize, World);
+            BoundingBox = new BoundingBox(min, max);
         }
 
-        private bool _dirty;
+        protected bool _initialized;
+
         public override void Update(GameTime gameTime)
         {
             if(!Enabled) return;

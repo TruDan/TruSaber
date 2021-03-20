@@ -10,3 +10,6 @@
 [submodule "lib/RocketUI"]
 	path = lib/RocketUI
 	url = git@github.com:TruDan/RocketUI.git
+[submodule "lib/SharpVR"]
+	path = lib/SharpVR
+	url = git@github.com:TruDan/SharpVR.git

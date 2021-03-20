@@ -53,11 +53,11 @@ namespace TruSaber.Scenes
             _scoreHelper = new ScoreHelper();
 
             GuiScreen.Screen = new PlayLiveScoreScreen(TruSaberGame.Instance.Game, _scoreHelper);
-            GuiScreen.Transform.Position += Vector3.Forward * 4;
+            GuiScreen.Transform.RelativePosition += Vector3.Forward * 4;
 
             _countdownScreenEntity = new GuiScreenEntity((Game) TruSaberGame.Instance);
-            _countdownScreenEntity.Transform.Position = new Vector3(-(ScreenSize.X /2f), ScreenSize.Y,-3f);
-            _countdownScreenEntity.Transform.Scale = new Vector3((float)ScreenSize.X / GuiManager.ScaledResolution.ScaledWidth, (float)ScreenSize.Y / GuiManager.ScaledResolution.ScaledHeight, 1f);
+            _countdownScreenEntity.Transform.RelativePosition = new Vector3(-(ScreenSize.X /2f), ScreenSize.Y,-3f);
+            _countdownScreenEntity.Transform.RelativeScale = new Vector3((float)ScreenSize.X / GuiManager.ScaledResolution.ScaledWidth, (float)ScreenSize.Y / GuiManager.ScaledResolution.ScaledHeight, 1f);
 
             _countdownScreenEntity.Screen = new Screen();
             _countdownScreenEntity.Screen.UpdateSize(500, 500);
@@ -205,7 +205,7 @@ namespace TruSaber.Scenes
             var intersection = hand.Ray.Intersects(note.BoundingBox);
             if (intersection.HasValue)
             {
-                if (intersection < 2f) // saber length of 80cm.
+                if (intersection < 0.8f) // saber length of 80cm.
                 {
                     var intersectionPoint = (hand.Ray.Position + (intersection.Value * hand.Ray.Direction));
                     if (note.Type == NoteType.LeftNote && hand.Hand == Hand.Left)
@@ -214,6 +214,7 @@ namespace TruSaber.Scenes
                         //Console.WriteLine($"Left Hand hit a Left Block!!! +50 points to griffindor!");
                         _scoreHelper.RegisterHitBlock(115f);
                         DespawnNote(note);
+                        return;
                     }
                     else if (note.Type == NoteType.RightNote && hand.Hand == Hand.Right)
                     {
@@ -221,8 +222,31 @@ namespace TruSaber.Scenes
                        // Console.WriteLine($"Right Hand hit a Right Block!!! +50 points to griffindor!");
                        _scoreHelper.RegisterHitBlock(115f);
                         DespawnNote(note);
+                        return;
+                    }
+                    else
+                    {
+                        _scoreHelper.RegisterMissedBlock();
+                        return;
                     }
                 }
+            }
+        }
+
+        private void CheckHandCollision(HandEntity hand, WallEntity wall)
+        {
+            if (wall.BoundingBox.Contains(hand.Position) == ContainmentType.Contains)
+            {
+                // Vibrate!!
+                hand.Vibrate();
+            }
+        }
+        
+        private void CheckHmdCollision(Vector3 hmdPosition, WallEntity wall)
+        {
+            if (wall.BoundingBox.Contains(hmdPosition) == ContainmentType.Contains)
+            {
+                
             }
         }
 

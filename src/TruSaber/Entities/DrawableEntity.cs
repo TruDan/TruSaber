@@ -8,12 +8,9 @@ namespace TruSaber
 {
     public class DrawableEntity : Entity, IDrawable
     {
-        private bool _initialized;
         private bool _disposed;
         private int  _drawOrder;
         private bool _visible = true;
-
-        public bool Initialized => _initialized;
 
         /// <summary>
         /// Get the <see cref="P:Microsoft.Xna.Framework.DrawableGameComponent.GraphicsDevice" /> that this <see cref="T:Microsoft.Xna.Framework.DrawableGameComponent" /> uses for drawing.

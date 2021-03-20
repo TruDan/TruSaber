@@ -7,9 +7,9 @@ namespace BeatMapInfo
     {
         [JsonProperty("_customData", NullValueHandling = NullValueHandling.Ignore)] public Dictionary<string, object> CustomData { get; set; } // Obstacle custom data
         [JsonProperty("_duration")]                                 public double Duration { get; set; }                       // Duration in beats
-        [JsonProperty("_lineIndex")]                                public long LineIndex { get; set; }                        // Obstacle horizontal position, starting at far left
+        [JsonProperty("_lineIndex")]                                public byte LineIndex { get; set; }                        // Obstacle horizontal position, starting at far left
         [JsonProperty("_time")]                                     public double Time { get; set; }                           // Time offset in beats
-        [JsonProperty("_type")]                                     public long Type { get; set; }                             // Type of this obstacle
-        [JsonProperty("_width")]                                    public long Width { get; set; }                            // Width of this obstacle
+        [JsonProperty("_type")]                                     public byte Type { get; set; }                             // Type of this obstacle
+        [JsonProperty("_width")]                                    public byte Width { get; set; }                            // Width of this obstacle
     }
 }

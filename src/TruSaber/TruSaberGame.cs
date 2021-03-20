@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -10,6 +11,7 @@ using RocketUI.Input;
 using RocketUI.Utilities.Helpers;
 using SharpVR;
 using TruSaber.Abstractions;
+using TruSaber.Configuration;
 using TruSaber.Debugging;
 using TruSaber.Graphics;
 using TruSaber.Scenes;

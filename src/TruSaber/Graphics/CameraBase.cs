@@ -23,18 +23,18 @@ namespace TruSaber.Graphics
 
         public Vector3 Scale
         {
-            get => Transform.Scale;
-            set => Transform.Scale = value;
+            get => Transform.RelativeScale;
+            set => Transform.RelativeScale = value;
         }
         public Vector3 Position
         {
-            get => Transform.Position;
-            set => Transform.Position = value;
+            get => Transform.RelativePosition;
+            set => Transform.RelativePosition = value;
         }
         public Quaternion Rotation
         {
-            get => Transform.Rotation;
-            set => Transform.Rotation = value;
+            get => Transform.RelativeRotation;
+            set => Transform.RelativeRotation = value;
         }
         public Matrix World
         {
@@ -87,7 +87,7 @@ namespace TruSaber.Graphics
             _game.GraphicsDeviceManager.DeviceCreated += (sender, args) => UpdateProjection();
             _game.GraphicsDeviceManager.DeviceReset += (sender,   args) => UpdateProjection();
             _game.Window.ClientSizeChanged += (sender,            args) => UpdateProjection();
-            Transform.PositionChanged += (sender,                 args) => UpdateView();
+            Transform.Changed += (sender,                 args) => UpdateView();
         }
         
         private void UpdateView()

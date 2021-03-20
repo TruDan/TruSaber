@@ -45,9 +45,9 @@ namespace TruSaber.Scenes
             
             GuiScreen = new GuiScreenEntity(TruSaberGame.Instance.Game);
             
-            GuiScreen.Transform.Position = new Vector3(-(ScreenSize.X /2f), ScreenSize.Y,-3f);
-            GuiScreen.Transform.Scale = new Vector3(ScreenSize.X / GuiManager.ScaledResolution.ScaledWidth, ScreenSize.Y / GuiManager.ScaledResolution.ScaledHeight, 1f);
-            GuiScreen.Transform.Rotation = Quaternion.CreateFromYawPitchRoll(0f, 180f.ToRadians(), 0f);
+            GuiScreen.Transform.RelativePosition = new Vector3(-(ScreenSize.X /2f), ScreenSize.Y,-3f);
+            GuiScreen.Transform.RelativeScale = new Vector3(ScreenSize.X / GuiManager.ScaledResolution.ScaledWidth, ScreenSize.Y / GuiManager.ScaledResolution.ScaledHeight, 1f);
+            GuiScreen.Transform.RelativeRotation = Quaternion.CreateFromYawPitchRoll(0f, 180f.ToRadians(), 0f);
 
         }
 
@@ -72,8 +72,8 @@ namespace TruSaber.Scenes
 
         private void OnScreenSizeChanged()
         {
-            GuiScreen.Transform.Position = new Vector3(-(ScreenSize.X /2f), ScreenSize.Y,-3f);
-            GuiScreen.Transform.Scale = new Vector3((float)ScreenSize.X / GuiManager.ScaledResolution.ScaledWidth, (float)ScreenSize.Y / GuiManager.ScaledResolution.ScaledHeight, 1f);
+            GuiScreen.Transform.RelativePosition = new Vector3(-(ScreenSize.X /2f), ScreenSize.Y,-3f);
+            GuiScreen.Transform.RelativeScale = new Vector3((float)ScreenSize.X / GuiManager.ScaledResolution.ScaledWidth, (float)ScreenSize.Y / GuiManager.ScaledResolution.ScaledHeight, 1f);
         }
 
     }

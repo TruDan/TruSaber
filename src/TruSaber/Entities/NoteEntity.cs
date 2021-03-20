@@ -58,6 +58,9 @@ namespace TruSaber
             _initialPosition = new Vector3(LineIndex - 1.5f, LineLayer + 0.5f,
                 (-_speed * (((float) _note.Time)) * (60f / _bpm)));
 
+            BoundingBoxSize = Vector3.One;
+            BoundingBoxOrigin = -Vector3.One / 2f;
+            
             base.Position = _initialPosition;
             base.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, CutDirection.ToAngle());
 
@@ -100,30 +103,11 @@ namespace TruSaber
             space.Remove(this);
         }
 
-        /// <summary>
-        /// Cylinder shape used to compute the expanded bounding box of the character.
-        /// </summary>
-        void ExpandBoundingBox()
-        {
-        }
-
         protected override void OnPositionChanged()
         {
             base.OnPositionChanged();
 
             Visible = MathF.Abs(Position.Z) < 30f;
-
-            var half3 = (Vector3.One * 1.0f) * 0.5f;
-            BoundingBox = new BoundingBox(Position - half3, Position + half3);
-            // if (Position)
-        }
-
-        /// <inheritdoc />
-        public override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-
-            //PhysicsEntity.CollisionInformation.UpdateBoundingBox((float) gameTime.ElapsedGameTime.TotalSeconds);
         }
 
         private void LoadBlockModel()
