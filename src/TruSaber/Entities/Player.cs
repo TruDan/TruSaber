@@ -18,8 +18,9 @@ namespace TruSaber
 
         public float Height { get; set; } = 1.8f;
 
-        public HandEntity LeftHand { get; }
+        public HandEntity LeftHand  { get; }
         public HandEntity RightHand { get; }
+        public HeadEntity Head      { get; }
 
         private PlayerInputManager _playerInputManager;
 
@@ -27,6 +28,7 @@ namespace TruSaber
         {
             LeftHand = new HandEntity(game, this, Hand.Left);
             RightHand = new HandEntity(game, this, Hand.Right);
+            Head = new HeadEntity(game, this);
 
             _playerInputManager = game.InputManager.GetOrAddPlayerManager(PlayerIndex.One);
         }
@@ -38,6 +40,7 @@ namespace TruSaber
             
             LeftHand.Initialize();
             RightHand.Initialize();
+            Head.Initialize();
             
             base.Initialize();
             //ResizeToHeight();
@@ -47,39 +50,8 @@ namespace TruSaber
         {
             LeftHand.Update(gameTime);
             RightHand.Update(gameTime);
-            // if (_vrService.Enabled)
-            // {
-            //     //ResizeToHeight();
-            //     //var pos = _vrService.Context.Hmd.GetPose().Translation;
-            //     //Position = new Vector3(pos.X, 0, pos.Z);
-            //     _vrService.Context.Hmd.GetRelativePosition(ref _headPosition);
-            //     _vrService.Context.Hmd.GetRelativeRotation(ref _headRotation);
-            //     Position = new Vector3(_headPosition.X, 0, _headPosition.Z);
-            //     
-            //     if (_head != null)
-            //     {
-            //         _head.SetCompleteTransform(
-            //           Matrix.CreateFromQuaternion(_headRotation)
-            //                                    * Matrix.CreateTranslation(_headPosition));
-            //     }
-            //
-            //     if (_leftHand != null && _vrService.Context.LeftController != null)
-            //     {
-            //         _vrService.Context.LeftController.GetRelativePosition(ref _leftHandPosition);
-            //         _vrService.Context.LeftController.GetRelativeRotation(ref _leftHandRotation);
-            //         _leftHand.SetCompleteTransform(Matrix.CreateFromQuaternion(_leftHandRotation)
-            //                                        * Matrix.CreateTranslation(_leftHandPosition));
-            //     }
-            //
-            //     if (_rightHand != null && _vrService.Context.RightController != null)
-            //     {
-            //         _vrService.Context.RightController.GetRelativePosition(ref _rightHandPosition);
-            //         _vrService.Context.RightController.GetRelativeRotation(ref _rightHandRotation);
-            //         _rightHand.SetCompleteTransform(Matrix.CreateFromQuaternion(_rightHandRotation)
-            //                                        * Matrix.CreateTranslation(_rightHandPosition));
-            //     }
-            // }
-
+            Head.Update(gameTime);
+            
             base.Update(gameTime);
         }
 
@@ -128,9 +100,6 @@ namespace TruSaber
         /// </summary>
         private ModelExtra modelExtra = null;
 
-        private Vector3 _leftHandPosition, _rightHandPosition, _headPosition;
-        private Quaternion _leftHandRotation, _rightHandRotation, _headRotation;
-
         public override void Draw(GameTime gameTime)
         {
             LeftHand.Draw(gameTime);
@@ -139,9 +108,7 @@ namespace TruSaber
         }
         
         protected override void LoadContent()
-        {
-            
-            
+        {   
             Model = Game.Content.Load<Model>("Models/Characters/Player");
 
             modelExtra = Model.Tag as ModelExtra;

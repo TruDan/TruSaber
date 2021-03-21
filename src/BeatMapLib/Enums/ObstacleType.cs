@@ -1,6 +1,6 @@
 ﻿namespace BeatMapInfo
 {
-    public enum ObstacleType : byte
+    public enum ObstacleType : long
     {
         FullHeightWall = 0,
         CrouchWall     = 1,

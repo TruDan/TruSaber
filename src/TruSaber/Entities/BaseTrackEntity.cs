@@ -13,8 +13,8 @@ namespace TruSaber
         private readonly float           _offset;
         private          bool            _spawned;
 
-        public byte LineIndex { get; }
-        public byte LineLayer { get; }
+        public byte LineIndex { get; protected set; }
+        public byte LineLayer { get; protected set; }
 
         //public TimeSpan DueTime { get; }
 

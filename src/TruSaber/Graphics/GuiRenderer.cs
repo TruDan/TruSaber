@@ -98,10 +98,10 @@ namespace TruSaber.Graphics
             var basePath = "Textures/UI/";
 
             var buttons = _content.Load<Texture2D>(basePath + "Buttons");
-            LoadTextureFromSpriteSheet(GuiTextures.ButtonDefault, buttons, ButtonBackgroundDefault, new Thickness(50));
-            LoadTextureFromSpriteSheet(GuiTextures.ButtonHover, buttons, ButtonBackgroundHover, new Thickness(50));
-            LoadTextureFromSpriteSheet(GuiTextures.ButtonFocused, buttons, ButtonBackgroundFocus, new Thickness(50));
-            LoadTextureFromSpriteSheet(GuiTextures.ButtonDisabled, buttons, ButtonBackgroundDisabled, new Thickness(50));
+            LoadTextureFromSpriteSheet(GuiTextures.ButtonDefault, buttons, ButtonBackgroundDefault, ButtonPadding);
+            LoadTextureFromSpriteSheet(GuiTextures.ButtonHover, buttons, ButtonBackgroundHover, ButtonPadding);
+            LoadTextureFromSpriteSheet(GuiTextures.ButtonFocused, buttons, ButtonBackgroundFocus, ButtonPadding);
+            LoadTextureFromSpriteSheet(GuiTextures.ButtonDisabled, buttons, ButtonBackgroundDisabled, ButtonPadding);
             
             LoadTextureFromSpriteSheet(GuiTextures.PanelGeneric, buttons, PanelSolid, new Thickness(15));
             LoadTextureFromSpriteSheet(GuiTextures.PanelGlass, buttons, PanelGlass, new Thickness(10));
@@ -128,10 +128,11 @@ namespace TruSaber.Graphics
         #region Buttons
 
         // Buttons Region: 0,0 -> 432,416
-        private static readonly Rectangle ButtonBackgroundDefault  = new Rectangle(0, 0, 400, 100);
-        private static readonly Rectangle ButtonBackgroundHover    = new Rectangle(0, 100, 400, 100);
-        private static readonly Rectangle ButtonBackgroundFocus    = new Rectangle(0, 200, 400, 100);
-        private static readonly Rectangle ButtonBackgroundDisabled = new Rectangle(0, 300, 400, 100);
+        private static readonly Thickness ButtonPadding            = new Thickness(10, 15, 15, 4);
+        private static readonly Rectangle ButtonBackgroundDefault  = new Rectangle(0, 0, 160, 40);
+        private static readonly Rectangle ButtonBackgroundHover    = new Rectangle(0, 40, 160, 40);
+        private static readonly Rectangle ButtonBackgroundFocus    = new Rectangle(0, 80, 160, 40);
+        private static readonly Rectangle ButtonBackgroundDisabled = new Rectangle(0, 120, 160, 40);
         
         #endregion
 

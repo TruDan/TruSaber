@@ -29,11 +29,12 @@ namespace TruSaber.Scenes
         public  Difficulty              Difficulty     { get; }
 
         private List<NoteEntity> _activeNoteEntities;
+        private List<WallEntity> _activeObstacles;
 
-        private float   _speed => (float) (_map.BeatMap?.NoteJumpMovementSpeed ?? 0f);
-        private Player  _player;
+        private float  _speed => (float) (_map.BeatMap?.NoteJumpMovementSpeed ?? 0f);
+        private Player _player;
 
-        private Space          _space;
+        private Space _space;
 
         private ScoreHelper _scoreHelper;
 
@@ -45,10 +46,11 @@ namespace TruSaber.Scenes
             Level = beatlevel;
             Characteristic = characteristic;
             Difficulty = difficulty;
-            
+
             _logger = TruSaberGame.Instance.ServiceProvider.GetRequiredService<ILogger<PlayLevelScene>>();
             _player = TruSaberGame.Instance.Player;
             _activeNoteEntities = new List<NoteEntity>();
+            _activeObstacles = new List<WallEntity>();
             _space = new Space(Level);
             _scoreHelper = new ScoreHelper();
 
@@ -56,8 +58,10 @@ namespace TruSaber.Scenes
             GuiScreen.Transform.RelativePosition += Vector3.Forward * 4;
 
             _countdownScreenEntity = new GuiScreenEntity((Game) TruSaberGame.Instance);
-            _countdownScreenEntity.Transform.RelativePosition = new Vector3(-(ScreenSize.X /2f), ScreenSize.Y,-3f);
-            _countdownScreenEntity.Transform.RelativeScale = new Vector3((float)ScreenSize.X / GuiManager.ScaledResolution.ScaledWidth, (float)ScreenSize.Y / GuiManager.ScaledResolution.ScaledHeight, 1f);
+            _countdownScreenEntity.Transform.RelativePosition = new Vector3(-(ScreenSize.X / 2f), ScreenSize.Y, -3f);
+            _countdownScreenEntity.Transform.RelativeScale = new Vector3(
+                (float) ScreenSize.X / GuiManager.ScaledResolution.ScaledWidth,
+                (float) ScreenSize.Y / GuiManager.ScaledResolution.ScaledHeight, 1f);
 
             _countdownScreenEntity.Screen = new Screen();
             _countdownScreenEntity.Screen.UpdateSize(500, 500);
@@ -68,7 +72,7 @@ namespace TruSaber.Scenes
                 Scale = 10F,
             };
         }
-        
+
         protected override void OnInitialize()
 
         {
@@ -84,19 +88,23 @@ namespace TruSaber.Scenes
         private TimeSpan          _mapDuration;
         private DateTime          _startTime;
         private Song              _song;
-        
+
         private float _countdown;
-        
+
         private void InitBeatmap(BeatMapDifficulty map)
         {
             _map = map;
             var bpm = Level.MapInfo.BeatsPerMinute;
             foreach (var note in map.Notes)
             {
-                var noteEntity = new NoteEntity(TruSaberGame.Instance, note, (float) bpm, _speed, 0f);
-                
-                SpawnNote(noteEntity);
-                //_noteEntities.Enqueue(noteEntity);
+                var noteEntity = new NoteEntity(TruSaberGame.Instance, note, (float) bpm, _speed, (float)map.BeatMap.NoteJumpStartBeatOffset);
+                SpawnTrackEntity(noteEntity);
+            }
+
+            foreach (var obstacle in map.Obstacles)
+            {
+                var obstacleEntity = new WallEntity(TruSaberGame.Instance, obstacle, (float) bpm, _speed, (float)map.BeatMap.NoteJumpStartBeatOffset);
+                SpawnTrackEntity(obstacleEntity);
             }
 
             _song = Song.FromUri(Level.MapInfo.SongName, new Uri(Level.SongPath));
@@ -104,7 +112,7 @@ namespace TruSaber.Scenes
             var mapDuration  = TimeSpan.FromMinutes(map.Notes.Max(n => n.Time) / bpm);
             var songDuration = _song.Duration;
             _mapDuration = mapDuration > songDuration ? mapDuration : songDuration;
-            
+
             InitPhysics();
 
             _countdown = CountdownTime;
@@ -115,9 +123,6 @@ namespace TruSaber.Scenes
 
         private void InitPhysics()
         {
-            //CollisionRules.CollisionGroupRules.Add(new CollisionGroupPair(leftNoteGroup, leftNoteGroup), CollisionRule.NoSolver);
-            //CollisionRules.CollisionGroupRules.Add(new CollisionGroupPair(rightNoteGroup, rightNoteGroup), CollisionRule.NoSolver);
-
             _player.LeftHand.AddToSpace(_space);
             _player.RightHand.AddToSpace(_space);
 
@@ -141,38 +146,38 @@ namespace TruSaber.Scenes
 
         private void UpdateCountdownText()
         {
-            var sec = (int)Math.Ceiling(_countdown);
+            var sec = (int) Math.Ceiling(_countdown);
             if (_prevSec != sec)
             {
                 _prevSec = sec;
-                
+
                 // start over with new number
                 _countdownText.Scale = 2F;
                 _countdownText.Text = $"{sec}";
             }
 
             var pct = _countdown - ((int) Math.Floor(_countdown)); // 0.0 - 0.999..
-            
+
             _countdownText.Scale = 2F + (8F * (1F - pct));
         }
-        
+
         protected override void OnUpdate(GameTime gameTime)
         {
             base.OnUpdate(gameTime);
-            
+
             if (!_started && _isReady)
             {
                 if (_countdown > 0)
                 {
-                    _countdown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    _countdown -= (float) gameTime.ElapsedGameTime.TotalSeconds;
                     UpdateCountdownText();
                     return;
                 }
-                
+
                 Start();
             }
-            
-            if(!_started) return;
+
+            if (!_started) return;
 
             var now = DateTime.UtcNow;
             if ((now - _startTime) >= (_mapDuration + TimeSpan.FromSeconds(5)))
@@ -181,7 +186,7 @@ namespace TruSaber.Scenes
                 Stop();
             }
 
-            var playPosition       = MediaPlayer.PlayPosition + _speedOffset;
+            var playPosition = MediaPlayer.PlayPosition + _speedOffset;
 
             _space.Update(gameTime);
 
@@ -190,63 +195,84 @@ namespace TruSaber.Scenes
                 if (note.Position.Z > 0 && note.Spawned)
                 {
                     _scoreHelper.RegisterMissedBlock();
-                    DespawnNote(note);
+                    DespawnTrackEntity(note);
                 }
+
                 if (note.Position.Z > -10)
                 {
                     CheckHandCollision(_player.LeftHand, note);
                     CheckHandCollision(_player.RightHand, note);
                 }
             }
-        }
 
-        private void CheckHandCollision(HandEntity hand, NoteEntity note)
-        {
-            var intersection = hand.Ray.Intersects(note.BoundingBox);
-            if (intersection.HasValue)
+            foreach (var wall in _activeObstacles.ToArray())
             {
-                if (intersection < 0.8f) // saber length of 80cm.
+                if (wall.BoundingBox.Min.Z > 0 && wall.BoundingBox.Max.Z > 0 && wall.Spawned)
                 {
-                    var intersectionPoint = (hand.Ray.Position + (intersection.Value * hand.Ray.Direction));
-                    if (note.Type == NoteType.LeftNote && hand.Hand == Hand.Left)
-                    {
-                        // woohoo!!
-                        //Console.WriteLine($"Left Hand hit a Left Block!!! +50 points to griffindor!");
-                        _scoreHelper.RegisterHitBlock(115f);
-                        DespawnNote(note);
-                        return;
-                    }
-                    else if (note.Type == NoteType.RightNote && hand.Hand == Hand.Right)
-                    {
-                        // woohoo!
-                       // Console.WriteLine($"Right Hand hit a Right Block!!! +50 points to griffindor!");
-                       _scoreHelper.RegisterHitBlock(115f);
-                        DespawnNote(note);
-                        return;
-                    }
-                    else
-                    {
-                        _scoreHelper.RegisterMissedBlock();
-                        return;
-                    }
+                    DespawnTrackEntity(wall);
+                }
+
+                if (wall.Position.Z > -10)
+                {
+                    CheckHandCollision(_player.LeftHand, wall);
+                    CheckHandCollision(_player.RightHand, wall);
+                    CheckHeadCollision(_player.Head, wall);
                 }
             }
         }
 
-        private void CheckHandCollision(HandEntity hand, WallEntity wall)
+        private void CheckHandCollision(HandEntity hand, BaseTrackEntity trackEntity)
         {
-            if (wall.BoundingBox.Contains(hand.Position) == ContainmentType.Contains)
+            if (trackEntity is NoteEntity note)
             {
-                // Vibrate!!
-                hand.Vibrate();
+                var intersection = hand.Ray.Intersects(note.BoundingBox);
+                if (intersection.HasValue)
+                {
+                    if (intersection < 0.8f) // saber length of 80cm.
+                    {
+                        var intersectionPoint = (hand.Ray.Position + (intersection.Value * hand.Ray.Direction));
+                        if (note.Type == NoteType.LeftNote && hand.Hand == Hand.Left)
+                        {
+                            // woohoo!!
+                            //Console.WriteLine($"Left Hand hit a Left Block!!! +50 points to griffindor!");
+                            _scoreHelper.RegisterHitBlock(115f);
+                            DespawnTrackEntity(note);
+                            return;
+                        }
+                        else if (note.Type == NoteType.RightNote && hand.Hand == Hand.Right)
+                        {
+                            // woohoo!
+                            // Console.WriteLine($"Right Hand hit a Right Block!!! +50 points to griffindor!");
+                            _scoreHelper.RegisterHitBlock(115f);
+                            DespawnTrackEntity(note);
+                            return;
+                        }
+                        else
+                        {
+                            _scoreHelper.RegisterMissedBlock();
+                            return;
+                        }
+                    }
+                }
+            }
+            else if (trackEntity is WallEntity wall)
+            {
+                if (wall.BoundingBox.Contains(hand.Position) == ContainmentType.Contains)
+                {
+                    // Vibrate!!
+                    hand.Vibrate();
+                }
             }
         }
-        
-        private void CheckHmdCollision(Vector3 hmdPosition, WallEntity wall)
+
+        private void CheckHeadCollision(HeadEntity head, BaseTrackEntity trackEntity)
         {
-            if (wall.BoundingBox.Contains(hmdPosition) == ContainmentType.Contains)
+            if (trackEntity is WallEntity wall)
             {
-                
+                if (wall.BoundingBox.Contains(head.Position) == ContainmentType.Contains)
+                {
+                    _scoreHelper.RegisterMissedBlock();
+                }
             }
         }
 
@@ -256,7 +282,7 @@ namespace TruSaber.Scenes
             var view   = camera.View;
             var proj   = camera.Projection;
 
-            
+
             _bbEffect.View = view;
             _bbEffect.Projection = proj;
         }
@@ -264,7 +290,7 @@ namespace TruSaber.Scenes
         protected override void OnDraw(GameTime gameTime)
         {
             DrawPhysicsDebug();
-            
+
             base.OnDraw(gameTime);
         }
 
@@ -276,28 +302,33 @@ namespace TruSaber.Scenes
                 Timestamps = Timestamps.Now
             };
 
-        private void SpawnNote(NoteEntity note)
+        private void SpawnTrackEntity(BaseTrackEntity trackEntity)
         {
-            note.Velocity = new Vector3(0f, 0f, _speed);
-            Components.Add(note);
-            note.AddToSpace(_space);
-            _activeNoteEntities.Add(note);
-        //    _modelDrawer.Add(note.PhysicsEntity);
+            trackEntity.Velocity = new Vector3(0f, 0f, _speed);
+            Components.Add(trackEntity);
+            trackEntity.AddToSpace(_space);
+            if (trackEntity is NoteEntity note)
+            {
+                _activeNoteEntities.Add(note);
+            }
         }
-        private void DespawnNote(NoteEntity note)
+
+        private void DespawnTrackEntity(BaseTrackEntity trackEntity)
         {
-            if(!note.Spawned) return;
-            
-         //   _modelDrawer.Remove(note.PhysicsEntity);
-            _activeNoteEntities.Remove(note);
-            note.RemoveFromSpace(_space);
-            Components.Remove(note);
+            if (!trackEntity.Spawned) return;
+            if (trackEntity is NoteEntity note)
+            {
+                _activeNoteEntities.Remove(note);
+            }
+
+            trackEntity.RemoveFromSpace(_space);
+            Components.Remove(trackEntity);
         }
 
         private void Start()
         {
-            if(_started) return;
-        
+            if (_started) return;
+
             _countdownText.Text = "";
             Components.Remove(_countdownScreenEntity);
             MediaPlayer.Stop();
@@ -307,15 +338,15 @@ namespace TruSaber.Scenes
             noteIndex = 0;
             noteTotal = _map.Notes.Length;
             //_activeNoteEntities.Clear();
-            _speedOffset = TimeSpan.FromSeconds((1f / (float) _speed)* (60f / Level.MapInfo.BeatsPerMinute));
+            _speedOffset = TimeSpan.FromSeconds((1f / (float) _speed) * (60f / Level.MapInfo.BeatsPerMinute));
             _space.Start(TimeSpan.FromSeconds(Level.MapInfo.SongTimeOffset));
             _startTime = DateTime.UtcNow;
         }
 
         private void Stop()
         {
-            if(!_started) return;
-            if(_finished) return;
+            if (!_started) return;
+            if (_finished) return;
             _finished = true;
             if (MediaPlayer.State == MediaState.Playing)
             {

@@ -1,0 +1,52 @@
+{
+  "_version": "2.0.0",
+  "_songName": "The Dark Side",
+  "_songSubName": "",
+  "_songAuthorName": "Muse",
+  "_levelAuthorName": "KuritsaDBS",
+  "_beatsPerMinute": 100,
+  "_shuffle": 0,
+  "_shufflePeriod": 0.5,
+  "_previewStartTime": 12,
+  "_previewDuration": 10,
+  "_songFilename": "song.egg",
+  "_coverImageFilename": "cover.jpg",
+  "_environmentName": "TriangleEnvironment",
+  "_songTimeOffset": 0,
+  "_difficultyBeatmapSets": [
+    {
+      "_beatmapCharacteristicName": "Standard",
+      "_difficultyBeatmaps": [
+        {
+          "_difficulty": "Easy",
+          "_difficultyRank": 1,
+          "_beatmapFilename": "EasyStandard.dat",
+          "_noteJumpMovementSpeed": 17,
+          "_noteJumpStartBeatOffset": 0.20000000298023224,
+          "_customData": {
+            "_difficultyLabel": "Visual Show",
+            "_editorOffset": 0,
+            "_editorOldOffset": 0,
+            "_requirements": [
+              "Mapping Extensions"
+            ]
+          }
+        },
+        {
+          "_difficulty": "Expert",
+          "_difficultyRank": 7,
+          "_beatmapFilename": "ExpertStandard.dat",
+          "_noteJumpMovementSpeed": 17,
+          "_noteJumpStartBeatOffset": 0.20000000298023224,
+          "_customData": {
+            "_editorOffset": 0,
+            "_editorOldOffset": 0,
+            "_requirements": [
+              "Mapping Extensions"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -7,20 +7,56 @@ namespace TruSaber
 {
     public class WallEntity : BaseTrackEntity
     {
-        public           Obstacle Obstacle { get; }
-        
-        public WallEntity(IGame game, Obstacle obstacle, float bpm, float speed, float offset) : base(game, obstacle, bpm, speed, offset)
+        public Obstacle Obstacle { get; }
+
+        public WallEntity(IGame game, Obstacle obstacle, float bpm, float speed, float offset) : base(game, obstacle,
+            bpm, speed, offset)
         {
+            float height = 2f;
+            float y      = 0f;
+            float width  = obstacle.Width;
             if (obstacle.Type == ObstacleType.CrouchWall)
             {
-                Scale = new Vector3(obstacle.Width, 1f, (float) (obstacle.Duration * speed * (60f/bpm)));
-                Position = new Vector3(LineIndex - 1.5f, 1f, (-speed * (((float) obstacle.Time)) * (60f / bpm)));
+                height = 1f;
+                LineLayer = 2;
             }
-            else 
+
+            // Mapping Extensions Support
+            int value                 = (int) obstacle.Type;
+                float multiplier = 1f;
+            if (obstacle.Width >= 1000 || (value >= 1000 && value <= 4000) || (value >= 4001 && value <= 4005000))
             {
-                // Full height wall
-                Scale = new Vector3(obstacle.Width, 2f, (float) (obstacle.Duration * speed * (60f/bpm)));
-                Position = new Vector3(LineIndex - 1.5f, 0f, (-speed * (((float) obstacle.Time)) * (60f / bpm)));
+                var preciseHeighStartMode = (value >= 4001 && value <= 4100000);
+
+                if (preciseHeighStartMode)
+                {
+                    value -= 4001;
+                    height = value / 1000;
+                    y = value % 1000;
+                }
+                else
+                {
+                    height = value - 1000;
+                }
+
+                if (width >= 1000 || preciseHeighStartMode)
+                {
+                    width = (width - 1000) / 1000;
+                }
+
+                if (value >= 1000)
+                {
+                    multiplier = height / 1000f;
+                }
+            }
+
+            Scale = new Vector3(width * 0.98f, height * multiplier, (float) (obstacle.Duration * speed * (60f / bpm)));
+            Position = new Vector3(LineIndex - 1.5f, y, (-speed * (((float) obstacle.Time)) * (60f / bpm)));
+
+            if (obstacle.CustomData.Scale.HasValue)
+            {
+                var s =obstacle.CustomData.Scale.Value;
+                Scale = new Vector3(s.X, s.Y, s.Z);
             }
         }
 
