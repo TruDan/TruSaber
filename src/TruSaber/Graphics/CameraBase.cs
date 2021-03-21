@@ -23,18 +23,18 @@ namespace TruSaber.Graphics
 
         public Vector3 Scale
         {
-            get => Transform.RelativeScale;
-            set => Transform.RelativeScale = value;
+            get => Transform.Scale;
+            set => Transform.Scale = value;
         }
         public Vector3 Position
         {
-            get => Transform.RelativePosition;
-            set => Transform.RelativePosition = value;
+            get => Transform.Position;
+            set => Transform.Position = value;
         }
         public Quaternion Rotation
         {
-            get => Transform.RelativeRotation;
-            set => Transform.RelativeRotation = value;
+            get => Transform.Rotation;
+            set => Transform.Rotation = value;
         }
         public Matrix World
         {

@@ -57,11 +57,9 @@ namespace TruSaber
         /// <inheritdoc />
         public override void Initialize()
         {
-            Transform.RelativePosition = Hand == Hand.Left ? Vector3.Left : Vector3.Right;
-            Transform.RelativeRotation = Quaternion.Identity;
+            Transform.LocalPosition = Hand == Hand.Left ? Vector3.Left : Vector3.Right;
             _rayVerticies = new VertexPositionColor[2];
-            _vertexBuffer = new VertexBuffer(Game.GraphicsDevice, VertexPositionColor.VertexDeclaration, 2,
-                BufferUsage.WriteOnly);
+            _vertexBuffer = new VertexBuffer(Game.GraphicsDevice, VertexPositionColor.VertexDeclaration, 2, BufferUsage.WriteOnly);
             _effect = new BasicEffect(GraphicsDevice);
 
             base.Initialize();
@@ -75,9 +73,9 @@ namespace TruSaber
             {
                 if (VrContext.LeftController != null)
                 {
-                    Transform.RelativePosition = VrContext.LeftController.LocalPosition;
-                    Transform.RelativeRotation =
-                        Quaternion.Multiply(VrContext.LeftController.LocalRotation, ControllerOffset);
+                    Transform.LocalPosition = VrContext.LeftController.LocalPosition;
+                    //Transform.LocalQuaternion = Quaternion.Multiply(VrContext.LeftController.LocalRotation, ControllerOffset);
+                    Transform.LocalRotation = VrContext.LeftController.LocalRotation;
                     //PhysicsEntity.AngularVelocity = VrContext.LeftController.GetAngularVelocity().ToBEPU();
                 }
             }
@@ -85,9 +83,9 @@ namespace TruSaber
             {
                 if (VrContext.RightController != null)
                 {
-                    Transform.RelativePosition = VrContext.RightController.LocalPosition;
-                    Transform.RelativeRotation =
-                        Quaternion.Multiply(VrContext.RightController.LocalRotation, ControllerOffset);
+                    Transform.LocalPosition = VrContext.RightController.LocalPosition;
+//                    Transform.LocalQuaternion = Quaternion.Multiply(VrContext.RightController.LocalRotation, ControllerOffset);
+                    Transform.LocalRotation = VrContext.RightController.LocalRotation;
                 }
             }
 

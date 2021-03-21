@@ -55,9 +55,9 @@ namespace TruSaber
 
         public override void Initialize()
         {
-            if (this._initialized)
+            if (Initialized)
                 return;
-            this._initialized = true;
+            base.Initialize();
             this.LoadContent();
         }
 

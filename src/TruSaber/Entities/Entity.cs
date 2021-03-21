@@ -56,6 +56,12 @@ namespace TruSaber
             Transform.Changed += (sender, args) => OnPositionChanged();
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            _initialized = true;
+        }
+
         protected virtual void OnPositionChanged()
         {
             var min = Vector3.Transform(BoundingBoxOrigin, World);
@@ -63,7 +69,7 @@ namespace TruSaber
             BoundingBox = new BoundingBox(min, max);
         }
 
-        protected bool _initialized;
+        private bool _initialized;
 
         public override void Update(GameTime gameTime)
         {

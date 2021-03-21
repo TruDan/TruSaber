@@ -55,11 +55,11 @@ namespace TruSaber.Scenes
             _scoreHelper = new ScoreHelper();
 
             GuiScreen.Screen = new PlayLiveScoreScreen(TruSaberGame.Instance.Game, _scoreHelper);
-            GuiScreen.Transform.RelativePosition += Vector3.Forward * 4;
+            GuiScreen.Transform.LocalPosition += Vector3.Forward * 4;
 
             _countdownScreenEntity = new GuiScreenEntity((Game) TruSaberGame.Instance);
-            _countdownScreenEntity.Transform.RelativePosition = new Vector3(-(ScreenSize.X / 2f), ScreenSize.Y, -3f);
-            _countdownScreenEntity.Transform.RelativeScale = new Vector3(
+            _countdownScreenEntity.Transform.LocalPosition = new Vector3(-(ScreenSize.X / 2f), ScreenSize.Y, -3f);
+            _countdownScreenEntity.Transform.LocalScale = new Vector3(
                 (float) ScreenSize.X / GuiManager.ScaledResolution.ScaledWidth,
                 (float) ScreenSize.Y / GuiManager.ScaledResolution.ScaledHeight, 1f);
 
@@ -228,7 +228,7 @@ namespace TruSaber.Scenes
                 var intersection = hand.Ray.Intersects(note.BoundingBox);
                 if (intersection.HasValue)
                 {
-                    if (intersection < 0.8f) // saber length of 80cm.
+                    if (intersection < 1.6f) // saber length of 80cm.
                     {
                         var intersectionPoint = (hand.Ray.Position + (intersection.Value * hand.Ray.Direction));
                         if (note.Type == NoteType.LeftNote && hand.Hand == Hand.Left)

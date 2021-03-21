@@ -46,8 +46,8 @@ namespace TruSaber
         {
             if(!(Initialized && Enabled)) return;
 
-            Transform.RelativePosition = VrContext.Hmd.LocalPosition;
-            Transform.RelativeRotation = VrContext.Hmd.LocalRotation;
+            Transform.LocalPosition = VrContext.Hmd.LocalPosition;
+            Transform.LocalRotation = VrContext.Hmd.LocalRotation;
             
             base.Update(gameTime);
         }
