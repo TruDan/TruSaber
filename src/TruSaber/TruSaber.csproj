@@ -97,7 +97,4 @@
       <DependentUpon>EndLevelScreen.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Content\Shaders\common.hlsl" />
-  </ItemGroup>
 </Project>

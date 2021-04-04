@@ -21,14 +21,14 @@ namespace TruSaber
         public Model ArrowModel { get; private set; }
         public Color Color      { get; }
 
-        public NoteEntity(IGame game, Note note, float bpm, float speed, float offset) : base(game, note, bpm, speed, offset)
+        public NoteEntity(IGame game, Note note, float positioningMultiplier) : base(game, note, positioningMultiplier)
         {
             CutDirection = note.CutDirection;
             Type = note.Type;
 
             Color = note.Type == NoteType.Bomb ? Color.DarkGray : (note.Type == NoteType.LeftNote ? Color.Red : Color.Blue);
             BoundingBoxSize = Vector3.One;
-            BoundingBoxOrigin = -Vector3.One / 2f;
+            BoundingBoxOrigin = Vector3.One / 2f;
             
             base.Rotation = Quaternion.CreateFromAxisAngle(Vector3.UnitZ, CutDirection.ToAngle());
             
@@ -113,7 +113,7 @@ namespace TruSaber
                 ArrowModel?.DrawModelWithExclusions(World, cam.View, cam.Projection, CutDirection == CutDirection.Any ? "Arrow" : "Dot");
             }
 
-            if(false)
+            //if(false)
                 BoundingBox.Draw(GraphicsDevice, Color);
         }
     }

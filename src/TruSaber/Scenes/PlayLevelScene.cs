@@ -31,7 +31,8 @@ namespace TruSaber.Scenes
         private List<NoteEntity> _activeNoteEntities;
         private List<WallEntity> _activeObstacles;
 
-        private float  _speed => (float) (_map.BeatMap?.NoteJumpMovementSpeed ?? 0f);
+        private float  _positioningMultiplier;
+        private float  _speed;
         private Player _player;
 
         private Space _space;
@@ -95,15 +96,21 @@ namespace TruSaber.Scenes
         {
             _map = map;
             var bpm = Level.MapInfo.BeatsPerMinute;
+            var bps = bpm / 60f;
+
+            _speed = (float) (map.BeatMap?.NoteJumpMovementSpeed ?? 0f);
+            _positioningMultiplier = (float) (_speed * (60f / bpm));
+            
+            
             foreach (var note in map.Notes)
             {
-                var noteEntity = new NoteEntity(TruSaberGame.Instance, note, (float) bpm, _speed, (float)map.BeatMap.NoteJumpStartBeatOffset);
+                var noteEntity = new NoteEntity(TruSaberGame.Instance, note, _positioningMultiplier);
                 SpawnTrackEntity(noteEntity);
             }
 
             foreach (var obstacle in map.Obstacles)
             {
-                var obstacleEntity = new WallEntity(TruSaberGame.Instance, obstacle, (float) bpm, _speed, (float)map.BeatMap.NoteJumpStartBeatOffset);
+                var obstacleEntity = new WallEntity(TruSaberGame.Instance, obstacle, _positioningMultiplier);
                 SpawnTrackEntity(obstacleEntity);
             }
 
@@ -305,6 +312,7 @@ namespace TruSaber.Scenes
         private void SpawnTrackEntity(BaseTrackEntity trackEntity)
         {
             trackEntity.Velocity = new Vector3(0f, 0f, _speed);
+            
             Components.Add(trackEntity);
             trackEntity.AddToSpace(_space);
             if (trackEntity is NoteEntity note)

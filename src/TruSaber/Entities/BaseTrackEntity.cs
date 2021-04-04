@@ -8,13 +8,11 @@ namespace TruSaber
     public class BaseTrackEntity : DrawableEntity
     {
         private readonly TrackObjectBase _trackObject;
-        private readonly float           _bpm;
-        private readonly float           _speed;
-        private readonly float           _offset;
+        private readonly float           _positioningMultiplier;
         private          bool            _spawned;
 
-        public byte LineIndex { get; protected set; }
-        public byte LineLayer { get; protected set; }
+        public long LineIndex { get; protected set; }
+        public long LineLayer { get; protected set; }
 
         //public TimeSpan DueTime { get; }
 
@@ -26,16 +24,14 @@ namespace TruSaber
 
         public bool HasSpawnedAtLeastOnce { get; protected set; }
 
-        public BaseTrackEntity(IGame game, TrackObjectBase trackObject, float bpm, float speed, float offset) : base(game)
+        public BaseTrackEntity(IGame game, TrackObjectBase trackObject, float positioningMultiplier) : base(game)
         {
             _trackObject = trackObject;
-            _bpm = bpm;
-            _speed = speed;
-            _offset = offset;
+            _positioningMultiplier = positioningMultiplier;
             LineIndex = trackObject.LineIndex;
             LineLayer = trackObject.LineLayer;
 
-            _initialPosition = new Vector3(LineIndex - 1.5f, LineLayer + 0.5f, -(_offset + (_speed * (((float) trackObject.Time)) * (60f / _bpm))));
+            _initialPosition = new Vector3(LineIndex - 1.5f, LineLayer + 0.5f, -((float) trackObject.Time * _positioningMultiplier));
             
             Position = _initialPosition;
         }
@@ -73,7 +69,8 @@ namespace TruSaber
         {
             base.OnPositionChanged();
 
-            Visible = MathF.Abs(Position.Z) < 30f;
+//            Visible = BoundingBox.Min.Z < 5f || Position.Z < 5f;
+            Visible = Math.Abs(Position.Z) < 30f;
         }
     }
 }

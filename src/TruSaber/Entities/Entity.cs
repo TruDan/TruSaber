@@ -14,13 +14,7 @@ namespace TruSaber
         public virtual Vector3 Velocity
         {
             get => _velocity;
-            set
-            {
-                if (_velocity == value)
-                    return;
-                _velocity = value;
-                OnPositionChanged();
-            }
+            set => _velocity = value;
         }
         public Transform3D Transform { get; } = new Transform3D();
         public Vector3 Scale
@@ -64,8 +58,12 @@ namespace TruSaber
 
         protected virtual void OnPositionChanged()
         {
-            var min = Vector3.Transform(BoundingBoxOrigin, World);
-            var max = Vector3.Transform(BoundingBoxOrigin + BoundingBoxSize, World);
+            var wrld = Matrix.Identity
+                       * Matrix.CreateTranslation(-BoundingBoxOrigin)
+                       * Matrix.CreateScale(BoundingBoxSize)
+                       * World;
+            var min = Vector3.Transform(Vector3.Zero, wrld);
+            var max = Vector3.Transform(Vector3.One, wrld);
             BoundingBox = new BoundingBox(min, max);
         }
 

@@ -9,8 +9,7 @@ namespace TruSaber
     {
         public Obstacle Obstacle { get; }
 
-        public WallEntity(IGame game, Obstacle obstacle, float bpm, float speed, float offset) : base(game, obstacle,
-            bpm, speed, offset)
+        public WallEntity(IGame game, Obstacle obstacle, float positioningMultiplier) : base(game, obstacle,positioningMultiplier)
         {
             float height = 2f;
             float y      = 0f;
@@ -50,8 +49,8 @@ namespace TruSaber
                 }
             }
 
-            Scale = new Vector3(width * 0.98f, height * multiplier, (float) (obstacle.Duration * speed * (60f / bpm)));
-            Position = new Vector3(LineIndex - 1.5f, y, (-speed * (((float) obstacle.Time)) * (60f / bpm)));
+            Scale = new Vector3(width * 0.98f, height * multiplier, (float) (obstacle.Duration * positioningMultiplier));
+            Position = new Vector3(LineIndex - 1.5f, y, -((float) obstacle.Time * positioningMultiplier));
 
             if (obstacle.CustomData.Scale.HasValue)
             {
