@@ -32,7 +32,7 @@ namespace TruSaber.Services
                 try
                 {
                     var info = new FileInfo(allFile);
-                    if ((info.Attributes & FileAttributes.Directory) != 0)
+                    if (info.Attributes.HasFlag(FileAttributes.Directory))
                     {
                         // load as directory
                         var beatLevel = new BeatLevel(info.FullName);

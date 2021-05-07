@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DiscordRichPresence" Version="1.0.169" />
-    <PackageReference Include="JetBrains.Annotations" Version="2020.3.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="MonoGame.Framework.Content.Pipeline" Version="3.8.*" />
@@ -95,6 +95,9 @@
     </Compile>
     <Compile Update="Scenes\Screens\EndLevelScreen.cs">
       <DependentUpon>EndLevelScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Scenes\Screens\SelectLevelScreen.cs">
+      <DependentUpon>SelectLevelScreen.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

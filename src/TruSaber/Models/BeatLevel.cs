@@ -60,12 +60,14 @@ namespace TruSaber.Models
             }
             else if (fileInfo.Extension.ToLowerInvariant() == "zip")
             {
-                var zip   = new ZipArchive(fileInfo.OpenRead(), ZipArchiveMode.Read);
-                var entry = zip.GetEntry("info.dat");
-                using (var e = entry.Open())
-                using(var sr = new StreamReader(e))
+                using (var zip = new ZipArchive(fileInfo.OpenRead(), ZipArchiveMode.Read))
                 {
-                    infoJson = await sr.ReadToEndAsync();
+                    var entry = zip.GetEntry("info.dat");
+                    using (var e = entry.Open())
+                    using (var sr = new StreamReader(e))
+                    {
+                        infoJson = await sr.ReadToEndAsync();
+                    }
                 }
             }
             else

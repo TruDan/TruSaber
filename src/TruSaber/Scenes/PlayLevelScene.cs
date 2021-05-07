@@ -99,9 +99,9 @@ namespace TruSaber.Scenes
             var bps = bpm / 60f;
 
             _speed = (float) (map.BeatMap?.NoteJumpMovementSpeed ?? 0f);
-            _positioningMultiplier = (float) (_speed * (60f / bpm));
-            
-            
+            _positioningMultiplier = (float) (_speed * (60f/bpm));
+
+
             foreach (var note in map.Notes)
             {
                 var noteEntity = new NoteEntity(TruSaberGame.Instance, note, _positioningMultiplier);
@@ -214,17 +214,14 @@ namespace TruSaber.Scenes
 
             foreach (var wall in _activeObstacles.ToArray())
             {
-                if (wall.BoundingBox.Min.Z > 0 && wall.BoundingBox.Max.Z > 0 && wall.Spawned)
+                if (wall.BoundingBox.Min.Z > 10 && wall.BoundingBox.Max.Z > 10 && wall.Spawned)
                 {
                     DespawnTrackEntity(wall);
                 }
 
-                if (wall.Position.Z > -10)
-                {
-                    CheckHandCollision(_player.LeftHand, wall);
-                    CheckHandCollision(_player.RightHand, wall);
-                    CheckHeadCollision(_player.Head, wall);
-                }
+                CheckHandCollision(_player.LeftHand, wall);
+                CheckHandCollision(_player.RightHand, wall);
+                CheckHeadCollision(_player.Head, wall);
             }
         }
 
@@ -235,14 +232,28 @@ namespace TruSaber.Scenes
                 var intersection = hand.Ray.Intersects(note.BoundingBox);
                 if (intersection.HasValue)
                 {
-                    if (intersection < 1.6f) // saber length of 80cm.
+                    if (intersection < 1.2f) // saber length of 80cm.
                     {
-                        var intersectionPoint = (hand.Ray.Position + (intersection.Value * hand.Ray.Direction));
+                        var p1               = (hand.Ray.Position + (intersection.Value * hand.Ray.Direction));
+                        var p2               = (hand.NextRay.Position + (intersection.Value * hand.NextRay.Direction));
+                        var cutAngleGradient = new Vector2(p2.X, p2.Y) - new Vector2(p1.X, p1.Y);
+                        cutAngleGradient.Normalize();
+
+                        var cutAngle              = MathF.Atan2(cutAngleGradient.Y, cutAngleGradient.X);
+                        var cuttDiffToTargetAngle = Math.Abs(note.CutDirection.ToAngle() - cutAngle);
+                        if (cuttDiffToTargetAngle > 45.0f)
+                        {
+                            // Ha! fail.
+                            _scoreHelper.RegisterMissedBlock();
+                            DespawnTrackEntity(note);
+                            return;
+                        }
+
                         if (note.Type == NoteType.LeftNote && hand.Hand == Hand.Left)
                         {
                             // woohoo!!
                             //Console.WriteLine($"Left Hand hit a Left Block!!! +50 points to griffindor!");
-                            _scoreHelper.RegisterHitBlock(115f);
+                            _scoreHelper.RegisterHitBlock(cuttDiffToTargetAngle);
                             DespawnTrackEntity(note);
                             return;
                         }
@@ -250,13 +261,14 @@ namespace TruSaber.Scenes
                         {
                             // woohoo!
                             // Console.WriteLine($"Right Hand hit a Right Block!!! +50 points to griffindor!");
-                            _scoreHelper.RegisterHitBlock(115f);
+                            _scoreHelper.RegisterHitBlock(cuttDiffToTargetAngle);
                             DespawnTrackEntity(note);
                             return;
                         }
                         else
                         {
                             _scoreHelper.RegisterMissedBlock();
+                            DespawnTrackEntity(note);
                             return;
                         }
                     }
@@ -312,7 +324,7 @@ namespace TruSaber.Scenes
         private void SpawnTrackEntity(BaseTrackEntity trackEntity)
         {
             trackEntity.Velocity = new Vector3(0f, 0f, _speed);
-            
+
             Components.Add(trackEntity);
             trackEntity.AddToSpace(_space);
             if (trackEntity is NoteEntity note)

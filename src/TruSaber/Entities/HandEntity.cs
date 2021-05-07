@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using RocketUI;
 using SharpVR;
 using TruSaber.Abstractions;
 using Quaternion = Microsoft.Xna.Framework.Quaternion;
@@ -13,12 +15,14 @@ namespace TruSaber
         public  Player  Player { get; }
         public  Hand    Hand   { get; }
 
-        public Color Color { get; set; }
+        public Transform3D NextTransform { get; }
+        public Color       Color         { get; set; }
 
         public  Quaternion ControllerOffset { get; set; }
         private IVrContext VrContext        { get; }
 
         public Ray Ray { get; private set; }
+        public Ray NextRay { get; private set; }
 
         public Vector3 AngularVelocity
         {
@@ -35,9 +39,12 @@ namespace TruSaber
 
         public HandEntity(IGame game, Player player, Hand hand) : base(game)
         {
+            NextTransform = new Transform3D();
+            NextTransform.Changed += NextTransformOnChanged;
             Player = player;
             Hand = hand;
             Transform.ParentTransform = player.Transform;
+            NextTransform.ParentTransform = player.Transform;
 
             Color = hand == Hand.Left ? Color.Red : Color.Blue;
             VrContext = game.ServiceProvider.GetRequiredService<IVrContext>();
@@ -47,7 +54,23 @@ namespace TruSaber
 
             InitPhysics();
             Ray = new Ray();
+            NextRay = new Ray();
             Scale = Vector3.One;
+        }
+
+        private void NextTransformOnChanged(object? sender, EventArgs e)
+        {
+            if (_rayVerticies != null)
+            {
+                var nearPoint = Vector3.Transform(Vector3.Zero, NextTransform.World);
+                var farPoint  = Vector3.Transform(Vector3.Forward, NextTransform.World);
+                var direction = farPoint - nearPoint;
+
+                //var direction = Vector3.Transform(Vector3.Up, World);
+                direction.Normalize();
+
+                NextRay = new Ray(NextTransform.Position, direction);
+            }
         }
 
         private VertexPositionColor[] _rayVerticies;
@@ -74,9 +97,9 @@ namespace TruSaber
                 if (VrContext.LeftController != null)
                 {
                     Transform.LocalPosition = VrContext.LeftController.LocalPosition;
-                    //Transform.LocalQuaternion = Quaternion.Multiply(VrContext.LeftController.LocalRotation, ControllerOffset);
                     Transform.LocalRotation = VrContext.LeftController.LocalRotation;
-                    //PhysicsEntity.AngularVelocity = VrContext.LeftController.GetAngularVelocity().ToBEPU();
+                    NextTransform.LocalPosition = VrContext.LeftController.NextLocalPosition;
+                    NextTransform.LocalRotation = VrContext.LeftController.NextLocalRotation;
                 }
             }
             else if (Hand == Hand.Right)
@@ -84,8 +107,9 @@ namespace TruSaber
                 if (VrContext.RightController != null)
                 {
                     Transform.LocalPosition = VrContext.RightController.LocalPosition;
-//                    Transform.LocalQuaternion = Quaternion.Multiply(VrContext.RightController.LocalRotation, ControllerOffset);
                     Transform.LocalRotation = VrContext.RightController.LocalRotation;
+                    NextTransform.LocalPosition = VrContext.RightController.NextLocalPosition;
+                    NextTransform.LocalRotation = VrContext.RightController.NextLocalRotation;
                 }
             }
 

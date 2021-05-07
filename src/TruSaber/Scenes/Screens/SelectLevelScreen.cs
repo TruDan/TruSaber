@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Media;
@@ -12,10 +13,10 @@ namespace TruSaber.Scenes.Screens
 {
     public partial class SelectLevelScreen : Screen
     {
-        private          Button        _playButton;
-        private readonly LevelManager  _levelManager;
+        private          Button                    _playButton;
+        private readonly LevelManager              _levelManager;
         private readonly SelectionList _selectionList;
-        private          LevelInfo     _levelInfo;
+        private          LevelInfo                 _levelInfo;
 
         public SelectLevelScreen()
         {
@@ -66,13 +67,17 @@ namespace TruSaber.Scenes.Screens
         {
             _levelManager.LoadLevels().GetAwaiter().GetResult();
 
-            var levels = _levelManager.Levels;
+            var levels         = _levelManager.Levels;
+            var selectionItems = new List<SelectionListItem>();
             foreach (var level in levels)
             {
                 Console.WriteLine($"adding level: {level.MapInfo.SongName}");
                 var levelItem = new LevelSelectSelectionListItem(level);
+                selectionItems.Add(levelItem);
                 _selectionList.AddChild(levelItem);
             }
+
+            //_selectionList.Items = selectionItems;
         }
 
 

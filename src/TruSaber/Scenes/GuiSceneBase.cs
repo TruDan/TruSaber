@@ -53,7 +53,6 @@ namespace TruSaber.Scenes
 
         protected override void OnInitialize()
         {
-            
             base.OnInitialize();
             
             _skybox = new Skybox(TruSaberGame.Instance)

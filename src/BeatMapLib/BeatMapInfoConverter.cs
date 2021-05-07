@@ -6,7 +6,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace BeatMapInfo
 {
-    internal static class BeatMapInfoConverter
+    public static class BeatMapInfoConverter
     {
         public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
         {

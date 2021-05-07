@@ -5,7 +5,11 @@ namespace TruSaber
 {
     public class ScoreHelper
     {
-        public float Score { get; private set; }
+        private const float MaxNoteCutAngle           = 45.0f;
+        private const float MaxNoteCutAngleScoreValue = 45.0f;
+        private const float BaseScoreValue            = 70.0f;
+        
+        public        float  Score { get; private set; }
 
         public int Combo { get; private set; }
 
@@ -23,11 +27,11 @@ namespace TruSaber
             UpdateComboMultiplier();
         }
 
-        public void RegisterHitBlock(float scoreIncrease)
+        public void RegisterHitBlock(float noteCutAngle)
         {
             Combo++;
             UpdateComboMultiplier();
-            Score += (scoreIncrease * ComboMultiplier);
+            Score += (BaseScoreValue + ((noteCutAngle / MaxNoteCutAngle) * MaxNoteCutAngleScoreValue)) * ComboMultiplier;
         }
 
         private void UpdateComboMultiplier()
