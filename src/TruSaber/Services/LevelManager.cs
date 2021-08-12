@@ -54,6 +54,10 @@ namespace TruSaber.Services
 
             Levels = levels;
         }
-        
+
+        public void LoadLevel(string path)
+        {
+            
+        }
     }
 }

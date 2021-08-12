@@ -1,0 +1,42 @@
+{
+  "_version": "2.0.0",
+  "_songName": "Rap God",
+  "_songSubName": "(Short Edit)",
+  "_songAuthorName": "Eminem",
+  "_levelAuthorName": "abc",
+  "_beatsPerMinute": 148,
+  "_shuffle": 0,
+  "_shufflePeriod": 0.5,
+  "_previewStartTime": 1,
+  "_previewDuration": 2,
+  "_songFilename": "rap.egg",
+  "_coverImageFilename": "god.jpg",
+  "_environmentName": "DefaultEnvironment",
+  "_songTimeOffset": 0,
+  "_customData": {
+    "_contributors": []
+  },
+  "_difficultyBeatmapSets": [
+    {
+      "_beatmapCharacteristicName": "Standard",
+      "_difficultyBeatmaps": [
+        {
+          "_difficulty": "ExpertPlus",
+          "_difficultyRank": 9,
+          "_beatmapFilename": "ExpertPlusStandard.dat",
+          "_noteJumpMovementSpeed": 22,
+          "_noteJumpStartBeatOffset": 0,
+          "_customData": {
+            "_difficultyLabel": "look",
+            "_editorOffset": 100,
+            "_editorOldOffset": 100,
+            "_warnings": [],
+            "_information": [],
+            "_suggestions": [],
+            "_requirements": []
+          }
+        }
+      ]
+    }
+  ]
+}
